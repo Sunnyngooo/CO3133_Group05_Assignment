@@ -1,0 +1,17 @@
+site_name: My Docs
+# site_url: https://sunny
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.instant.preview
+    - navigation.tracking
+    - navigation.tabs
+
+nav:
+  - Home: index.md
+  - Assignment 1: assignment1.md
+  - Assignment 2: assignment2.md
+  - Assignment 3: assignment3.md
+  - AI Usage Disclosure: ai_usage.md

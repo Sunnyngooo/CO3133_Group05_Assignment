@@ -17,11 +17,11 @@
 - Group name: Group 01
 - Group's Repository:
 
-  | Name                 | Student ID | Main role | Github Profile |
-  | :------------------- | :--------- | :-------- | :------------- |
-  | Đàm Hoài An          | 2352002    |           |                |
-  | Nguyễn Hữu Minh Khôi | 2352614    |           |                |
-  | Ngô Diễm Quyên       | 2353031    |           |                |
+  | Name                 | Student ID | Main role | Github Profile                |
+  | :------------------- | :--------- | :-------- | :---------------------------- |
+  | Đàm Hoài An          | 2352002    |           |                               |
+  | Nguyễn Hữu Minh Khôi | 2352614    |           |                               |
+  | Ngô Diễm Quyên       | 2353031    |           | https://github.com/Sunnyngooo |
 
 ## **Assignment index**
 

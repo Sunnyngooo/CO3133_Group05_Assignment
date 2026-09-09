@@ -34,20 +34,20 @@ jobs:
         with:
           path: ./site
 
-deploy:
-  if: github.ref == 'refs/heads/main'
-  runs-on: ubunt-latest
-  needs: build
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubunt-latest
+    needs: build
 
-  permissions:
-    pages: write
-    id-token: write
+    permissions:
+      pages: write
+      id-token: write
 
-  environment:
-    name: github-pages
-    url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-  steps:
-    - names: Deploy to Github Pages
-      id: deployment
-      uses: actions/deploy-pages@v2
+    steps:
+      - names: Deploy to Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

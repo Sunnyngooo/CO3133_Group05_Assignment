@@ -17,11 +17,11 @@
 - Group name: Group 01
 - Group's Repository:
 
-  | Name                 | Student ID | Main role | Github Profile                          |
-  | :------------------- | :--------- | :-------- | :-------------------------------------- |
-  | Đàm Hoài An          | 2352002    |           | [link](https://github.com/alicejiharba) |
-  | Nguyễn Hữu Minh Khôi | 2352614    |           | [link](https://github.com/nhmkct1)      |
-  | Ngô Diễm Quyên       | 2353031    |           | [link](https://github.com/Sunnyngooo)   |
+  | Name                 | Student ID | Main role | Github Profile                                              |
+  | :------------------- | :--------- | :-------- | :---------------------------------------------------------- |
+  | Đàm Hoài An          | 2352002    |           | [link](https://github.com/alicejiharba){: target="\_blank"} |
+  | Nguyễn Hữu Minh Khôi | 2352614    |           | [link](https://github.com/nhmkct1){: target="\_blank"}      |
+  | Ngô Diễm Quyên       | 2353031    |           | [link](https://github.com/Sunnyngooo){: target="\_blank"}   |
 
 ## **Assignment index**
 

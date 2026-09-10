@@ -15,3 +15,6 @@ nav:
   - Assignment 2: assignment2.md
   - Assignment 3: assignment3.md
   - AI Usage Disclosure: ai_usage.md
+
+markdown_extensions:
+  - attr_list

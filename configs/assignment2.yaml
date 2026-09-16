@@ -1,0 +1,5 @@
+assignment: 2
+seed: 43
+dataset_path: data/assignment2
+checkpoint_dir: checkpoints/assignment2
+device: cpu

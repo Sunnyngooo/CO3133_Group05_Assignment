@@ -16,11 +16,12 @@
 
 - Group name: Group 01
 - Group's Repository: [link](https://github.com/Sunnyngooo/CO3133_Group05_Assignment.git)
-  | Name | Student ID | Main role | Github Profile |
-  | :------------------- | :--------- | :-------- | :---------------------------------------------------------- |
-  | Đàm Hoài An | 2352002 | | [alicejiharba](https://github.com/alicejiharba){: target="\_blank"} |
-  | Nguyễn Hữu Minh Khôi | 2352614 | | [nhmkct1](https://github.com/nhmkct1){: target="\_blank"} |
-  | Ngô Diễm Quyên | 2353031 | | [Sunnyngooo](https://github.com/Sunnyngooo){: target="\_blank"} |
+
+  | Name                 | Student ID | Main role | Github Profile                                                      |
+  | :------------------- | :--------- | :-------- | :------------------------------------------------------------------ |
+  | Đàm Hoài An          | 2352002    |           | [alicejiharba](https://github.com/alicejiharba){: target="\_blank"} |
+  | Nguyễn Hữu Minh Khôi | 2352614    |           | [nhmkct1](https://github.com/nhmkct1){: target="\_blank"}           |
+  | Ngô Diễm Quyên       | 2353031    |           | [Sunnyngooo](https://github.com/Sunnyngooo){: target="\_blank"}     |
 
 ## **Assignment index**
 

@@ -23,3 +23,27 @@
   ```bash
   pip install -r requirements.txt
   ```
+
+### Environment Setup
+
+Follow these steps to set up the project on Windows:
+
+1. Open a terminal in the project root:
+
+   ```bash
+   cd "c:\your_root\CO3133_Group05_Assignment"
+   ```
+
+2. Create a virtual environment:
+   ```bash
+    python -m venv venv
+   ```
+3. Activate the virtual environment:
+   ```bash
+   .\venv\Scripts\Activate.ps1
+   ```
+4. Install the requirements:
+   ```bash
+   pip install -r assignment1\requirements.txt
+   ```
+   Then open the `draft.ipynb` and select the created venv for kernel.

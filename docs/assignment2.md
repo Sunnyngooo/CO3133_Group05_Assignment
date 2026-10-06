@@ -53,8 +53,8 @@ The official Cityscapes train/validation split is preserved without creating a c
 Pixel statistics were computed over all **2,975 training masks**, containing:
 
 $$
-2975 \times 1024 \times 2048
-= 6,239,027,200
+2{,}975 \times 1{,}024 \times 2{,}048
+= 6{,}239{,}027{,}200
 $$
 
 pixels in total.
@@ -144,31 +144,25 @@ Overall, the preliminary EDA identifies four main challenges:
 
 ### **Methodology**
 
-Two segmentation models are planned:
+The main controlled experiment will compare two loss formulations:
 
-**Baseline — U-Net**
-
-A U-Net trained from scratch will provide the simple baseline.
-
-**Main model — DeepLabV3-ResNet50**
-
-DeepLabV3 with an ImageNet-pretrained ResNet-50 backbone will be fine-tuned on Cityscapes with a 19-class segmentation head.
-
-The main controlled experiment will compare:
+**Cross-Entropy:**
 
 $$
-L = L_{CE}
+\mathcal{L} = \mathcal{L}_{CE}
 $$
 
-with:
+**Cross-Entropy + Dice:**
 
 $$
-L = L_{CE} + \lambda L_{Dice}
+\mathcal{L}
+=
+\mathcal{L}_{CE}
++
+\lambda \mathcal{L}_{Dice}
 $$
 
 **Hypothesis:** combining Dice loss with Cross-Entropy may improve segmentation performance under the observed class imbalance and region-size variation.
-
-Only the loss formulation will be intentionally changed. Model architecture, data split, preprocessing, augmentation, optimizer, learning-rate schedule, batch size, training duration, random seed, checkpoint criterion, and evaluation procedure will remain fixed.
 
 ---
 
@@ -183,19 +177,35 @@ Training will be performed using **Kaggle GPU acceleration**. Because the origin
 
 Planned preprocessing includes resizing/cropping, normalization, and random horizontal flipping for training.
 
-The primary evaluation metric is **mean Intersection over Union (mIoU)**:
+The primary evaluation metric is **mean Intersection over Union (mIoU)**. For each class $c$:
 
 $$
-IoU_c =
-\frac{TP_c}{TP_c + FP_c + FN_c}
+\operatorname{IoU}_c
+=
+\frac{TP_c}
+{TP_c + FP_c + FN_c}
 $$
 
+The mean IoU over the 19 evaluation classes is:
+
 $$
-mIoU =
-\frac{1}{19}\sum_{c=1}^{19} IoU_c
+\operatorname{mIoU}
+=
+\frac{1}{19}
+\sum_{c=1}^{19}
+\operatorname{IoU}_c
 $$
 
-**Dice score** and **per-class IoU/Dice** will also be reported.
+The Dice score for each class is:
+
+$$
+\operatorname{Dice}_c
+=
+\frac{2TP_c}
+{2TP_c + FP_c + FN_c}
+$$
+
+mIoU will be used as the primary evaluation metric, while Dice score and per-class IoU/Dice will provide additional class-level analysis.
 
 ---
 

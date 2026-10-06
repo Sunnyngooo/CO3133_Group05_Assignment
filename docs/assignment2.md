@@ -3,6 +3,7 @@
 #### **Topic:** Semantic Segmentation of Urban Street Scenes using Cityscapes
 
 **Group members:**
+
 - Đàm Hoài An
 - Nguyễn Hữu Minh Khôi
 - Ngô Diễm Quyên
@@ -85,15 +86,9 @@ The class distribution among valid pixels is:
 | rider | 0.135% |
 | motorcycle | 0.099% |
 
-<p align="center">
-  <img src="assets/assignment2/train_pixel_distribution.png"
-       alt="Cityscapes training pixel distribution"
-       width="850">
-</p>
+![Cityscapes training pixel distribution](assets/assignment2/train_pixel_distribution.png)
 
-<p align="center">
-  <em>Figure 1. Pixel-level class distribution of the Cityscapes training set.</em>
-</p>
+*Figure 1. Pixel-level class distribution of the Cityscapes training set.*
 
 The dataset shows substantial **pixel-level class imbalance**. Road, building, and vegetation alone account for approximately **75.62%** of all valid pixels, while several classes contribute less than 0.3%.
 
@@ -116,15 +111,9 @@ A threshold of **1,024 pixels (32 × 32)** was used as an exploratory definition
 | person | 890 | 52.87% |
 | motorcycle | 890.5 | 52.91% |
 
-<p align="center">
-  <img src="assets/assignment2/train_median_region_size.png"
-       alt="Cityscapes connected semantic region sizes"
-       width="850">
-</p>
+![Connected semantic region sizes](assets/assignment2/train_median_region_size.png)
 
-<p align="center">
-  <em>Figure 2. Median connected semantic-region size for each Cityscapes class.</em>
-</p>
+*Figure 2. Median connected semantic-region size for each Cityscapes class.*
 
 Traffic-related and human-related classes frequently appear as small regions. Together with the pixel distribution, this indicates that Cityscapes contains both **class imbalance and strong scale variation**.
 
@@ -134,21 +123,11 @@ Traffic-related and human-related classes frequently appear as small regions. To
 
 Selected RGB images and their semantic annotations were visually inspected.
 
-<p align="center">
-  <img src="assets/assignment2/__results___58_0.png"
-       alt="Cityscapes RGB example"
-       width="850">
-</p>
+![Cityscapes RGB example](assets/assignment2/__results___58_0.png)
 
-<p align="center">
-  <img src="assets/assignment2/__results___58_1.png"
-       alt="Cityscapes semantic annotation"
-       width="850">
-</p>
+![Cityscapes semantic annotation](assets/assignment2/__results___58_1.png)
 
-<p align="center">
-  <em>Figure 3. Example Cityscapes street scene and its fine semantic annotation.</em>
-</p>
+*Figure 3. Example Cityscapes street scene and its fine semantic annotation.*
 
 The examples show large regions such as road, building, and vegetation together with much smaller vehicles, riders, pedestrians, poles, and traffic infrastructure. Perspective and partial occlusion further increase segmentation difficulty.
 

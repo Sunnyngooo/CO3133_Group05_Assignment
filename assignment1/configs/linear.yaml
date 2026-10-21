@@ -1,0 +1,9 @@
+experiment:
+  name: linear-baseline
+
+model:
+  name: linear
+  dropout: 0.2
+
+training:
+  lr: 0.0005

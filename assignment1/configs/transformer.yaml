@@ -1,0 +1,12 @@
+experiment:
+  name: transformer-baseline
+
+model:
+  name: transformer
+  embedded_dim: [32, 64]
+  num_heads: 1
+  num_layers: 2
+  dropout: 0.2
+
+training:
+  lr: 0.0005

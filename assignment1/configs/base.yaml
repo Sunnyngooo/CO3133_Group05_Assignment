@@ -1,0 +1,20 @@
+experiment:
+  seed: 42
+  deterministic: true
+
+data:
+  dataset: fashion_mnist
+  root: ./data
+  val_ratio: 0.1666666666666667
+  batch_size: 128
+  num_workers: 0
+
+training:
+  epochs: 30
+  optimizer: adam
+  lr: 0.001
+  weight_decay: 0.0
+
+checkpoints:
+  monitor: val_macro_f1
+  mode: max

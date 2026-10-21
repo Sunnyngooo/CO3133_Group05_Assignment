@@ -1,0 +1,11 @@
+experiment:
+  name: lstm-baseline
+
+model:
+  name: lstm
+  hidden_size: [32, 64]
+  num_layers: 2
+  dropout: 0.2
+
+training:
+  lr: 0.0005

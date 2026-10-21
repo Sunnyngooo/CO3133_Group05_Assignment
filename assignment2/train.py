@@ -210,6 +210,8 @@ def main():
     parser.add_argument("--max-batches", type=int, default=None)
     parser.add_argument("--resume", type=str, default=None)
     parser.add_argument("--output-root", type=str, default=None)
+    parser.add_argument("--batch-size", type=int, default=None)
+    parser.add_argument("--num-workers", type=int, default=None)
 
     args = parser.parse_args()
 
@@ -239,8 +241,20 @@ def main():
     train_cfg = cfg["training"]
 
     image_size = tuple(data_cfg["image_size"])
-    batch_size = data_cfg["batch_size"]
-    num_workers = data_cfg["num_workers"]
+    batch_size = (
+        args.batch_size
+        if args.batch_size is not None
+        else data_cfg["batch_size"]
+    )
+
+    num_workers = (
+        args.num_workers
+        if args.num_workers is not None
+        else data_cfg["num_workers"]
+    )
+
+    if batch_size < 1 or num_workers < 0:
+        parser.error("Invalid batch size or worker count")
 
     generator = torch.Generator()
     generator.manual_seed(seed)

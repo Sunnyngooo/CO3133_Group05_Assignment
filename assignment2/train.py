@@ -1,9 +1,12 @@
 import argparse
 import csv
 import json
+from pickletools import optimize
 import random
 import time
 import shutil
+from tqdm.auto import tqdm
+from itertools import islice
 from contextlib import nullcontext
 from pathlib import Path
 
@@ -75,7 +78,21 @@ def train_one_epoch(
     total_valid_pixels = 0
     start_time = time.perf_counter()
 
-    for batch_idx, (images, masks) in enumerate(loader):
+    total_batches = (
+        min(len(loader), max_batches)
+        if max_batches is not None
+        else len(loader)
+    )
+
+    progress_bar = tqdm(
+        enumerate(islice(loader, total_batches)),
+        total=total_batches,
+        desc="Training",
+        unit="batch",
+        dynamic_ncols=True,
+    )
+
+    for batch_idx, (images, masks) in progress_bar:
         if max_batches is not None and batch_idx >= max_batches:
             break
 
@@ -96,6 +113,11 @@ def train_one_epoch(
 
         total_loss += loss.item() * valid_pixels
         total_valid_pixels += valid_pixels
+
+        progress_bar.set_postfix(
+            loss=f"{total_loss / max(total_valid_pixels, 1):.4f}",
+            lr=f"{optimizer.param_groups[0]['lr']:.1e}",
+        )
 
     if total_valid_pixels == 0:
         raise RuntimeError("No valid training pixels")
@@ -121,7 +143,21 @@ def validate(
     total_loss = 0.0
     total_valid_pixels = 0
 
-    for batch_idx, (images, masks) in enumerate(loader):
+    total_batches = (
+        min(len(loader), max_batches)
+        if max_batches is not None
+        else len(loader)
+    )
+
+    progress_bar = tqdm(
+        enumerate(islice(loader, total_batches)),
+        total=total_batches,
+        desc="Validation",
+        unit="batch",
+        dynamic_ncols=True,
+    )
+
+    for batch_idx, (images, masks) in progress_bar:
         if max_batches is not None and batch_idx >= max_batches:
             break
 
@@ -138,6 +174,10 @@ def validate(
 
         total_loss += loss.item() * valid_pixels
         total_valid_pixels += valid_pixels
+
+        progress_bar.set_postfix(
+            loss=f"{total_loss / max(total_valid_pixels, 1):.4f}",
+        )
 
     if total_valid_pixels == 0:
         raise RuntimeError("No valid validation pixels")
@@ -436,6 +476,12 @@ def main():
             ])
 
         for epoch in range(start_epoch, epochs + 1):
+            print(
+                f"\n{'=' * 60}\n"
+                f"Epoch {epoch}/{epochs}\n"
+                f"{'=' * 60}",
+                flush=True,
+            )
             train_loss, elapsed = train_one_epoch(
                 model, train_loader, optimizer, criterion,
                 scaler, device, use_amp, args.max_batches,

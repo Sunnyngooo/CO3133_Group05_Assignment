@@ -194,13 +194,20 @@ def load_checkpoint(
     if rng:
         random.setstate(rng["python"])
         np.random.set_state(rng["numpy"])
-        torch.set_rng_state(rng["torch"])
 
+        # PyTorch CPU RNG requires a CPU ByteTensor.
+        torch.set_rng_state(rng["torch"].cpu())
+
+        # CUDA RNG states are also restored from CPU tensors.
         if torch.cuda.is_available() and rng["cuda"] is not None:
-            torch.cuda.set_rng_state_all(rng["cuda"])
+            torch.cuda.set_rng_state_all(
+                [state.cpu() for state in rng["cuda"]]
+            )
 
     if "data_generator_state" in checkpoint:
-        generator.set_state(checkpoint["data_generator_state"])
+        generator.set_state(
+            checkpoint["data_generator_state"].cpu()
+        )
 
     return checkpoint["epoch"], checkpoint["best_miou"]
 

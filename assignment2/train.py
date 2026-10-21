@@ -3,6 +3,7 @@ import csv
 import json
 import random
 import time
+import shutil
 from contextlib import nullcontext
 from pathlib import Path
 
@@ -146,7 +147,7 @@ def validate(
 
 def save_checkpoint(
     path, model, optimizer, scaler,
-    epoch, best_miou, config
+    epoch, best_miou, config, generator
 ):
     checkpoint = {
         "epoch": epoch,
@@ -155,6 +156,7 @@ def save_checkpoint(
         "scaler_state_dict": scaler.state_dict(),
         "best_miou": best_miou,
         "config": config,
+        "data_generator_state": generator.get_state(),
         "rng_state": {
             "python": random.getstate(),
             "numpy": np.random.get_state(),
@@ -172,8 +174,9 @@ def save_checkpoint(
     tmp_path.replace(path)
 
 
-def load_checkpoint(path, model, optimizer, scaler, device):
-    # Only load checkpoints created by this project and trusted sources.
+def load_checkpoint(
+    path, model, optimizer, scaler, device, generator
+):    # Only load checkpoints created by this project and trusted sources.
     checkpoint = torch.load(
         path,
         map_location=device,
@@ -195,6 +198,9 @@ def load_checkpoint(path, model, optimizer, scaler, device):
 
         if torch.cuda.is_available() and rng["cuda"] is not None:
             torch.cuda.set_rng_state_all(rng["cuda"])
+
+    if "data_generator_state" in checkpoint:
+        generator.set_state(checkpoint["data_generator_state"])
 
     return checkpoint["epoch"], checkpoint["best_miou"]
 
@@ -331,6 +337,31 @@ def main():
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    run_config_path = output_dir / "run_config.yaml"
+
+    if args.resume:
+        if not run_config_path.exists():
+            raise FileNotFoundError(
+                f"Run config not found: {run_config_path}"
+            )
+
+        with open(run_config_path, "r", encoding="utf-8") as f:
+            previous_config = yaml.safe_load(f)
+
+        if previous_config != cfg:
+            raise RuntimeError(
+                "Current config differs from the original run config. "
+                "Use the original configuration when resuming."
+            )
+    else:
+        with open(run_config_path, "w", encoding="utf-8") as f:
+            yaml.safe_dump(
+                cfg,
+                f,
+                sort_keys=False,
+                allow_unicode=True,
+            )
+
     epochs = (
         args.epochs
         if args.epochs is not None
@@ -347,17 +378,35 @@ def main():
             optimizer,
             scaler,
             device,
+            generator,
         )
         start_epoch = last_epoch + 1
         print(f"Resuming from epoch {start_epoch}")
 
     history_path = output_dir / "unet_history.csv"
 
-    if args.resume and not history_path.exists():
-        raise FileNotFoundError(
-            "Resume requires the existing history CSV: "
-            f"{history_path}"
-        )
+    if args.resume:
+        if not history_path.exists():
+            raise FileNotFoundError(
+                f"History CSV not found: {history_path}"
+            )
+
+        with open(history_path, "r", encoding="utf-8") as f:
+            rows = list(csv.DictReader(f))
+
+        if not rows:
+            raise RuntimeError("History CSV is empty")
+
+        last_history_epoch = int(rows[-1]["epoch"])
+        checkpoint_epoch = start_epoch - 1
+
+        if last_history_epoch != checkpoint_epoch:
+            raise RuntimeError(
+                "Checkpoint/history mismatch: "
+                f"checkpoint epoch={checkpoint_epoch}, "
+                f"history epoch={last_history_epoch}. "
+                "Restore matching checkpoint and history files."
+            )
 
     append_history = args.resume is not None
 
@@ -394,15 +443,6 @@ def main():
             miou = results["miou"]
             mean_dice = results["mean_dice"]
 
-            writer.writerow([
-                epoch,
-                train_loss,
-                val_loss,
-                miou,
-                mean_dice,
-                elapsed,
-            ])
-            f.flush()
 
             print(
                 f"Epoch {epoch}/{epochs} | "
@@ -436,15 +476,25 @@ def main():
             save_checkpoint(
                 checkpoint_dir / "unet_last.pth",
                 model, optimizer, scaler,
-                epoch, best_miou, cfg,
+                epoch, best_miou, cfg, generator,
             )
 
             if improved:
                 save_checkpoint(
                     checkpoint_dir / "unet_best.pth",
                     model, optimizer, scaler,
-                    epoch, best_miou, cfg,
+                    epoch, best_miou, cfg, generator,
                 )
+
+            writer.writerow([
+                epoch,
+                train_loss,
+                val_loss,
+                miou,
+                mean_dice,
+                elapsed,
+            ])
+            f.flush()
 
             if device.type == "cuda":
                 peak_gb = (

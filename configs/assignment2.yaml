@@ -16,7 +16,7 @@ model:
 
 data:
   image_size: [512, 1024]
-  batch_size: 2
+  batch_size: 12
   num_workers: 2
 
 training:

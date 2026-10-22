@@ -1,8 +1,10 @@
 venv
 assignment1/data/
+
 __pycache__/
 *.py[cod]
 *$py.class
+
 *-ubyte
 *.ubyte.gz
 *.gz

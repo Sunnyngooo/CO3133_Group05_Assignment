@@ -5,10 +5,12 @@ experiment:
 data:
   dataset: fashion_mnist
   root: ./data
-  val_ratio: 0.1
+  val_ratio: 0.15
   batch_size: 128
   num_workers: 0
-
+  augmentation:
+    enabled: False
+    rotation_degrees: 10
 training:
   epochs: 30
   optimizer: adam

@@ -3,6 +3,19 @@ from torch.utils.data import random_split
 import numpy as np
 from pathlib import Path
 
+def get_split_path(config: dict) -> Path: 
+    assignment_dir = Path(__file__).resolve().parents[2]
+    data_path = Path(config['data']['root'])
+    if not data_path.is_absolute():
+            data_path = assignment_dir / data_path
+        
+    seed = config['experiment']['seed']
+    val_ratio = config['data']['val_ratio']
+    
+    ratio_name = str(val_ratio).replace('.','p')
+    
+    return (data_path / 'splits' / f"fashion_mnist_split_seed{seed}_val{ratio_name}.npz")
+    
 def load_or_create_split(dataset, split_path: Path, val_ratio: float, seed: int):
     n_samples = len(dataset)
     if split_path.exists():

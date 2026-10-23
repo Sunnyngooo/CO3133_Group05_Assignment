@@ -2,7 +2,7 @@ from torchvision.datasets import FashionMNIST
 from torch.utils.data import DataLoader, Subset
 from pathlib import Path
 from assignment1.src.data.transforms import build_val_transform, build_train_transform
-from assignment1.src.data.split import load_or_create_split
+from assignment1.src.data.split import load_or_create_split, get_split_path
 from assignment1.src.utils.seed import make_generator, seed_worker
 from assignment1.src.data.statistics import compute_mean_std
 
@@ -25,8 +25,7 @@ def build_dataloaders(config):
     
     # Create split indices 
     ratio_name = str(val_ratio).replace('.', 'p')
-    split_path = (data_path / 'splits' 
-                  / f"fashion_mnist_split_seed{seed}_val{ratio_name}.npz")
+    split_path = get_split_path(config=config)
     train_indices, val_indices = load_or_create_split(train_full_dataset, 
                                                       split_path, 
                                                       val_ratio=data_config['val_ratio'], 

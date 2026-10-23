@@ -1,0 +1,29 @@
+{
+    "num_samples": 51000,
+    "raw_image_shape": [
+        28,
+        28
+    ],
+    "model_input_image_shape": [
+        1,
+        28,
+        28
+    ],
+    "min_pixel": 0.0,
+    "max_pixel": 1.0,
+    "mean": 0.28566697239875793,
+    "std": 0.3528567850589752,
+    "class_counts": {
+        "T-shirt/top": 5030,
+        "Trouser": 5073,
+        "Pullover": 5110,
+        "Dress": 5142,
+        "Coat": 5131,
+        "Sandal": 5108,
+        "Shirt": 5058,
+        "Sneaker": 5168,
+        "Bag": 5115,
+        "Ankle boot": 5065
+    },
+    "imbalance_ratio": 1.0274353876739564
+}

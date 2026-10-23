@@ -346,6 +346,7 @@ def main():
         pin_memory=(device.type == "cuda"),
         worker_init_fn=seed_worker,
         generator=generator,
+        drop_last=True,
     )
 
     val_loader = DataLoader(
@@ -355,6 +356,7 @@ def main():
         num_workers=num_workers,
         pin_memory=(device.type == "cuda"),
         worker_init_fn=seed_worker,
+        generator=generator,
     )
 
     model = build_model(model_cfg, resume=bool(args.resume)).to(device)

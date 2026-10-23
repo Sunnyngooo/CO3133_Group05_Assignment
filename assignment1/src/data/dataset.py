@@ -24,8 +24,7 @@ def build_dataloaders(config):
     
     # Create split indices 
     ratio_name = str(val_ratio).replace('.', 'p')
-    split_path = (assignment_path 
-                  / "data" / 'splits' 
+    split_path = (data_path / 'splits' 
                   / f"fashion_mnist_split_seed{seed}_val{ratio_name}.npz")
     train_indices, val_indices = load_or_create_split(train_full_dataset, 
                                                       split_path, 
@@ -63,4 +62,4 @@ def build_dataloaders(config):
                             shuffle=False,
                             num_workers=data_config['num_workers'],
                             worker_init_fn=seed_worker)
-    return train_loader, val_loader, test_loader
+    return train_loader, val_loader, test_loader, {'mean': mean, 'std': std}

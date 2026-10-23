@@ -4,6 +4,7 @@ from pathlib import Path
 from assignment1.src.data.transforms import build_val_transform, build_train_transform
 from assignment1.src.data.split import load_or_create_split
 from assignment1.src.utils.seed import make_generator, seed_worker
+from assignment1.src.data.statistics import compute_mean_std
 
 def build_dataloaders(config):
     """
@@ -31,10 +32,8 @@ def build_dataloaders(config):
                                                       val_ratio=data_config['val_ratio'], 
                                                       seed=seed)
     # Compute mean and standard deviation for normalization (training only)
-    pixels = train_full_dataset.data[train_indices].float() / 255.0
-    mean = pixels.mean().item()
-    std = pixels.std(unbiased=False).item()
-    
+    mean, std = compute_mean_std(train_full_dataset, train_indices)
+
     # Build and apply transform 
     train_transform = build_train_transform(config=config, mean=mean, std=std)
     val_transform = build_val_transform(config=config, mean=mean, std=std)

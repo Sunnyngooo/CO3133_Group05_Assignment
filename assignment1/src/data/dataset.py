@@ -24,7 +24,6 @@ def build_dataloaders(config):
     test_dataset = FashionMNIST(root=data_path, train=False, download=True)
     
     # Create split indices 
-    ratio_name = str(val_ratio).replace('.', 'p')
     split_path = get_split_path(config=config)
     train_indices, val_indices = load_or_create_split(train_full_dataset, 
                                                       split_path, 

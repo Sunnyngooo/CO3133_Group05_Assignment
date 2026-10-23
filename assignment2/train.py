@@ -1,10 +1,8 @@
 import argparse
 import csv
 import json
-from pickletools import optimize
 import random
 import time
-import shutil
 from tqdm.auto import tqdm
 from itertools import islice
 from contextlib import nullcontext
@@ -19,6 +17,7 @@ from torch.utils.data import DataLoader
 from assignment2.dataset import CityscapesDataset
 from assignment2.metrics import SegmentationMetrics
 from assignment2.models.unet import UNet
+from assignment2.models.deeplabv3 import DeepLabV3
 
 
 CLASS_NAMES = [
@@ -27,6 +26,25 @@ CLASS_NAMES = [
     "terrain", "sky", "person", "rider", "car", "truck",
     "bus", "train", "motorcycle", "bicycle",
 ]
+
+
+
+def build_model(model_cfg, resume=False):
+    name = model_cfg.get("name", "unet").lower()
+    if name == "unet":
+        return UNet(
+            in_channels=model_cfg["in_channels"],
+            num_classes=model_cfg["num_classes"],
+            base_channels=model_cfg["base_channels"],
+        )
+    if name == "deeplabv3":
+        return DeepLabV3(
+            num_classes=model_cfg["num_classes"],
+            pretrained_backbone=(
+                model_cfg.get("pretrained_backbone", True) and not resume
+            ),
+        )
+    raise ValueError(f"Unsupported model: {name}")
 
 
 def set_seed(seed):
@@ -93,9 +111,6 @@ def train_one_epoch(
     )
 
     for batch_idx, (images, masks) in progress_bar:
-        if max_batches is not None and batch_idx >= max_batches:
-            break
-
         images = images.to(device, non_blocking=True)
         masks = masks.to(device, non_blocking=True)
 
@@ -158,9 +173,6 @@ def validate(
     )
 
     for batch_idx, (images, masks) in progress_bar:
-        if max_batches is not None and batch_idx >= max_batches:
-            break
-
         images = images.to(device, non_blocking=True)
         masks = masks.to(device, non_blocking=True)
 
@@ -345,11 +357,7 @@ def main():
         worker_init_fn=seed_worker,
     )
 
-    model = UNet(
-        in_channels=model_cfg["in_channels"],
-        num_classes=model_cfg["num_classes"],
-        base_channels=model_cfg["base_channels"],
-    ).to(device)
+    model = build_model(model_cfg, resume=bool(args.resume)).to(device)
 
     ignore_index = train_cfg["ignore_index"]
 
@@ -367,6 +375,7 @@ def main():
         "cuda", enabled=use_amp
     )
 
+    model_name = model_cfg.get("name", "unet").lower()
     smoke_test = args.max_batches is not None
 
     if args.output_root:
@@ -430,7 +439,7 @@ def main():
         start_epoch = last_epoch + 1
         print(f"Resuming from epoch {start_epoch}")
 
-    history_path = output_dir / "unet_history.csv"
+    history_path = output_dir / f"{model_name}_history.csv"
 
     if args.resume:
         if not history_path.exists():
@@ -516,7 +525,7 @@ def main():
             }
 
             with open(
-                output_dir / f"unet_per_class_epoch_{epoch}.json",
+                output_dir / f"{model_name}_per_class_epoch_{epoch}.json",
                 "w",
                 encoding="utf-8",
             ) as metrics_file:
@@ -527,14 +536,14 @@ def main():
                 best_miou = miou
 
             save_checkpoint(
-                checkpoint_dir / "unet_last.pth",
+                checkpoint_dir / f"{model_name}_last.pth",
                 model, optimizer, scaler,
                 epoch, best_miou, cfg, generator,
             )
 
             if improved:
                 save_checkpoint(
-                    checkpoint_dir / "unet_best.pth",
+                    checkpoint_dir / f"{model_name}_best.pth",
                     model, optimizer, scaler,
                     epoch, best_miou, cfg, generator,
                 )

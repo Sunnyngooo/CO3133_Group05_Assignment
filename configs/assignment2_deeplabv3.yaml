@@ -1,0 +1,26 @@
+assignment: 2
+seed: 43
+
+dataset_path: data/assignment2
+checkpoint_dir: checkpoints/assignment2/deeplabv3
+output_dir: outputs/assignment2/deeplabv3
+
+device: auto
+
+model:
+  name: deeplabv3
+  num_classes: 19
+  pretrained_backbone: true
+
+data:
+  image_size: [512, 1024]
+  batch_size: 2
+  num_workers: 2
+
+training:
+  epochs: 10
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  optimizer: adamw
+  loss: cross_entropy
+  ignore_index: 255

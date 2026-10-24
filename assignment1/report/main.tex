@@ -1,0 +1,267 @@
+% Compile with XeLaTeX or LuaLaTeX (Unicode Vietnamese names).
+% Keep images/01_logobachkhoasang.png alongside this project.
+\documentclass[a4paper,12pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+% Latin Modern is the Unicode version of LaTeX's classic Computer Modern.
+% XeLaTeX/LuaLaTeX preserve the Vietnamese names below.
+\setmainfont{lmroman10-regular.otf}[
+  BoldFont=lmroman10-bold.otf,
+  ItalicFont=lmroman10-italic.otf,
+  BoldItalicFont=lmroman10-bolditalic.otf
+]
+\setlength{\headheight}{30pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\fontsize{9}{11}\selectfont
+  Ho Chi Minh City University of Technology\\
+  Faculty of Computer Science and Engineering}
+\fancyfoot[L]{\fontsize{9}{11}\selectfont Deep Learning -- Assignment 1}
+\fancyfoot[R]{\fontsize{9}{11}\selectfont Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+\hypersetup{pdftitle={Deep Learning -- Assignment 1 Report}}
+\newcommand{\TBD}{TBD\par}
+
+% Coordinates below are in millimetres from the top edge of an A4 page.
+\newcommand{\centerlineat}[2]{%
+  \put(105,-#1){\makebox(0,0){#2}}%
+}
+\AddToHookNext{shipout/foreground}{%
+  \begingroup
+  \setlength{\unitlength}{1mm}%
+  \centerlineat{43.5}{{\fontsize{13}{16}\selectfont
+    VIETNAM NATIONAL UNIVERSITY HO CHI MINH CITY}}%
+  \centerlineat{50}{{\fontsize{13}{16}\selectfont
+    HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY}}%
+  \centerlineat{56.5}{{\fontsize{13}{16}\selectfont
+    FACULTY OF COMPUTER SCIENCE AND ENGINEERING}}%
+  \centerlineat{84}{\includegraphics[width=52mm]{images/01_logobachkhoasang.png}}%
+  \centerlineat{112}{{\fontsize{21}{25}\selectfont\bfseries Deep Learning}}%
+  \put(38,-124){\rule{134mm}{0.45pt}}%
+  \centerlineat{157}{{\fontsize{29}{35}\selectfont\bfseries Assignment 1 Report}}%
+  \put(38,-190){\rule{134mm}{0.45pt}}%
+  \centerlineat{213}{%
+    {\fontsize{13}{20}\selectfont
+      \renewcommand{\arraystretch}{1.45}%
+      \begin{tabular}{@{}l@{\hspace{5mm}}l@{\hspace{8mm}}l@{}}
+        Advisor: & Lê Thành Sách & \\
+        Students: & Nguyễn Hữu Minh Khôi & 2352614 \\
+                  & Ngô Diễm Quyên & 2353031 \\
+                  & Đàm Hoài An & 2352002
+      \end{tabular}%
+    }%
+  }%
+  \centerlineat{263}{{\fontsize{13}{16}\selectfont HO CHI MINH CITY, OCTOBER 2026}}%
+  \endgroup
+}
+\begin{document}
+\thispagestyle{empty}
+\null
+\clearpage
+
+% Outline sources: handbook-ene-v2.pdf, Sections 3--5 and 8--14;
+% origin/a1 at commit 82656a7. The supplied sample informs formatting only.
+% Placeholders do not assert that planned models or experiments are complete.
+\pagenumbering{roman}
+\thispagestyle{plain}
+\begingroup
+\small
+\tableofcontents
+\endgroup
+\clearpage
+\pagenumbering{arabic}
+
+% PART 1: required problem formulation, Fashion-MNIST data, EDA and split.
+\section{Problem and Data Description}
+
+\subsection{Motivation and Problem Formulation}
+\subsubsection{Motivation and Research Objectives}
+\TBD
+\subsubsection{Classification Task: Inputs, Outputs and Prediction Unit}
+\TBD
+\subsubsection{Mathematical Formulation and Main Challenges}
+\TBD
+
+\subsection{Fashion-MNIST Dataset}
+\subsubsection{Source, Version, License and Labeling Process}
+\TBD
+\subsubsection{Sample Counts, Class Definitions and File Formats}
+\TBD
+\subsubsection{Dataset Bias and Limitations}
+\TBD
+
+\subsection{Exploratory Data Analysis}
+\subsubsection{Class Distribution and Imbalance Analysis}
+\TBD
+\subsubsection{Image Dimensions, Channels and Pixel Statistics}
+\TBD
+\subsubsection{Representative Samples and Visual Ambiguity}
+\TBD
+
+\subsection{Data Splitting and Leakage Prevention}
+\subsubsection{Official Test Set and Training--Validation Partitions}
+\TBD
+\subsubsection{Split Sizes, Random Seed and Stratification Policy}
+\TBD
+\subsubsection{Saved Split Indices, Subset Rules and Leakage Checks}
+\TBD
+
+\subsection{Preprocessing and Augmentation}
+\subsubsection{Data Quality Checks, Tensor Conversion and Input Shapes}
+\TBD
+\subsubsection{Normalization Using Training-Only Statistics}
+\TBD
+\subsubsection{Training Augmentation and Evaluation Transforms}
+\TBD
+\subsubsection{Example Batch After Preprocessing}
+\TBD
+
+\clearpage
+% PART 2: methods and planned comparisons, without claiming final results.
+\section{Methodology}
+
+\subsection{End-to-End Deep Learning Pipeline}
+\subsubsection{Pipeline Overview and Diagram}
+\TBD
+\subsubsection{Dataset and DataLoader Design}
+\TBD
+\subsubsection{Training, Validation and Test Procedures}
+\TBD
+
+\subsection{Model Architectures and Input Representations}
+\subsubsection{Linear / Softmax Classifier: Flattened Pixels and Logits}
+\TBD
+\subsubsection{Multilayer Perceptron: Hidden Layers and Activations}
+\TBD
+\subsubsection{Convolutional Neural Network: Convolution, Pooling and Feature Maps}
+\TBD
+\subsubsection{LSTM: Image Sequences, Timesteps and Hidden States}
+\TBD
+\subsubsection{Transformer: Tokens, Positional Encoding and Attention}
+\TBD
+
+\subsection{Loss Function and Evaluation Protocol}
+\subsubsection{Cross-Entropy Loss and Logit-Based Predictions}
+\TBD
+\subsubsection{Accuracy and Macro-F1}
+\TBD
+\subsubsection{Shared Test Protocol and Per-Class Evaluation}
+\TBD
+
+\subsection{Training Setup and Hyperparameter Selection}
+\subsubsection{Hardware, Software Versions and Random Seeds}
+\TBD
+\subsubsection{Optimizer, Learning Rate, Batch Size and Epochs}
+\TBD
+\subsubsection{Regularization, Scheduler, Early Stopping and Precision}
+\TBD
+\subsubsection{Checkpoint Selection and Hyperparameter Search}
+\TBD
+
+\subsection{Experimental Design and Fair Comparison}
+\subsubsection{Research Hypotheses and Comparison Criteria}
+\TBD
+\subsubsection{Changed Factors and Fixed Factors}
+\TBD
+\subsubsection{Shared Splits, Evaluation Metrics and Timing Protocol}
+\TBD
+
+\subsection{Implementation and Verification}
+\subsubsection{Self-Implemented Components and Library Components}
+\TBD
+\subsubsection{Data Pipeline, Metrics, Training and Checkpoint Tests}
+\TBD
+
+\clearpage
+% PART 3: all mandatory outputs from handbook Section 12.1.
+\section{Implementation Results}
+
+\subsection{Training Behavior}
+\subsubsection{Training and Validation Loss and Metric Curves}
+\TBD
+\subsubsection{Selected Checkpoints and Convergence Behavior}
+\TBD
+\subsubsection{Overfitting, Underfitting and Implementation Issues}
+\TBD
+
+\subsection{Quantitative Model Comparison}
+\subsubsection{Test Accuracy and Macro-F1 Across the Five Models}
+\TBD
+\subsubsection{Parameter Counts and Model Configurations}
+\TBD
+\subsubsection{Training Time and Inference Time}
+\TBD
+\subsubsection{Variability Across Random Seeds, When Feasible}
+\TBD
+
+\subsection{Qualitative Results and Per-Class Analysis}
+\subsubsection{Confusion Matrices and Per-Class Performance}
+\TBD
+\subsubsection{Correct Predictions and Difficult but Correct Cases}
+\TBD
+\subsubsection{Incorrect Predictions and Ground-Truth Comparisons}
+\TBD
+
+\subsection{Comparison and Discussion}
+\subsubsection{Effects of Input Representation and Inductive Bias}
+\TBD
+\subsubsection{Accuracy--Speed--Parameter Trade-Offs}
+\TBD
+\subsubsection{Evidence for Hypotheses and Limits of the Comparison}
+\TBD
+
+\subsection{Error Analysis}
+\subsubsection{Error Categories, Frequencies and Representative Examples}
+\TBD
+\subsubsection{Likely Causes of Misclassification}
+\TBD
+\subsubsection{Potential Improvements}
+\TBD
+
+\subsection{Representation or Regularization Ablation (Optional)}
+\TBD
+
+\subsection{Limitations and Conclusion}
+\subsubsection{Data, Method and Experimental Limitations}
+\TBD
+\subsubsection{Main Findings and Answer to the Research Question}
+\TBD
+\subsubsection{Generalization and Future Work}
+\TBD
+
+\clearpage
+\section*{References}
+\addcontentsline{toc}{section}{References}
+\TBD
+
+\appendix
+\section{Reproducibility and Project Resources}
+\subsection{Environment Setup and Dataset Preparation}
+\TBD
+\subsection{Training, Evaluation and Checkpoint Reconstruction}
+\TBD
+\subsection{Result Traceability: Configuration, Split, Checkpoint, Log and Commit}
+\TBD
+\subsection{Repository, Website, Checkpoints, Slides and Video Links}
+\TBD
+
+\section{Team Contributions}
+\TBD
+
+\section{AI Usage Disclosure}
+\subsection{Tool, Model, User, Development Stage and Purpose}
+\TBD
+\subsection{Affected Sections and Representative Prompts or Prompt Logs}
+\TBD
+\subsection{Edits, Verification Sources and Responsible Members}
+\TBD
+\end{document}

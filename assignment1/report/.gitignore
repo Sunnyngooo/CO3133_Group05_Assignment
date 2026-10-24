@@ -1,0 +1,14 @@
+# LaTeX build products; keep the source and figures under version control.
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+*.bbl
+*.blg
+main.pdf

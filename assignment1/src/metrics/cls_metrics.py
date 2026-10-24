@@ -66,8 +66,8 @@ def compute_per_class_metrics(y_true, y_pred, num_classes=10):
     
     precision, recall, f1, support = precision_recall_fscore_support(y_true=y_true, y_pred=y_pred, labels=range(num_classes), zero_division=0)
     return {
-        'precision': precision,
-        "recall": recall,
-        "f1": f1,
-        "support": support # number of occurences of each label in y_true
+        'precision': precision.tolist(),
+        "recall": recall.tolist(),
+        "f1": f1.tolist(),
+        "support": support.tolist() # number of occurences of each label in y_true
     }    

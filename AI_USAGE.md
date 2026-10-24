@@ -33,3 +33,17 @@ All generated content was reviewed and adjusted by the project contributors befo
 - Student edits and verification: TBD; no student verification is claimed.
 - Responsible member for final verification: TBD.
 - Detailed experimental content and results remain TBD.
+
+### Assignment 1 automatic PDF builds - 24 October 2026
+
+- Tool: OpenAI Codex; exact model/version not recorded.
+- Used by: requesting group member; identity confirmation TBD.
+- Purpose and prompt summary: configure GitHub to build and provide the PDF
+  automatically after changes, so group members need not compile locally.
+- Affected files: `.github/workflows/a1-report-pdf.yml` and
+  `assignment1/report/README.md`.
+- AI contribution: XeLaTeX build workflow, artifact upload and download guide.
+- Verification: checked the LaTeX action's documented inputs and GitHub artifact
+  documentation; resolved action versions to commit hashes. Build execution is
+  checked against the corresponding GitHub Actions run.
+- Student review and final responsible member: TBD.

@@ -27,7 +27,7 @@ def build_dataloaders(config):
     split_path = get_split_path(config=config)
     train_indices, val_indices = load_or_create_split(train_full_dataset, 
                                                       split_path, 
-                                                      val_ratio=data_config['val_ratio'], 
+                                                      val_ratio=val_ratio, 
                                                       seed=seed)
     # Compute mean and standard deviation for normalization (training only)
     mean, std = compute_mean_std(train_full_dataset, train_indices)

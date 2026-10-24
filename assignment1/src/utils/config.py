@@ -91,7 +91,7 @@ def validate_config(config: dict) -> None:
     # checkpoints section
     monitor = require_key(config=config, section='checkpoints', key='monitor', expected_type=str)
     mode = require_key(config=config, section='checkpoints', key='mode', expected_type=str) 
-    if monitor != 'macro-f1' or mode != 'max': 
+    if monitor != 'macro_f1' or mode != 'max': 
         raise ValueError("fit() only supports macro-f1 with mode=max.")
     
     # model section 

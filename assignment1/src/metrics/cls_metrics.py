@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, precision_recall_fscore_support
 
 def validate_label_vector(y_values, name):
     if isinstance(y_values, torch.Tensor):
@@ -45,3 +45,29 @@ def compute_classification_metrics(y_true, y_pred, num_classes=10):
     macro_f1_score = f1_score(y_true=y_true, y_pred=y_pred, average='macro', labels=range(num_classes), zero_division=0)
     
     return {"accuracy": accuracy, "macro_f1": macro_f1_score}
+
+def compute_confusion_matrix(y_true, y_pred, num_classes=10):
+    y_true, y_pred = validate_input(y_true=y_true, y_pred=y_pred, num_classes=num_classes)
+    cm = confusion_matrix(y_true=y_true, y_pred=y_pred, labels=range(num_classes))
+    return cm
+
+def compute_per_class_accuracy(y_true, y_pred, num_classes=10):
+    cm = compute_confusion_matrix(y_true=y_true, y_pred=y_pred, num_classes=num_classes)
+    
+    true_positive = np.diag(cm) 
+    total_per_class = np.sum(cm, axis=1)
+    return np.divide(true_positive, total_per_class, 
+                     out=np.zeros(num_classes, dtype=float), 
+                     where=total_per_class != 0)
+    
+    
+def compute_per_class_metrics(y_true, y_pred, num_classes=10):
+    y_true, y_pred = validate_input(y_true=y_true, y_pred=y_pred, num_classes=num_classes)
+    
+    precision, recall, f1, support = precision_recall_fscore_support(y_true=y_true, y_pred=y_pred, labels=range(num_classes), zero_division=0)
+    return {
+        'precision': precision,
+        "recall": recall,
+        "f1": f1,
+        "support": support # number of occurences of each label in y_true
+    }    

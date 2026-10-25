@@ -47,3 +47,15 @@ All generated content was reviewed and adjusted by the project contributors befo
   documentation; resolved action versions to commit hashes. Build execution is
   checked against the corresponding GitHub Actions run.
 - Student review and final responsible member: TBD.
+
+## Assignment 1 report draft and table placement - 25 October 2026
+
+- Tool: OpenAI Codex; exact model/version not recorded.
+- Used by: requesting group member; identity confirmation TBD.
+- Purpose: draft report content from a1 snapshot eb89385269bf1384913a011cf4d8ed6184690172 and stored EDA/notebook evidence, then fix the isolated Table 4 page.
+- Affected files: assignment1/report/main.tex, sections/, images/, data/ and README.md.
+- AI contribution: drafted data/methodology/preliminary-result discussion, packaged figures and saved curve values, and adjusted only the final batch table placement and local spacing in the last formatting step.
+- Evidence limits: final comparative results remain TBD; saved notebook validation scores are labeled preliminary and use a different configuration. No new training or test results were generated.
+- Verification: approved source compiled twice with XeLaTeX; 23 pages; no overfull/underfull or unresolved-reference warnings. Table 4 and the following Methodology page were visually checked. Other body pages retained their extracted text apart from page numbering. Published LaTeX and assets were copied byte-for-byte from the approved source.
+- User review: user accepted the table placement preview and authorized commit/push. This does not imply final scientific verification of the report.
+- Student verification and final responsible member: TBD.

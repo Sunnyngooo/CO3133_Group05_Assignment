@@ -1,0 +1,167 @@
+\clearpage
+\section{Methodology}
+\label{sec:methods}
+
+\subsection{End-to-End Deep Learning Pipeline}
+\subsubsection{Pipeline Overview and Diagram}
+The project separates configuration, data preparation, model construction, optimization, evaluation and checkpoint handling into modules~\cite{code}. Figure~\ref{fig:pipeline} summarizes the implemented processing stages. The same data-loading and evaluation functions are intended to support all architecture families, reducing differences unrelated to the models themselves.
+
+\begin{figure}[htbp]
+\centering
+\fbox{\begin{minipage}{0.92\linewidth}
+\centering\small
+\vspace{3mm}
+Fashion-MNIST $\longrightarrow$ Saved split $\longrightarrow$ Preprocessing
+$\longrightarrow$ DataLoaders\\[2mm]
+$\downarrow$\\[2mm]
+Model logits $\longrightarrow$ Cross-entropy $\longrightarrow$ Parameter update\\[2mm]
+$\downarrow$\\[2mm]
+Validation Macro-F1 $\longrightarrow$ Best checkpoint\\[2mm]
+$\downarrow$\\[2mm]
+Held-out test predictions $\longrightarrow$ Accuracy and Macro-F1
+\vspace{3mm}
+\end{minipage}}
+\caption{Implemented pipeline. Training updates model weights; validation selects the checkpoint. Test evaluation is a separate step after selection.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsubsection{Dataset and DataLoader Design}
+The data module creates separate Fashion-MNIST dataset objects for training, validation and testing. The first two refer to the official training pool but receive different transforms and disjoint subsets of indices. This separation allows optional training augmentation without modifying validation inputs. All loaders use batch size 128 and currently use zero worker processes. Training shuffles examples with a seeded generator; validation and test loaders preserve their ordering.
+
+\subsubsection{Training, Validation and Test Procedures}
+For each training batch, the loop enables training mode, clears gradients, performs a forward pass, computes cross-entropy, backpropagates and updates parameters. The implementation stores predictions and targets across the epoch to compute classification metrics. If batch $b$ contains $n_b$ examples and its mean loss is $\ell_b$, the reported epoch loss is
+\begin{equation}
+ \overline{\ell}=\frac{\sum_b n_b\ell_b}{\sum_b n_b}.
+\end{equation}
+This prevents the final short batch from receiving the same weight as a full batch.
+
+Validation and test use evaluation mode and disable gradient tracking. They compute predictions and metrics without optimizer updates. After training, the evaluation entry point rebuilds the selected architecture from the saved run configuration, restores its best checkpoint, verifies configuration consistency and writes test metrics to a JSON file. The availability of this code does not by itself establish that a particular final experiment has been executed.
+
+\subsection{Model Architectures and Input Representations}
+\subsubsection{Linear / Softmax Classifier: Flattened Pixels and Logits}
+The linear baseline flattens each image into a vector $v\in\mathbb{R}^{784}$ and applies one affine transformation,
+\begin{equation}
+ z=Wv+b,\qquad W\in\mathbb{R}^{10\times784},\quad b\in\mathbb{R}^{10}.
+\end{equation}
+Its parameter count is $784\times10+10=7{,}850$. The forward method returns logits directly; it does not apply softmax before cross-entropy. This is the least complex implemented model and provides a useful reference for how much can be learned without hidden nonlinear layers. It can assign different weights to image positions but does not explicitly encode locality or shared image features.
+
+\subsubsection{Multilayer Perceptron: Hidden Layers and Activations}
+The MLP uses the sequence $784\rightarrow256\rightarrow128\rightarrow10$. Each hidden linear layer is followed by ReLU and dropout with probability 0.2, while the final layer produces logits. ReLU enables nonlinear decision boundaries, and dropout suppresses randomly selected hidden activations during training. The architecture contains
+\begin{equation}
+ (784\times256+256)+(256\times128+128)+(128\times10+10)
+ =235{,}146
+\end{equation}
+trainable parameters. Flattening retains the pixel values but removes an explicit two-dimensional layout from subsequent layers. Thus, the MLP adds nonlinear capacity while still relying on fully connected weights to learn spatial relationships.
+
+\subsubsection{Convolutional Neural Network: Convolution, Pooling and Feature Maps}
+The CNN is constructed from two convolutional blocks, followed by a small fully connected classifier. Each block contains a $3\times3$ convolution with padding 1, ReLU and $2\times2$ max pooling. Channel counts are 32 and 64. Convolution preserves the spatial dimensions within each block, and pooling reduces them from $28\times28$ to $14\times14$ and then $7\times7$. The final feature tensor therefore has $64\times7\times7=3{,}136$ values per image.
+
+The classifier flattens those features, maps them to 64 hidden units, applies ReLU and dropout 0.2, and outputs ten logits. Table~\ref{tab:cnn} details the learned layers. Shared local kernels encode an image-specific structural assumption, while pooling reduces spatial resolution. These properties motivate the hypothesis that the CNN can learn useful local garment patterns, but a performance advantage must still be measured under a shared protocol.
+
+\begin{table}[htbp]
+\centering\small
+\caption{CNN learned layers and dimensions under the current configuration. ReLU, max pooling and dropout introduce no trainable parameters.}
+\label{tab:cnn}
+\begin{tabularx}{\linewidth}{@{}lXr@{}}
+\toprule
+Layer & Dimensions / operation & Parameters \\
+\midrule
+Conv 1 & $1\rightarrow32$, $3\times3$; pool to $32\times14\times14$ & 320 \\
+Conv 2 & $32\rightarrow64$, $3\times3$; pool to $64\times7\times7$ & 18,496 \\
+Hidden linear & $3{,}136\rightarrow64$ & 200,768 \\
+Output linear & $64\rightarrow10$ & 650 \\
+\midrule
+Total & & 220,234 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+\subsubsection{LSTM: Image Sequences, Timesteps and Hidden States}
+\TBD
+
+\subsubsection{Transformer: Tokens, Positional Encoding and Attention}
+\TBD
+
+\subsection{Loss Function and Evaluation Protocol}
+\subsubsection{Cross-Entropy Loss and Logit-Based Predictions}
+All implemented training configurations use \texttt{CrossEntropyLoss} without class weights. For a batch of $B$ examples and logits $z_{ic}$, the objective is
+\begin{equation}
+ \mathcal{L}= -\frac{1}{B}\sum_{i=1}^{B}
+ \log\left(\frac{\exp(z_{i,y_i})}{\sum_{c=0}^{9}\exp(z_{ic})}\right).
+\end{equation}
+PyTorch's loss accepts unnormalized logits and incorporates the required normalization internally~\cite{pytorchloss}. Applying softmax before it is unnecessary. Prediction uses $\hat y_i=\arg\max_c z_{ic}$, so no probability threshold or additional post-processing is used.
+
+\subsubsection{Accuracy and Macro-F1}
+Accuracy measures the fraction of correctly classified examples,
+\begin{equation}
+ \mathrm{Accuracy}=\frac{1}{N}\sum_{i=1}^{N}\mathbf{1}(\hat y_i=y_i).
+\end{equation}
+For class $c$, let $TP_c$, $FP_c$ and $FN_c$ denote true positives, false positives and false negatives. Its F1 score and the ten-class macro average are
+\begin{equation}
+ F1_c=\frac{2TP_c}{2TP_c+FP_c+FN_c},\qquad
+ \mathrm{Macro\mbox{-}F1}=\frac{1}{10}\sum_{c=0}^{9}F1_c.
+\end{equation}
+The metrics implementation explicitly includes all ten class labels and assigns zero when an F1 denominator is undefined. It validates input lengths, label-vector dimensions and integer label ranges before calling the library metrics. Both scores are computed from the full epoch's predictions rather than averaged across independently scored batches.
+
+\subsubsection{Shared Test Protocol and Per-Class Evaluation}
+The current scripts select a checkpoint using validation Macro-F1 and evaluate that checkpoint on the held-out test set. Test results must not determine the checkpoint or tune hyperparameters. The source also contains helpers for confusion matrices and per-class precision, recall, F1 and support. The helper named \texttt{compute\_per\_class\_accuracy} divides each confusion-matrix diagonal entry by its row sum; this quantity is class recall. Published per-class outputs and their integration into the saved final results are \textbf{TBD}.
+
+\subsection{Training Setup and Hyperparameter Selection}
+\subsubsection{Hardware, Software Versions and Random Seeds}
+The project README records Windows on an Intel Core i7-8665U, 16 GB RAM and CPU execution without a discrete GPU. It lists Python 3.12.10 and a CPU PyTorch build. The dependency file records PyTorch 2.14.0+cpu, torchvision 0.29.0+cpu, NumPy 2.5.3, scikit-learn 1.9.1, Matplotlib 3.11.2, seaborn 0.13.2 and pytest 9.1.1~\cite{code}. These are repository-declared environment details, not a fresh environment capture for the eventual reported runs.
+
+The implementation seeds Python, NumPy and PyTorch, seeds CUDA when available, configures cuDNN determinism and requests deterministic PyTorch algorithms. The configured seed is 42. These controls support repeatability within a specified environment; they do not establish identical results across different libraries, devices or platforms~\cite{pytorchrepro}. The final experiment's environment capture is \textbf{TBD}.
+
+\subsubsection{Optimizer, Learning Rate, Batch Size and Epochs}
+Table~\ref{tab:training} gives the merged settings for the three implemented models. Model-specific YAML files override the base settings: in particular, the current Linear, MLP and CNN configurations use 20 epochs and learning rate $5\times10^{-4}$ rather than the base defaults of 30 epochs and $10^{-3}$. The entry point supports SGD, Adam and AdamW, but Adam is the configured optimizer for this comparison.
+
+\begin{table}[htbp]
+\centering
+\caption{Current configured settings; final run results remain pending.}
+\label{tab:training}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Setting & Linear, MLP and CNN \\
+\midrule
+Optimizer & Adam \\
+Learning rate & $0.0005$ \\
+Training batch size & 128 \\
+Epochs & 20 \\
+Weight decay & 0 \\
+Random seed & 42 \\
+Train / validation / test & 51,000 / 9,000 / 10,000 \\
+Augmentation & Disabled \\
+Checkpoint rule & Highest validation Macro-F1 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Regularization, Scheduler, Early Stopping and Precision}
+The MLP and CNN include dropout with probability 0.2; the linear baseline has no dropout layer. Weight decay is zero. The current training loop has no learning-rate scheduler or early-stopping mechanism and runs for the configured number of epochs. It uses ordinary floating-point training without an automatic mixed-precision context. These statements describe the implementation, rather than options merely mentioned in the report outline.
+
+\subsubsection{Checkpoint Selection and Hyperparameter Search}
+After each epoch, the loop saves a checkpoint when validation Macro-F1 strictly exceeds its previous best. Equal scores retain the earlier checkpoint. Each checkpoint contains model weights, optimizer state, epoch, validation metrics and configuration. The run directory also records the resolved YAML and training history. This design allows test evaluation to reconstruct the selected model.
+
+The repository supplies one current configuration for each implemented architecture. It does not provide evidence of a completed hyperparameter search, so these settings must not be described as optimized or best-performing. A documented search strategy and its selection record are \textbf{TBD}.
+
+\subsection{Experimental Design and Fair Comparison}
+\subsubsection{Research Hypotheses and Comparison Criteria}
+The intended experiments test two main hypotheses. First, adding hidden nonlinear layers to the flattened linear baseline may improve recognition of categories requiring interactions between pixels. Second, convolutional weight sharing and local receptive fields may provide a better accuracy--cost trade-off than fully connected processing. These are architecture-motivated hypotheses. Their acceptance or rejection requires shared-split results, uncertainty information where feasible and class-level evidence.
+
+\subsubsection{Changed Factors and Fixed Factors}
+The principal changed factor is the architecture and its associated representation. The currently implemented models share the dataset partitions, normalization procedure, seed, optimizer family, learning rate, batch size, epoch budget, selection metric and test protocol. Dropout is architecture-dependent. Parameter counts differ, so equal epochs and optimizer settings do not constitute matched model capacity or equal compute budgets. Sequence representation choices and optional controlled ablations remain \textbf{TBD}.
+
+\subsubsection{Shared Splits, Evaluation Metrics and Timing Protocol}
+Every final comparison should use the same saved split and report both Accuracy and Macro-F1. The training loop already records elapsed wall-clock time for the fit call, including training, validation and checkpoint saving; it excludes earlier data preparation and model construction. This is not pure optimizer time. If GPU execution is used later, timing must account for device synchronization.
+
+An implemented inference benchmark is not present in the examined snapshot. Its batch size, warm-up, device, repetition count, synchronization and measurement unit are \textbf{TBD}. No inference-speed ranking can be drawn from parameter counts alone.
+
+\subsection{Implementation and Verification}
+\subsubsection{Self-Implemented Components and Library Components}
+The group-defined components include configuration merging and validation, saved-split handling, normalization-statistic computation, model assembly, training/evaluation loops, run identifiers and checkpoint management. PyTorch provides tensors, neural layers, automatic differentiation, optimizers, DataLoader and serialization. Torchvision provides Fashion-MNIST access and transforms; scikit-learn supplies classification metrics; Matplotlib is used for EDA figures, and PyYAML handles configuration files. The implemented main models do not load pretrained weights.
+
+\subsubsection{Data Pipeline, Metrics, Training and Checkpoint Tests}
+The repository contains tests for metric values and invalid inputs, weighted epoch losses, parameter updates, evaluation mode and gradient suppression, as well as checkpoint metadata and restoration. Additional checks cover seeded splitting, batch contracts, transforms, EDA outputs and random-number reproducibility. Several of the data checks are executable scripts rather than collected pytest test functions, so the presence of test files alone is insufficient evidence that every check runs under one command.
+
+For this draft, 33 Python files in the source snapshot were parsed without syntax errors. The tests were not rerun because the available review environment lacked PyTorch. Therefore, no new test-pass count or end-to-end training success is claimed here. A test execution log tied to the final source commit is \textbf{TBD}. PyYAML is imported by the project but is not pinned in the current Assignment 1 dependency file; its tested version must also be recorded for a complete environment specification.

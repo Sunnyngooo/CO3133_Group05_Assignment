@@ -1,0 +1,135 @@
+\clearpage
+\section{Implementation Results}
+\label{sec:results}
+
+\subsection{Training Behavior}
+\subsubsection{Training and Validation Loss and Metric Curves}
+\label{sec:preliminary}
+The only stored model-training output available in the inspected source snapshot is a preliminary linear-classifier experiment in \texttt{draft.ipynb}~\cite{code}. It contains ten epochs of printed training and validation metrics. Figure~\ref{fig:preliminary} reconstructs those curves from the saved text output; no model was retrained to produce the figure.
+
+\textbf{Protocol distinction.} This notebook experiment predates the current scripts. It uses a 50,000/10,000 train--validation split, batch size 64, SGD with learning rate 0.01 and ten epochs. Pixels are scaled to $[0,1]$ without the training-statistic normalization used by the current pipeline. Consequently, its metrics must not be presented as final test results or used as a controlled comparison with later model runs. Table~\ref{tab:protocols} makes these differences explicit.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Preliminary notebook protocol versus the current configured protocol.}
+\label{tab:protocols}
+\begin{tabularx}{\linewidth}{@{}lXX@{}}
+\toprule
+Setting & Preliminary notebook & Current scripts \\
+\midrule
+Train / validation & 50,000 / 10,000 & 51,000 / 9,000 \\
+Optimizer & SGD & Adam \\
+Learning rate & 0.01 & 0.0005 \\
+Batch size & 64 & 128 \\
+Epochs & 10 & 20 for Linear, MLP, CNN \\
+Normalization & Scale to $[0,1]$ only & Scale, then training mean/std \\
+Reported evaluation & Validation & Final test results TBD \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/preliminary_linear_curves.pdf}
+\caption{Preliminary Linear learning curves reconstructed from the ten logged notebook epochs. All displayed classification metrics are training or validation metrics, not test metrics.}
+\label{fig:preliminary}
+\end{figure}
+\FloatBarrier
+
+Across the logged epochs, training loss decreases from 1.0076 to 0.5003, while validation loss decreases from 0.7610 to 0.5151. Validation Accuracy increases from 75.44\% to 82.91\%, and validation Macro-F1 increases from 0.7433 to 0.8293. Table~\ref{tab:preliminary} reports the last logged epoch. These observations support that the preliminary linear model learns a useful decision rule under its own protocol, but do not establish its performance under the current configuration.
+
+\begin{table}[htbp]
+\centering
+\caption{Last logged epoch of the preliminary Linear experiment. Values retain the precision printed in the notebook.}
+\label{tab:preliminary}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Measurement at epoch 10 & Value \\
+\midrule
+Training loss & 0.5003 \\
+Training Accuracy & 83.32\% \\
+Validation loss & 0.5151 \\
+Validation Accuracy & 82.91\% \\
+Validation Macro-F1 & 0.8293 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Selected Checkpoints and Convergence Behavior}
+For the preliminary experiment, epoch 10 has the highest Macro-F1 among the ten printed validation scores. The notebook does not provide the current pipeline's saved-checkpoint record, so this observation is not evidence of a recoverable selected checkpoint. Best-epoch records, training histories and checkpoints for the current Linear, MLP and CNN configurations are \textbf{TBD}.
+
+\subsubsection{Overfitting, Underfitting and Implementation Issues}
+At the preliminary experiment's last logged epoch, training Accuracy exceeds validation Accuracy by 0.41 percentage points. Both loss curves decrease over the observed period. This short trajectory alone is insufficient to conclude that overfitting is absent or that the model is capacity-limited: the metrics are rounded, only one split is shown, and no independent repeat or test outcome is stored. A diagnosis for the current architectures requires their own histories.
+
+Implementation issues relevant to interpreting this draft are the older notebook protocol, unfinished sequence-model modules and the lack of committed final-run artifacts. They limit evidence coverage rather than demonstrate a specific model failure. Runtime issues and verified fixes associated with the final experiment runs remain \textbf{TBD}.
+
+\subsection{Quantitative Model Comparison}
+\subsubsection{Test Accuracy and Macro-F1 Across the Five Models}
+Table~\ref{tab:finalcomparison} reserves space for the required five-model comparison. The source snapshot contains implementations of Linear, MLP and CNN, but no corresponding saved final-run histories, test-metric JSON files or checkpoints. LSTM and Transformer model files are still empty. The absence of tracked run artifacts does not imply that no teammate has run experiments locally; it means those experiments cannot yet be verified from this snapshot.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Final comparison status. Parameter counts are architecture-derived; test metrics and timings have not been supplied.}
+\label{tab:finalcomparison}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Model & Parameters & Test Acc. & Macro-F1 & Train time & Infer. time \\
+\midrule
+Linear & 7,850 & TBD & TBD & TBD & TBD \\
+MLP & 235,146 & TBD & TBD & TBD & TBD \\
+CNN & 220,234 & TBD & TBD & TBD & TBD \\
+LSTM & TBD & TBD & TBD & TBD & TBD \\
+Transformer & TBD & TBD & TBD & TBD & TBD \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Parameter Counts and Model Configurations}
+The three known counts follow directly from layer dimensions, including biases. Linear has 7,850 parameters, MLP has 235,146 and CNN has 220,234. The CNN therefore contains 14,912 fewer trainable parameters than this MLP, approximately 6.34\% fewer. This is a structural comparison, not an observed accuracy, memory or speed improvement. ReLU, dropout, pooling and flattening do not add learned parameters.
+
+The implementation provides a helper for total, trainable and non-trainable parameter counts. The figures above were independently calculated from the current architecture definitions; runtime count verification for the final saved configurations is \textbf{TBD}.
+
+\subsubsection{Training Time and Inference Time}
+The fit function returns a \texttt{training\_time} field, but no measured value from a current model run is stored in the examined snapshot. Inference timing is not yet implemented as a benchmark. The notebook output includes no elapsed-time record. Both required timing columns therefore remain \textbf{TBD}; neither parameter count nor epoch count substitutes for a wall-clock measurement.
+
+\subsubsection{Variability Across Random Seeds, When Feasible}
+The present configurations specify seed 42, and the available preliminary output represents one run. Repeated-run results, mean scores and standard deviations are \textbf{TBD}. Without repeats, small differences between future scores should not be interpreted as robust improvements.
+
+\subsection{Qualitative Results and Per-Class Analysis}
+\subsubsection{Confusion Matrices and Per-Class Performance}
+\TBD
+\subsubsection{Correct Predictions and Difficult but Correct Cases}
+\TBD
+\subsubsection{Incorrect Predictions and Ground-Truth Comparisons}
+\TBD
+
+\subsection{Comparison and Discussion}
+\subsubsection{Effects of Input Representation and Inductive Bias}
+The implemented architectures already make different assumptions about images. Linear and MLP consume flattened pixels, whereas CNN preserves a two-dimensional feature hierarchy and shares local filters. The MLP introduces nonlinear capacity without explicit convolutional structure. These design differences define what the eventual experiments should test; the current evidence cannot attribute a measured gain to any of them because a shared-protocol multi-model result is not yet available.
+
+\subsubsection{Accuracy--Speed--Parameter Trade-Offs}
+The current MLP and CNN have similar parameter counts, with CNN slightly smaller, whereas Linear is substantially smaller. However, convolution performs repeated operations across spatial locations, and equal parameter counts do not imply equal inference cost. A complete trade-off analysis must combine final test metrics with measured train/inference times and the documented hardware. The empirical comparison is \textbf{TBD}.
+
+\subsubsection{Evidence for Hypotheses and Limits of the Comparison}
+The stored EDA supports a near-balanced training subset, and the preliminary notebook output supports that a linear model can learn under its earlier setup. Neither observation decides the architecture-comparison hypotheses. There is currently no controlled evidence that the CNN outperforms the MLP, that nonlinear capacity improves over Linear under the current protocol, or that a sequence model is competitive. Those conclusions remain \textbf{TBD}.
+
+\subsection{Error Analysis}
+\subsubsection{Error Categories, Frequencies and Representative Examples}
+\TBD
+\subsubsection{Likely Causes of Misclassification}
+\TBD
+\subsubsection{Potential Improvements}
+\TBD
+
+\subsection{Representation or Regularization Ablation (Optional)}
+\TBD
+
+\subsection{Limitations and Conclusion}
+\subsubsection{Data, Method and Experimental Limitations}
+This draft describes a controlled small-image benchmark and an implementation snapshot, not a completed five-model study. Its main limitations are unfinished LSTM/Transformer code, missing current-run artifacts and repeated trials, and unavailable per-class, qualitative and timing results. The preliminary Linear run cannot fill these gaps because it uses a different split and training configuration. Index-disjoint partitions also do not demonstrate content-level duplicate removal.
+
+\subsubsection{Main Findings and Answer to the Research Question}
+The completed work establishes a shared data-processing and checkpoint-selection pipeline, supplies EDA evidence and implements three architecture families. The stored training subset is nearly balanced, and the preliminary notebook reaches 82.91\% validation Accuracy under its earlier protocol. The main research question about comparative architecture quality remains unanswered. A final ranking and final test-based conclusion are \textbf{TBD}.
+
+\subsubsection{Generalization and Future Work}
+The next priorities are to complete the two sequence architectures, run all five models under the shared protocol, retain configurations/checkpoints/histories, and export test metrics, confusion matrices, prediction examples and timings. If feasible, additional seeds and a controlled representation or regularization ablation should assess stability and explain observed differences. Claims beyond Fashion-MNIST would require evaluation on data reflecting the intended deployment conditions.

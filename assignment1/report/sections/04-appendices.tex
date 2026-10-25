@@ -1,0 +1,72 @@
+\clearpage
+\appendix
+\section{Reproducibility and Project Resources}
+\subsection{Environment Setup and Dataset Preparation}
+The commands below assume a \emph{separate source checkout} of the cited \texttt{a1} snapshot, with the working directory at the repository root. They are instructions for the current implementation, not evidence that new experiments were run while preparing this draft. Install Python 3.12 and create an isolated environment. On Windows:
+\begin{quote}\small\ttfamily
+py -3.12 -m venv .venv\\
+.venv\textbackslash Scripts\textbackslash Activate.ps1\\
+python -m pip install -r assignment1/requirements.txt\\
+python -m pip install PyYAML
+\end{quote}
+PyYAML is an additional required dependency omitted from the current pinned list; its verified version is \textbf{TBD}. Fashion-MNIST is downloaded automatically when the data loader is first used. The EDA entry point can be invoked as follows:
+\begin{quote}\small\ttfamily
+python -m assignment1.scripts.eda
+\end{quote}
+Preserve the generated split file and use the same source revision and environment for all compared runs. The report branch was originally based on an older code snapshot, so report-only files should not be mistaken for the latest training implementation.
+
+\subsection{Training, Evaluation and Checkpoint Reconstruction}
+The following training commands correspond to the three architectures currently implemented in the cited source:
+\begin{quote}\small\ttfamily
+python -m assignment1.scripts.train --model linear\\
+python -m assignment1.scripts.train --model mlp\\
+python -m assignment1.scripts.train --model cnn
+\end{quote}
+Run identifiers take the form \texttt{<model>\_baseline\_<index>}. For example, if the first Linear run is assigned \texttt{linear\_baseline\_001}, evaluate it with
+\begin{quote}\small\ttfamily
+python -m assignment1.scripts.evaluate\\
+\hspace*{5mm}--run-id linear\_baseline\_001
+\end{quote}
+The evaluation command must be entered on one line. Its run configuration and best checkpoint must already exist. The script saves \texttt{test\_metrics.json} in the run directory. LSTM and Transformer commands must wait for their model implementations; appearing in command-line choices does not make them executable models. Exact reconstruction of an observed score must be checked from retained artifacts rather than assumed from a seed alone.
+
+\subsection{Result Traceability: Configuration, Split, Checkpoint, Log and Commit}
+For each final model, retain the source commit, run ID, merged YAML, saved split indices, normalization statistics, best checkpoint and history/test JSON files. The current scripts provide storage locations for these artifacts, but the final artifact inventory is \textbf{TBD}. The EDA images in this report originate from the stored output directory of commit \texttt{eb89385}; the preliminary curves were reconstructed from the notebook's logged values and retain their printed precision.
+
+\subsection{Repository, Website, Checkpoints, Slides and Video Links}
+\begin{itemize}
+\item \href{https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/a1}{Assignment 1 code branch}.
+\item \href{https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/a1-report/assignment1/report}{Report source branch}.
+\item \href{https://github.com/Sunnyngooo/CO3133_Group05_Assignment/actions/workflows/a1-report-pdf.yml}{Automatic report PDF builds}.
+\item Assignment website, final checkpoint links, slides and presentation video: \textbf{TBD}.
+\end{itemize}
+This review draft has not been committed or published. The automatic build link refers to versions already pushed to the report branch, not to this uncommitted preview.
+
+\section{Team Contributions}
+\begin{table}[htbp]
+\centering
+\caption{Registered group members and contribution records to be confirmed.}
+\begin{tabularx}{\linewidth}{@{}lrX@{}}
+\toprule
+Member & Student ID & Contributions \\
+\midrule
+Nguyễn Hữu Minh Khôi & 2352614 & TBD \\
+Ngô Diễm Quyên & 2353031 & TBD \\
+Đàm Hoài An & 2352002 & TBD \\
+\bottomrule
+\end{tabularx}
+\end{table}
+The requesting group member is responsible for the overall report; the corresponding name and the remaining implementation/experiment roles require group confirmation. No contribution is assigned to a specific member without that confirmation.
+
+\section{AI Usage Disclosure}
+\subsection{Tool, Model, User, Development Stage and Purpose}
+The existing Assignment 1 page records Gemini Flash use by Ngô Diễm Quyên for dependency-list preparation, formatting hardware information and inspecting tensor labels~\cite{code}. The exact model version and dates for those entries are \textbf{TBD}; the page records student checks for those tasks, which are not independently repeated here.
+
+OpenAI Codex was used during 24--25 October 2026 to prepare the cover, organize the report, inspect source/configuration files and stored outputs, check references, draft English text and configure automatic PDF builds. It also generated the preliminary learning-curve figure from the saved notebook logs. The exact model/version and the name of the requesting report author are \textbf{TBD}.
+
+\subsection{Affected Sections and Representative Prompts or Prompt Logs}
+Codex assistance affects the cover, structure, narrative in Sections 1--3, tables, reconstructed preliminary curves, references, appendices and LaTeX formatting. Representative user requests were to create the supplied cover using the university logo, build an outline from the handbook and branch \texttt{a1}, inspect completed work, and write a review draft before any commit. The detailed prompt-log link is \textbf{TBD}.
+
+\subsection{Edits, Verification Sources and Responsible Members}
+The assistant compared statements with the cited source snapshot, stored EDA JSON/images, notebook output, course handbook and primary dataset/PyTorch documentation. Parameter totals were calculated from layer dimensions; the preliminary curve values were parsed from the saved output, not produced by a new training run. Syntax parsing found no syntax errors in 33 Python files. Training and runtime tests were not rerun because the review environment lacked PyTorch; no new pass count or final test score is claimed.
+
+The PDF is checked for compilation and layout before delivery. Student edits, substantive review and approval remain pending. The member responsible for final scientific verification, final approval date and any additional AI uses by teammates are \textbf{TBD}. The final disclosure must be reconciled with the repository's \texttt{AI\_USAGE.md} before submission.

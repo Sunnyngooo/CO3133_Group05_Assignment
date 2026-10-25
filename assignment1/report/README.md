@@ -1,15 +1,18 @@
 # Assignment 1 report
 
 English LaTeX report for CO3133, Group 05, based on the Assignment 1 code
-on branch `a1` (commit `82656a7`).
+on branch `a1` (source snapshot `eb89385269bf1384913a011cf4d8ed6184690172`).
 
-The report currently includes the cover page, a table of contents, three main
-parts, references, and appendices. Detailed content is intentionally `TBD`.
+The report includes the cover, contents, data analysis, methodology, preliminary
+Linear results, references and appendices. Unavailable final results remain `TBD`.
 It uses Latin Modern fonts and preserves Vietnamese names.
 
 ## Files
 
-- `main.tex`: report source, including the cover and outline.
+- `main.tex`: cover and document assembly.
+- `sections/`: data, methodology, results, references and appendices.
+- `images/`: logo, EDA figures and preliminary learning curves.
+- `data/preliminary_linear_history.csv`: saved notebook values used for the curves.
 - `images/01_logobachkhoasang.png`: university logo supplied by the group.
 - `../../AI_USAGE.md`: AI assistance and pending student verification record.
 
@@ -34,7 +37,8 @@ PDFs are provided as downloadable build artifacts rather than committed files;
 ## Compile locally
 
 Install a LaTeX distribution with XeLaTeX, Latin Modern fonts, and the
-`geometry`, `fontspec`, `graphicx`, `fancyhdr`, and `hyperref` packages.
+`geometry`, `fontspec`, `graphicx`, `fancyhdr`, `hyperref`, `amsmath`,
+`amssymb`, `booktabs`, `tabularx`, `caption`, `placeins`, and `fix-cm` packages.
 From this directory, run twice to resolve the table of contents:
 
 ```sh
@@ -55,8 +59,13 @@ or importing the project into another LaTeX editor.
 
 ## Current scope and verification
 
-The source outline follows Sections 3--5 and 8--14 of the course handbook
-`handbook-ene-v2.pdf`. The sample report informed formatting only.
-The source was compiled successfully with the desktop editor's compiler.
-No results or completed experiments are claimed by the `TBD` placeholders.
+The structure follows the course handbook. Content describes the cited `a1`
+source snapshot and stored EDA artifacts. The notebook Linear experiment uses
+a different setup and is explicitly preliminary, not an official test result.
+Final comparative experiments and other unavailable evidence remain `TBD`.
+
+The reviewed source compiled twice with XeLaTeX into a 23-page preview on
+25 October 2026. Table 4 was placed below section 1.5.4 on printed Page 6;
+the following page starts Methodology. Those two pages were visually checked.
+Other previously identified presentation concerns were outside this targeted fix.
 Students must verify and complete the report and AI disclosure before submission.

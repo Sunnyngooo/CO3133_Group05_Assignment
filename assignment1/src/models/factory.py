@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from assignment1.src.models.linear import LinearClassifier
+from assignment1.src.models.mlp import MLPClassifier
 
 def build_model(config: dict) -> nn.Module:
     model_cfg = config['model']
@@ -10,6 +11,13 @@ def build_model(config: dict) -> nn.Module:
         input_dim = model_cfg['input_dim']
         output_dim = model_cfg['num_classes']
         return LinearClassifier(input_dim=input_dim, output_dim=output_dim)
+    
+    if model_name == 'mlp':
+        input_dim = model_cfg['input_dim']
+        hidden_dims = model_cfg['hidden_dims']
+        output_dim = model_cfg['num_classes']
+        dropout = model_cfg['dropout']
+        return MLPClassifier(input_dim=input_dim, hidden_dims=hidden_dims, output_dim=output_dim, dropout=dropout)
     
     raise ValueError(f"Unsupported model: {model_name}")
 

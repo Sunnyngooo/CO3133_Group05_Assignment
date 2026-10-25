@@ -3,9 +3,14 @@ experiment:
 
 model:
   name: cnn
+  input_channel: 1
+  image_size: 28
   channels: [32, 64]
   kernel_size: 3
+  hidden_dim: 64
+  num_classes: 10
   dropout: 0.2
 
 training:
   lr: 0.0005
+  epochs: 20

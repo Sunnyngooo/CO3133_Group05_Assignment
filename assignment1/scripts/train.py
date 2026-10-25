@@ -7,9 +7,7 @@ import argparse
 import json
 from assignment1.src.engine.trainer import fit
 from assignment1.src.utils.run_id import get_run_id
-
-from assignment1.test.dummy_model import DummyModel
-
+from assignment1.src.models.factory import build_model
 
 def main(model_name='cnn'):
     assignment_dir = Path(__file__).resolve().parents[1]
@@ -35,7 +33,7 @@ def main(model_name='cnn'):
     print("Pixel range:", sample_img.min().item(), sample_img.max().item()) 
     
     # 4. Model initialization + loss + optimizer
-    model = DummyModel().to(device)
+    model = build_model(config=config).to(device)
     optimizer_name = config['training']['optimizer'].lower()
     learning_rate = config['training']['lr']
     weight_decay = config['training']['weight_decay']

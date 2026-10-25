@@ -9,8 +9,7 @@ from assignment1.src.utils.seed import set_seed
 from assignment1.src.data.dataset import build_dataloaders
 from assignment1.src.engine.checkpoint import load_checkpoint
 from assignment1.src.engine.evaluator import test as test_model
-
-from assignment1.test.dummy_model import DummyModel
+from assignment1.src.models.factory import build_model
 
 def main(run_id):
     if not re.fullmatch(f"[A-Za-z0-9_-]+", run_id):
@@ -28,7 +27,7 @@ def main(run_id):
     
     # 2. Load saved config
     with open(config_path, 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
+        config = yaml.safe_load(f)
     validate_config(config)
     
     # 3. Reproducibility and device
@@ -36,10 +35,16 @@ def main(run_id):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # 4. Build test loader
-    _, _, test_loader, _ = build_dataloaders(config=config)
+    _, _, test_loader, stats = build_dataloaders(config=config)
+    saved_stats = config["data"]["normalization"]
+
+    for key in ("mean", "std"):
+        assert abs(float(saved_stats[key]) - float(stats[key])) < 1e-6, (
+            f"Normalization mismatch: {key}"
+        )
     
     # 5. Model
-    model = DummyModel().to(device)
+    model = build_model(config=config).to(device)
     
     # 6. Load best checkpoint
     checkpoint = load_checkpoint(path=checkpoint_path, model=model,

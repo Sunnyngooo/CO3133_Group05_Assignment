@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from assignment1.src.models.linear import LinearClassifier
 from assignment1.src.models.mlp import MLPClassifier
+from assignment1.src.models.cnn import CNNClassifier
 
 def build_model(config: dict) -> nn.Module:
     model_cfg = config['model']
@@ -19,6 +20,16 @@ def build_model(config: dict) -> nn.Module:
         dropout = model_cfg['dropout']
         return MLPClassifier(input_dim=input_dim, hidden_dims=hidden_dims, output_dim=output_dim, dropout=dropout)
     
+    if model_name == "cnn":
+        return CNNClassifier(
+            input_channel=model_cfg['input_channel'],
+            image_size=model_cfg['image_size'],
+            channels=model_cfg['channels'],
+            kernel_size=model_cfg['kernel_size'],
+            hidden_dim=model_cfg['hidden_dim'], 
+            output_dim=model_cfg['num_classes'], 
+            dropout=model_cfg['dropout']
+        )
     raise ValueError(f"Unsupported model: {model_name}")
 
 if __name__ == "__main__":

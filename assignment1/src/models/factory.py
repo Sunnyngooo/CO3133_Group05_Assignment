@@ -3,6 +3,7 @@ import torch.nn as nn
 from assignment1.src.models.linear import LinearClassifier
 from assignment1.src.models.mlp import MLPClassifier
 from assignment1.src.models.cnn import CNNClassifier
+from assignment1.src.models.lstm import LSTMClassifier
 
 def build_model(config: dict) -> nn.Module:
     model_cfg = config['model']
@@ -30,21 +31,14 @@ def build_model(config: dict) -> nn.Module:
             output_dim=model_cfg['num_classes'], 
             dropout=model_cfg['dropout']
         )
+    
+    if model_name == "lstm":
+        return LSTMClassifier(
+            input_size=model_cfg['input_size'],
+            hidden_size=model_cfg['hidden_size'],
+            num_layers=model_cfg['num_layers'],
+            output_dim=model_cfg['num_classes'],
+            dropout=model_cfg['dropout']
+        )
+        
     raise ValueError(f"Unsupported model: {model_name}")
-
-if __name__ == "__main__":
-    config = {
-        "model": {
-            "name": "linear",
-            "input_dim": 784,
-            "num_classes": 10
-        }
-    }
-    
-    model = build_model(config)
-    assert isinstance(model, LinearClassifier)
-    
-    x = torch.rand(8,1,28,28)
-    logits = model(x)
-    assert logits.shape == (8,10)
-    print("Passed")

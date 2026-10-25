@@ -3,9 +3,12 @@ experiment:
 
 model:
   name: lstm
-  hidden_size: [32, 64]
+  input_size: 28
+  hidden_size: 128
   num_layers: 2
+  num_classes: 10
   dropout: 0.2
 
 training:
   lr: 0.0005
+  epochs: 20

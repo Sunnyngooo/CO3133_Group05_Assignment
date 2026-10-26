@@ -1,4 +1,24 @@
 assignment: 3
+group_name: G-05
+dataset_name: N24News
+task: image_text_classification
+text_field: headline
+label_field: section
+image_id_field: image_id
+metadata_file: data/assignment3/raw/nytimes_dataset.json
+image_dir: data/assignment3/raw/images_original
+image_source_variant: original_asset_without_query_rendering
+prepared_run: full_seed44_original
+data_preparation_status: prepared
+selection_scope: full_metadata
+per_class_cap: 0 # no per-class cap
+train_manifest: data/assignment3/processed/full_seed44_original/train.jsonl
+validation_manifest: data/assignment3/processed/full_seed44_original/validation.jsonl
+test_manifest: data/assignment3/processed/full_seed44_original/test.jsonl
+label_mapping: data/assignment3/processed/full_seed44_original/label_mapping.json
+dataset_source: https://github.com/billywzh717/N24News
+dataset_revision: 047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106
+instructor_approval: not_recorded
 seed: 44
 dataset_path: data/assignment3
 checkpoint_dir: checkpoints/assignment3

@@ -1,0 +1,12 @@
+{
+  "sample_count": 24,
+  "classes": 24,
+  "source_variant": "original_asset_without_query_rendering",
+  "reviewer": "Codex visual inspection (AI; human review pending)",
+  "visible_query_rendered_published_year_banners": 0,
+  "relations": {
+    "clear_topic_support": 14,
+    "weak_contextual": 10
+  },
+  "scope": "One original-asset image per class visually inspected, same metadata-ID subjects as pilot; does not establish that every image in the corpus lacks embedded text or banners."
+}

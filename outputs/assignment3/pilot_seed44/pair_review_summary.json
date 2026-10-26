@@ -1,0 +1,36 @@
+{
+  "reviewed_pairs": 120,
+  "per_class": 5,
+  "classes": 24,
+  "ratings": {
+    "clear_topic_support": 81,
+    "weak_contextual": 37,
+    "uncertain": 2
+  },
+  "reviewer": "Codex visual inspection (AI; human review pending)",
+  "reviewed_image_variant": "metadata URL rendering; original asset path used for prepared subset",
+  "scope": "120 pilot image/headline pairs; all 120 IDs are in the main selection; not a population quality estimate",
+  "observations": [
+    "Many reviewed images contain an NYT Published-year rendering overlay. A same-asset URL without query parameters was checked visually and did not contain the overlay.",
+    "Generic portraits and editorial categories create weak image-only evidence.",
+    "Rows 66 and 68 visibly reuse the same medical transport scene.",
+    "No definite mismatch is claimed from image/headline inspection alone."
+  ],
+  "source_sheets": [
+    "review_gallery/pairs_01.jpg",
+    "review_gallery/pairs_02.jpg",
+    "review_gallery/pairs_03.jpg",
+    "review_gallery/pairs_04.jpg",
+    "review_gallery/pairs_05.jpg",
+    "review_gallery/pairs_06.jpg",
+    "review_gallery/pairs_07.jpg",
+    "review_gallery/pairs_08.jpg",
+    "review_gallery/pairs_09.jpg",
+    "review_gallery/pairs_10.jpg",
+    "review_gallery/pairs_11.jpg",
+    "review_gallery/pairs_12.jpg",
+    "review_gallery/pairs_13.jpg",
+    "review_gallery/pairs_14.jpg",
+    "review_gallery/pairs_15.jpg"
+  ]
+}

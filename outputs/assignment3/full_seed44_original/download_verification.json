@@ -1,0 +1,10 @@
+{
+  "run_name": "full_seed44_original",
+  "selected_metadata_ids": "all 61218 IDs matched",
+  "class_counts": "identical to full metadata",
+  "image_files_verified": 61218,
+  "actual_file_sha256_checks": "passed for all files",
+  "actual_bytes": 6363053805,
+  "failed_images": 0,
+  "scope": "File integrity verification; image decoding was verified by downloader; no semantic quality claim"
+}

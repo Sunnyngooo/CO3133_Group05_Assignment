@@ -1,13 +1,33 @@
-# CO3133 Group 5
+# CO3133 G-05
 
 Repository structure and reproducibility details for all three assignments.
+
+## Assignment 3 current status
+
+Assignment 3 uses N24News image + headline classification. Data preparation code
+is in `assignment3/`; model training and evaluation are not implemented yet.
+Use its separate environment and preparation instructions linked below.
+
+Main data scope is all 61,218 N24News metadata records (no per-class cap), retaining
+every usable image/headline pair. Full-data preparation is complete under
+`full_seed44_original`: 61,218 valid pairs, split 48,976/6,122/6,120. The earlier
+12,000-pair subset is retained for development;
+its manifests must not be mixed with the new full-data split.
+
+- [Preparation commands](assignment3/README.md)
+- [Dataset proposal](assignment3/PROPOSAL.md)
+- [Plan and requirement checklist](assignment3/PLAN.md)
+- [Dataset provenance](assignment3/DATASET.md)
+
+The preparation environment is `.venv-a3` on Windows. Main training starts after
+the Dataset Proposal is approved; no Assignment 3 model results are claimed.
 
 ## Repository layout
 
 ```text
 assignment_1/      # Assignment 1 code
 assignment_2/      # Assignment 2 code
-assignment_3/      # Assignment 3 code
+assignment3/       # Assignment 3 preparation code, proposal and plan
 configs/           # Assignment configs (includes seeds)
 requirements.txt   # Pinned dependency versions
 AI_USAGE.md        # AI usage declaration
@@ -34,7 +54,7 @@ Then prepare data:
 ```bash
 python assignment_1/train.py --config configs/assignment1.yaml --prepare-only
 python assignment_2/train.py --config configs/assignment2.yaml --prepare-only
-python assignment_3/train.py --config configs/assignment3.yaml --prepare-only
+.venv-a3/Scripts/python.exe assignment3/prepare_data.py --run-name full_seed44_original
 ```
 
 ## Train
@@ -42,7 +62,7 @@ python assignment_3/train.py --config configs/assignment3.yaml --prepare-only
 ```bash
 python assignment_1/train.py --config configs/assignment1.yaml
 python assignment_2/train.py --config configs/assignment2.yaml
-python assignment_3/train.py --config configs/assignment3.yaml
+# Assignment 3 model training is not implemented yet.
 ```
 
 ## Evaluate
@@ -50,7 +70,7 @@ python assignment_3/train.py --config configs/assignment3.yaml
 ```bash
 python assignment_1/evaluate.py --config configs/assignment1.yaml
 python assignment_2/evaluate.py --config configs/assignment2.yaml
-python assignment_3/evaluate.py --config configs/assignment3.yaml
+# Assignment 3 model evaluation is not implemented yet.
 ```
 
 ## Reproducibility details

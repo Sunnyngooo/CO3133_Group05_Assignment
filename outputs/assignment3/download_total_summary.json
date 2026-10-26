@@ -1,0 +1,10 @@
+{
+  "first_pass_seconds": 1545.625,
+  "retry_pass_seconds": 45.86,
+  "total_main_original_download_invocations_seconds": 1591.485,
+  "initial_transient_failures": 16,
+  "final_valid_images": 12000,
+  "final_failed_images": 0,
+  "final_valid_file_bytes": 1195861595,
+  "pilot_and_obsolete_metadata_rendering_download_time_excluded": true
+}

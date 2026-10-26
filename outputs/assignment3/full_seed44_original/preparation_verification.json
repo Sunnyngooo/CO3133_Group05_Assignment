@@ -1,0 +1,28 @@
+{
+  "run_name": "full_seed44_original",
+  "prepared_pairs": 61218,
+  "classes": 24,
+  "split_counts": {
+    "train": 48976,
+    "validation": 6122,
+    "test": 6120
+  },
+  "full_metadata_ids_and_class_counts": "exact_match",
+  "manifest_byte_sha256": "all_match_eda_summary",
+  "cross_split_disjoint_fields": [
+    "image_id",
+    "group_id",
+    "pixel_sha256",
+    "file_sha256",
+    "canonical_image_url",
+    "canonical_article_url",
+    "normalized_headline"
+  ],
+  "near_duplicate_links": "all_inside_single_group",
+  "source_metadata_and_image_audit": "all_rows_match",
+  "config_manifest_paths": "all_match",
+  "review_pairs": 120,
+  "review_gallery_pages": 15,
+  "independent_image_file_hashes": "61218 passed (download_verification.json)",
+  "scope": "Structural and file integrity verification, not full semantic review"
+}

@@ -1,0 +1,80 @@
+{
+  "sha256": "47145500b7161cf90914c2dfc7e4d269931e06f74958d7b89d8a6d40f82b2ede",
+  "metadata_bytes": 45402188,
+  "records": 61218,
+  "fields": [
+    "section",
+    "headline",
+    "abstract",
+    "caption",
+    "image_url",
+    "article_url",
+    "image_id"
+  ],
+  "class_counts": {
+    "Art & Design": 3000,
+    "Automobiles": 1825,
+    "Books": 3000,
+    "Dance": 3000,
+    "Economy": 1761,
+    "Education": 825,
+    "Fashion": 3000,
+    "Food": 3000,
+    "Global Business": 1182,
+    "Health": 3000,
+    "Media": 3000,
+    "Movies": 3000,
+    "Music": 3000,
+    "Opinion": 3000,
+    "Real Estate": 3000,
+    "Science": 3000,
+    "Sports": 3000,
+    "Style": 2681,
+    "Technology": 3000,
+    "Television": 3000,
+    "Theater": 3000,
+    "Travel": 3000,
+    "Well": 681,
+    "Your Money": 1263
+  },
+  "missing_fields": {
+    "section": 0,
+    "headline": 0,
+    "abstract": 0,
+    "caption": 303,
+    "image_url": 0,
+    "article_url": 0,
+    "image_id": 0
+  },
+  "duplicates": {
+    "image_id": {
+      "repeated_values": 0,
+      "extra_records": 0
+    },
+    "image_url": {
+      "repeated_values": 304,
+      "extra_records": 405
+    },
+    "article_url": {
+      "repeated_values": 1,
+      "extra_records": 1
+    },
+    "headline": {
+      "repeated_values": 180,
+      "extra_records": 1637
+    }
+  },
+  "headline_words": {
+    "min": 1,
+    "median": 9.0,
+    "p95": 13,
+    "max": 22,
+    "method": "whitespace word counts; p95 uses a sorted-index estimate"
+  },
+  "image_access_and_pair_quality": "not_verified_by_this_metadata_audit",
+  "source_revision": "047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106",
+  "source_url": "https://raw.githubusercontent.com/billywzh717/N24News/047a2bc3f4df0ea738b847a4ac3a6bd6aa2e4106/nytimes_dataset.json",
+  "retrieved_date": "2026-10-14",
+  "license_status": "not_explicitly_stated_in_author_repository",
+  "instructor_approval": "not_recorded"
+}

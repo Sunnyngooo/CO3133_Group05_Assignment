@@ -1,5 +1,10 @@
 venv
 assignment1/data/
+data/assignment3/
+checkpoints/assignment3/
+.venv-a3/
+__pycache__/
+outputs/assignment3/*/review_gallery/
 
 *-ubyte
 *.ubyte.gz

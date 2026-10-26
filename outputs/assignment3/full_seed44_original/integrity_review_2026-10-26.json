@@ -1,0 +1,86 @@
+{
+  "audit_date": "2026-10-26",
+  "scope": "Read-only comparison against stored preparation artifacts and 24 October code snapshot; no main training or approval inferred",
+  "run_name": "full_seed44_original",
+  "metadata_sha256": "47145500b7161cf90914c2dfc7e4d269931e06f74958d7b89d8a6d40f82b2ede",
+  "metadata_records": 61218,
+  "split_counts": {
+    "train": 48976,
+    "validation": 6122,
+    "test": 6120
+  },
+  "manifest_sha256": {
+    "train": "449dddd0cccdf94236338e30cbfedaf114eca5479d44b32ee8886ffb45562984",
+    "validation": "4ca8d221936962d432745fba9ceec2500858ebe8eb3f4ff351aecffe21a12646",
+    "test": "ddc98c99bd1c49e743397d1e51d86d05f66548c08c7b761014a6814f7ec9c6af"
+  },
+  "legacy_subset_manifests": "unchanged hashes",
+  "per_class_counts": "matches full metadata",
+  "cross_split_fields": [
+    "image_id",
+    "group_id",
+    "pixel_sha256",
+    "file_sha256",
+    "canonical_image_url",
+    "canonical_article_url",
+    "normalized_headline"
+  ],
+  "near_duplicate_groups": "passed",
+  "pinned_data_packages": 17,
+  "pinned_data_package_versions": "all match",
+  "docs_figure_copies": "match full EDA",
+  "image_files_checked": 61218,
+  "missing_images": [],
+  "modified_images": [],
+  "actual_image_bytes": 6363053805,
+  "expected_image_bytes": 6363053805,
+  "data_integrity": "passed",
+  "code_snapshot_2026_10_24": {
+    "audit_metadata.py": {
+      "sha256": "f3f3724e8474c073b3e79611db72457d68146be4e9689b24d0d2965943ea8ebc",
+      "matches": true
+    },
+    "data_utils.py": {
+      "sha256": "3e1106fde6411cd027d31f500cdc7ac6c3c321d26c1e928361ae36c6ecee2eff",
+      "matches": true
+    },
+    "download_images.py": {
+      "sha256": "27514602b5a073a1a31f43941c85b69b36ab1fbff81c697c765f14f4f335fc47",
+      "matches": true
+    },
+    "prepare_data.py": {
+      "sha256": "0f9b0e9f2171902aad6ea2720df20d53bca989ac75cbe11285a2cca7da38cdda",
+      "matches": true
+    },
+    "PLAN.md": {
+      "sha256": "54fa3d95f257859246c4c4b1218cd8e88bbdd8022580fac3d3944e7e8b2d8635",
+      "matches": true
+    }
+  },
+  "unit_tests": {
+    "ran": 9,
+    "result": "OK"
+  },
+  "pip_check": "No broken requirements found",
+  "python_environment": ".venv-a3; Python 3.11.9; include-system-site-packages=false",
+  "environment_extra_packages": "Jupyter/IPython/ipykernel support present; all 17 pinned data requirements unchanged",
+  "git_status_note": "assignment3/ and docs/assets/assignment3/ are untracked; configs and docs changes are not committed; raw data and venv intentionally ignored",
+  "shared_readme_note": "Generic assignment_3/train.py and evaluate.py commands remain placeholders; use assignment3/README.md for actual preparation commands",
+  "memory_observation": {
+    "available_gib_during_full_verification": 0.41,
+    "available_gib_after_verification": [
+      1.69,
+      1.7,
+      1.71
+    ],
+    "system_memory_used_percent_after": 88.8,
+    "attribution": "No causal attribution to other tasks; sandbox process inventory does not cover all host apps"
+  },
+  "gpu_observation": {
+    "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "total_memory_mib": 8188,
+    "used_memory_mib": 1496,
+    "utilization_percent": 45,
+    "scope": "Single read-only sample; not attributed to a particular task or application"
+  }
+}

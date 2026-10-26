@@ -1,45 +1,27 @@
 import numpy as np
+import pytest
 import torch
-from torchvision.datasets import FashionMNIST
-from assignment1.src.utils.config import load_config
-from assignment1.src.data.transforms import build_train_transform,  build_val_transform
-from assignment1.src.data.split import get_split_path, load_or_create_split
-from assignment1.src.data.statistics import compute_mean_std
-from pathlib import Path
+from PIL import Image
 
-def main(model_name): 
-    ASSIGNMENT_DIR = Path(__file__).resolve().parents[1]
-    config = load_config(model_name)
-    dataset = FashionMNIST(root= ASSIGNMENT_DIR / 'data', train=True, download=True)
-    img, label = dataset[0]
+from assignment1.src.data.transforms import build_train_transform, build_val_transform
 
-    split_path = get_split_path(config)
-    train_indices, _ = load_or_create_split(dataset=dataset, split_path=split_path, val_ratio=config['data']['val_ratio'], seed=config['experiment']['seed'])
-    mean, std = compute_mean_std(dataset, train_indices)
 
-    train_transform = build_train_transform(config, mean, std)
-    val_transform = build_val_transform(config, mean, std)
+@pytest.mark.parametrize('augmentation', [False, True])
+def test_transforms_produce_finite_image_tensors(config, augmentation):
+    config['data']['augmentation']['enabled'] = augmentation
+    image = Image.fromarray(np.arange(784, dtype=np.uint8).reshape(28, 28))
+    for transform in (build_train_transform(config, 0.3, 0.35), build_val_transform(config, 0.3, 0.35)):
+        result = transform(image)
+        assert result.shape == (1, 28, 28)
+        assert result.dtype == torch.float32
+        assert torch.isfinite(result).all()
 
-    train_img = train_transform(img)
-    eval_img = val_transform(img)
 
-    # Check shape and dtype 
-    assert train_img.shape ==  (1,28,28)
-    assert eval_img.shape ==  (1,28,28)
-    assert train_img.dtype == torch.float32
-    assert eval_img.dtype == torch.float32
-    
-    # Check normalization
-    raw_pixels = torch.from_numpy(np.array(img, copy=True)).float() / 255.0
-    expected_norm = (raw_pixels - mean) / std
-
-    assert torch.allclose(eval_img.squeeze(0), expected_norm, atol=1e-6)
-
-    # check deterministic 
-    eval_1 = val_transform(img)
-    eval_2 = val_transform(img)
-    assert torch.equal(eval_1, eval_2)
-    print("All tests passed !")
-
-if __name__ == "__main__":
-    main('cnn')
+def test_normalization_and_evaluation_are_deterministic(config):
+    pixels = np.arange(784, dtype=np.uint8).reshape(28, 28)
+    image = Image.fromarray(pixels)
+    transform = build_val_transform(config, mean=0.3, std=0.35)
+    expected = (torch.from_numpy(pixels).float() / 255.0 - 0.3) / 0.35
+    torch.testing.assert_close(transform(image).squeeze(0), expected)
+    assert torch.equal(transform(image), transform(image))
+    torch.testing.assert_close(build_train_transform(config, 0.3, 0.35)(image), transform(image))

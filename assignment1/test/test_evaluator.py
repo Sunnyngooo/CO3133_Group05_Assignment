@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from torch.utils.data import DataLoader, TensorDataset
 
-from assignment1.test.dummy_model import DummyModel
+from assignment1.src.models.linear import LinearClassifier
 from assignment1.src.engine.evaluator import evaluate, validate, test as evaluate_test
 from assignment1.src.metrics.cls_metrics import compute_classification_metrics
 
@@ -36,7 +36,7 @@ def make_model_and_loss():
     """Initialize deterministic model and loss function."""
     torch.manual_seed(42)
 
-    model = DummyModel().to(DEVICE)
+    model = LinearClassifier().to(DEVICE)
     loss_fn = nn.CrossEntropyLoss()
 
     return model, loss_fn

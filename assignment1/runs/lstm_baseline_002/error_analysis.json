@@ -1,0 +1,238 @@
+{
+    "run_id": "lstm_baseline_002",
+    "model_name": "lstm",
+    "checkpoint_epoch": 20,
+    "accuracy": 0.8966,
+    "macro_f1": 0.8959887859963146,
+    "confusion_matrix": [
+        [
+            846,
+            3,
+            15,
+            37,
+            3,
+            0,
+            87,
+            1,
+            8,
+            0
+        ],
+        [
+            4,
+            974,
+            1,
+            14,
+            4,
+            0,
+            1,
+            0,
+            2,
+            0
+        ],
+        [
+            12,
+            1,
+            847,
+            13,
+            67,
+            0,
+            56,
+            0,
+            4,
+            0
+        ],
+        [
+            7,
+            11,
+            9,
+            919,
+            34,
+            0,
+            16,
+            0,
+            4,
+            0
+        ],
+        [
+            0,
+            1,
+            87,
+            23,
+            812,
+            0,
+            75,
+            0,
+            2,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            955,
+            0,
+            24,
+            3,
+            18
+        ],
+        [
+            125,
+            3,
+            79,
+            43,
+            54,
+            0,
+            691,
+            0,
+            5,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            12,
+            0,
+            970,
+            0,
+            18
+        ],
+        [
+            4,
+            0,
+            2,
+            5,
+            1,
+            1,
+            2,
+            5,
+            980,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            25,
+            1,
+            972
+        ]
+    ],
+    "per_class_metrics": [
+        {
+            "class_id": 0,
+            "class_name": "T-shirt/top",
+            "precision": 0.8476953907815631,
+            "recall": 0.846,
+            "f1": 0.8468468468468469,
+            "support": 1000
+        },
+        {
+            "class_id": 1,
+            "class_name": "Trouser",
+            "precision": 0.9808660624370594,
+            "recall": 0.974,
+            "f1": 0.9774209734069242,
+            "support": 1000
+        },
+        {
+            "class_id": 2,
+            "class_name": "Pullover",
+            "precision": 0.8144230769230769,
+            "recall": 0.847,
+            "f1": 0.8303921568627451,
+            "support": 1000
+        },
+        {
+            "class_id": 3,
+            "class_name": "Dress",
+            "precision": 0.8719165085388995,
+            "recall": 0.919,
+            "f1": 0.8948393378773125,
+            "support": 1000
+        },
+        {
+            "class_id": 4,
+            "class_name": "Coat",
+            "precision": 0.8328205128205128,
+            "recall": 0.812,
+            "f1": 0.8222784810126582,
+            "support": 1000
+        },
+        {
+            "class_id": 5,
+            "class_name": "Sandal",
+            "precision": 0.9845360824742269,
+            "recall": 0.955,
+            "f1": 0.9695431472081218,
+            "support": 1000
+        },
+        {
+            "class_id": 6,
+            "class_name": "Shirt",
+            "precision": 0.7446120689655172,
+            "recall": 0.691,
+            "f1": 0.716804979253112,
+            "support": 1000
+        },
+        {
+            "class_id": 7,
+            "class_name": "Sneaker",
+            "precision": 0.9463414634146341,
+            "recall": 0.97,
+            "f1": 0.9580246913580247,
+            "support": 1000
+        },
+        {
+            "class_id": 8,
+            "class_name": "Bag",
+            "precision": 0.9712586719524281,
+            "recall": 0.98,
+            "f1": 0.975609756097561,
+            "support": 1000
+        },
+        {
+            "class_id": 9,
+            "class_name": "Ankle boot",
+            "precision": 0.9642857142857143,
+            "recall": 0.972,
+            "f1": 0.9681274900398407,
+            "support": 1000
+        }
+    ],
+    "top_confusions": [
+        {
+            "true_class": "Shirt",
+            "pred_class": "T-shirt/top",
+            "count": 125
+        },
+        {
+            "true_class": "T-shirt/top",
+            "pred_class": "Shirt",
+            "count": 87
+        },
+        {
+            "true_class": "Coat",
+            "pred_class": "Pullover",
+            "count": 87
+        },
+        {
+            "true_class": "Shirt",
+            "pred_class": "Pullover",
+            "count": 79
+        },
+        {
+            "true_class": "Coat",
+            "pred_class": "Shirt",
+            "count": 75
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "run_id": "mlp_baseline_002",
+    "checkpoint_epoch": 20,
+    "checkpoint_val_macro_f1": 0.896970850854047,
+    "test_metrics": {
+        "accuracy": 0.8908,
+        "macro_f1": 0.890659198478416,
+        "loss": 0.3255755849480629
+    }
+}

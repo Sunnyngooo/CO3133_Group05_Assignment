@@ -11,6 +11,7 @@ from assignment1.src.models.factory import build_model
 from assignment1.src.engine.predictions import collect_predictions
 from assignment1.src.metrics.error_analysis import analyze_classification_errors
 from assignment1.src.visualization.confusion_plots import plot_confusion_matrix
+from assignment1.src.visualization.prediction_sample import select_prediction_samples, plot_prediction_samples
 
 def main(run_id, device='cpu'):
     assignment_dir = Path(__file__).resolve().parents[1]
@@ -62,13 +63,23 @@ def main(run_id, device='cpu'):
     if not math.isclose(error_analysis['macro_f1'], test_metrics['test_metrics']['macro_f1'], rel_tol=0.0, abs_tol=1e-8):
         raise ValueError(f"Macro-F1 mismatch: error analysis: {error_analysis['macro_f1']}; test metrics: {test_metrics['test_metrics']['macro_f1']}")
     
-    # 9. Plot confusion matrices
-    save_path = assignment_dir / 'reports' / 'figures' 
-    save_path.mkdir(parents=True, exist_ok=True)
+    # 9. Correct and incorrect prediction samples    
+    fig_save_path = assignment_dir / 'reports' / 'figures' 
+    fig_save_path.mkdir(parents=True, exist_ok=True)
     
-    plot_confusion_matrix(cm=error_analysis['confusion_matrix'], class_names=class_names, save_path= save_path / f"{model_name}_cm_raw.png")
-    plot_confusion_matrix(cm=error_analysis['confusion_matrix'], class_names=class_names, save_path= save_path / f"{model_name}_cm_normalized.png", normalize=True)
-    # 10. Save error analysis 
+    selected_indices = select_prediction_samples(y_true=y_true, y_pred=y_pred, n_correct=5, n_incorrect=5)
+    norm_cfg = config['data']['normalization']
+    plot_prediction_samples(dataset=test_loader.dataset, y_true=y_true, y_pred=y_pred, 
+                            selected_indices=selected_indices, class_names=class_names, 
+                            mean=norm_cfg['mean'], std=norm_cfg['std'], 
+                            save_path=fig_save_path / f"{model_name}_prediction_examples.png")
+    
+    # 10. Plot confusion matrices
+    
+    plot_confusion_matrix(cm=error_analysis['confusion_matrix'], class_names=class_names, save_path= fig_save_path / f"{model_name}_cm_raw.png")
+    plot_confusion_matrix(cm=error_analysis['confusion_matrix'], class_names=class_names, save_path= fig_save_path / f"{model_name}_cm_normalized.png", normalize=True)
+    
+    # 11. Save error analysis 
     result = {
         'run_id': run_id,
         'model_name': model_name,

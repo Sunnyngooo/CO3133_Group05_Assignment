@@ -3,10 +3,16 @@ experiment:
 
 model:
   name: transformer
-  embedded_dim: [32, 64]
-  num_heads: 1
+  input_channels: 1
+  image_size: 28
+  patch_size: 7
+  embed_dim: 128
+  num_heads: 4
   num_layers: 2
+  ff_dim: 256
+  num_classes: 10
   dropout: 0.2
-
+  pooling: mean
 training:
   lr: 0.0005
+  epochs: 20

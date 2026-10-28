@@ -2,13 +2,31 @@
 \phantomsection
 \section*{AI Usage Disclosure}
 \addcontentsline{toc}{section}{AI Usage Disclosure}
-\subsection*{Tools, Members and Development Stages}
-The Assignment 1 page in the cited branch records Gemini Flash use by Ngô Diễm Quyên for generating dependency-inspection code, formatting hardware information and converting tensor targets for inspection. The recorded checks were comparison with installed package versions/system information and execution of the tensor-conversion snippet. Exact model version and dates are not recorded in that page.
 
-OpenAI Codex assisted the requesting report author during 24--28 October 2026 with report structure, cover/LaTeX layout, code/artifact inspection, English drafting, table generation, result analysis and figure preparation. The current report update uses only the committed \texttt{a1} evidence; it does not train or select new models. The exact Codex model/version and requesting member are not recorded in the source artifacts.
+\subsection*{ChatGPT: Model and Pipeline Development}
+\textbf{Tool:} ChatGPT (OpenAI, GPT-6). \textbf{Used by and responsible for final verification:} Ngô Diễm Quyên. Assistance covered architecture planning, implementation guidance, debugging, sanity testing and evaluation. The following summarizes the member's account of AI contributions and student verification. File paths are relative to \texttt{assignment1/}.
 
-\subsection*{Affected Content and Representative Requests}
-Codex assistance affects the report cover, Sections 1--3, references, reproducibility notes and figure placement. Representative requests were to create the cover/outline, improve table/figure placement, inspect the completed \texttt{a1} branch and finish the report, with every result based on that branch. The final report uses the original EDA, learning-curve, confusion-matrix and prediction-example files from the cited branch. Figure files are included without modifying their content.
+\begin{itemize}
+\setlength{\itemsep}{5pt}\setlength{\parskip}{0pt}
+\item \textbf{Architecture and experimental design.} Prompts requested model configurations, hyperparameters, input representations and training strategies for five Fashion-MNIST classifiers. AI suggested layer sizes, dropout, representations, fair comparison and validation-based checkpoint selection. The member reviewed configurations, implemented models, and checked behavior through sanity tests and training/validation results. \textit{Affected:} \texttt{src/models/}, \texttt{configs/}.
+\item \textbf{Implementation guidance.} Prompts asked how to organize modules to meet handbook requirements. AI explained function responsibilities, inputs/outputs and module structure. The member independently implemented and integrated the main pipeline, then executed its scripts to check functionality. \textit{Affected:} \texttt{src/engine/}, \texttt{src/metrics/}, \texttt{src/models/}, \texttt{src/visualization/}, \texttt{scripts/}.
+\item \textbf{Code review and debugging.} Prompts concerned tensor handling, configurations, checkpoint loading, JSON serialization and visualization errors. AI explained possible causes and proposed targeted fixes. The member applied relevant corrections, reran affected functions/scripts and inspected outputs. \textit{Affected:} model, metric and visualization modules and scripts.
+\item \textbf{Sanity-test generation.} Prompts requested checks for forward passes, tensor shapes, parameter counts, gradients, inference timing, confusion matrices and error analysis. AI supplied example test code and assertions. The member reviewed coverage, ran tests locally and corrected identified issues before full experiments. \textit{Affected:} \texttt{test/}.
+\item \textbf{Evaluation and visualization.} Prompts requested inference benchmarking, learning curves and correct/incorrect prediction panels. AI recommended procedures, layouts and result organization. The member implemented the functions, inspected figures and compared computed metrics with saved test results. \textit{Affected:} \texttt{src/metrics/}, \texttt{src/visualization/}, \texttt{scripts/compare.py}, \texttt{scripts/analyze\_error.py} and report Results.
+\end{itemize}
 
-\subsection*{Verification Sources and Checks}
-The assistant checked the course handbook, architecture definitions, training/evaluation/timing code, dependency list and saved artifacts at revision \texttt{27ef182}. All five confusion matrices were used to recompute Accuracy and Macro-F1, the result table was reconciled with the committed CSV, and checkpoint epochs were cross-checked across histories, evaluation and inference records. These checks describe assistant verification of the recorded artifacts.
+\subsection*{Gemini Flash: Environment and Tensor Inspection}
+\textbf{Tool:} Gemini Flash; exact version not recorded. \textbf{Used by and responsible for final verification:} Ngô Diễm Quyên. Assistance occurred during environment documentation and notebook debugging.
+\begin{itemize}
+\setlength{\itemsep}{5pt}\setlength{\parskip}{0pt}
+\item \textbf{Dependencies.} Asked how to retrieve versions of notebook packages. AI generated dependency-inspection code; the member reviewed the package versions used in \texttt{requirements.txt}.
+\item \textbf{Hardware documentation.} Asked how to structure hardware information in \texttt{README.md}. AI formatted the supplied specifications; the member cross-checked them against system information.
+\item \textbf{Tensor targets.} Asked how to remove the \texttt{tensor(...)} wrapper when inspecting labels. AI suggested \texttt{.tolist()} and \texttt{.numpy()}; the member executed a notebook snippet and verified its list output. \textit{Affected:} \texttt{draft.ipynb}.
+\end{itemize}
+
+\subsection*{Codex: Report Writing and LaTeX Editing}
+\textbf{Tool:} OpenAI Codex; exact model/version not recorded. \textbf{Used by and responsible for final verification:} Nguyễn Hữu Minh Khôi. During 24--28 October 2026, Codex assisted with the cover, report structure, English drafting, tables, artifact inspection, analysis and LaTeX layout. Prompts requested completion from branch \texttt{a1}, clearer Methodology and hypotheses, a pipeline diagram, concise limitations and this disclosure. Affected content includes the cover, Sections 1--3, references and AI disclosure.
+
+The user directed revisions to wording, organization and figure selection. The assistant checked handbook requirements, model/training/evaluation code and committed records at \texttt{27ef182}~\cite{code}, reconciled metrics and timing records, recomputed Accuracy/Macro-F1 from all five stored confusion matrices, and checked selected epochs. Source changes were checked with the desktop LaTeX compiler. These assistant checks are distinct from the final student verification assigned to Nguyễn Hữu Minh Khôi.
+
+Reported experiments remain those saved in \texttt{a1}; report editing introduces no new experimental scores. EDA, learning curves, confusion matrices and prediction panels use the original branch images. The pipeline diagram is a LaTeX illustration of the implemented method. Verification sources include configurations, code, sanity tests, saved training/test outputs, package versions, system information, the handbook and compiler diagnostics, as applicable to the activities above.

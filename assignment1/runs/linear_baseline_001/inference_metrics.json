@@ -1,0 +1,20 @@
+{
+  "run_id": "linear_baseline_001",
+  "model_name": "linear",
+  "device": "cpu",
+  "parameter_count": {
+    "total_params": 7850,
+    "trainable_params": 7850,
+    "non_trainable_params": 0
+  },
+  "epoch": 13,
+  "warmup": 5,
+  "repeats": 20,
+  "mean_ms": 0.0493499997901381,
+  "median_ms": 0.048350000724894926,
+  "p95_ms": 0.056999998560058884,
+  "min_ms": 0.04509999962465372,
+  "max_ms": 0.05889999920327682,
+  "batch_size": 1,
+  "num_threads": 4
+}

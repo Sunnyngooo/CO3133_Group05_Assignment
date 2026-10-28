@@ -1,32 +1,38 @@
+import pytest
 import torch
-from pathlib import Path
-from assignment1.src.utils.config import load_config
-from assignment1.src.data.dataset import build_dataloaders
+from torch.utils.data import RandomSampler, SequentialSampler
 
-def main(model_name):   
-    ASSIGNMENT_DIR = Path(__file__).resolve().parents[1]
-    config = load_config(model_name)
-    train_loader, val_loader, test_loader, stats = build_dataloaders(config)
-    mean, std = stats
-    
-    # check batch size and data type       
-    imgs, labels = next(iter(train_loader))
-    batch_size = config['data']['batch_size']
-     
-    assert imgs.shape == (batch_size, 1, 28, 28)
-    assert labels.shape == (batch_size,)
-    assert imgs.dtype == torch.float32
+from assignment1.src.data import dataset as dataset_module
+
+
+def test_loader_split_batches_and_training_only_normalization(monkeypatch, config, fake_fashion_mnist):
+    monkeypatch.setattr(dataset_module, 'FashionMNIST', fake_fashion_mnist)
+    train, val, test, stats = dataset_module.build_dataloaders(config)
+    assert [len(loader.dataset) for loader in (train, val, test)] == [85, 15, 20]
+    assert set(train.dataset.indices).isdisjoint(val.dataset.indices)
+    assert isinstance(train.sampler, RandomSampler)
+    assert isinstance(val.sampler, SequentialSampler)
+    assert isinstance(test.sampler, SequentialSampler)
+    pixels = train.dataset.dataset.data[train.dataset.indices].float() / 255.0
+    assert stats['mean'] == pytest.approx(pixels.mean().item())
+    assert stats['std'] == pytest.approx(pixels.std(unbiased=True).item())
+    images, labels = next(iter(train))
+    assert images.shape == (16, 1, 28, 28)
+    assert labels.shape == (16,)
     assert labels.dtype == torch.int64
-    
-    # Check label 
-    assert labels.min().item() >= 0
-    assert labels.max().item() < 10 
-    
-    # Check loader size with val_ratio = 0.15
-    assert len(train_loader.dataset) == 51000
-    assert len(val_loader.dataset) == 9000
-    assert len(test_loader.dataset) == 10000
-    print("All tests passed !")
-    
-if __name__ == "__main__": 
-    main("cnn")
+    assert images.dtype == torch.float32
+    assert torch.isfinite(images).all()
+    assert labels.min() >= 0 and labels.max() < 10
+    raw_image = val.dataset.dataset.data[val.dataset.indices[0]].float() / 255.0
+    image, _ = val.dataset[0]
+    torch.testing.assert_close(image.squeeze(0), (raw_image - stats['mean']) / stats['std'])
+
+
+def test_loader_seed_reproduces_first_training_batch(monkeypatch, config, fake_fashion_mnist):
+    monkeypatch.setattr(dataset_module, 'FashionMNIST', fake_fashion_mnist)
+    first, *_ = dataset_module.build_dataloaders(config)
+    second, *_ = dataset_module.build_dataloaders(config)
+    first_images, first_labels = next(iter(first))
+    second_images, second_labels = next(iter(second))
+    assert torch.equal(first_images, second_images)
+    assert torch.equal(first_labels, second_labels)

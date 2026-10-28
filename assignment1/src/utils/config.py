@@ -42,7 +42,7 @@ def require_key(config: dict, section: str, key: str, expected_type):
     if section not in config: 
         raise ValueError(f"Missing required section: {section}.")
     
-    if isinstance(config[section], dict):
+    if not isinstance(config[section], dict):
         raise TypeError(f"Section {section} must be a mapping.")
     
     if key not in config[section]: 
@@ -89,10 +89,10 @@ def validate_config(config: dict) -> None:
         raise ValueError("training.weight_decay must be positive.")
     
     # checkpoints section
-    require_key(config=config, section='checkpoints', key='monitor', expected_type=str)
+    monitor = require_key(config=config, section='checkpoints', key='monitor', expected_type=str)
     mode = require_key(config=config, section='checkpoints', key='mode', expected_type=str) 
-    if mode not in {'min', 'max'}: 
-        raise ValueError("The mode must be min or max.")
+    if monitor != 'macro_f1' or mode != 'max': 
+        raise ValueError("fit() only supports macro-f1 with mode=max.")
     
     # model section 
     models_avail = {'linear', 'mlp', 'cnn', 'lstm', 'transformer'}

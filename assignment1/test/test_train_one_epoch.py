@@ -3,7 +3,7 @@ import pytest
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
-from assignment1.test.dummy_model import DummyModel
+from assignment1.src.models.linear import LinearClassifier
 from assignment1.src.engine.trainer import train_one_epoch
 from assignment1.src.metrics.cls_metrics import compute_classification_metrics
 
@@ -34,7 +34,7 @@ def make_training_components(lr=0.01):
     """Create a model, loss function and optimizer."""
     torch.manual_seed(42)
 
-    model = DummyModel().to(DEVICE)
+    model = LinearClassifier().to(DEVICE)
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=lr)
 

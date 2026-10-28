@@ -18,7 +18,7 @@ def save_checkpoint(path: Path, model, optimizer, epoch, val_metrics, config):
     # Save as files
     torch.save(checkpoint, path)
     
-def load_checkpoint(path: Path, model, optimizer=None, device='cpu'):
+def load_checkpoint(path: Path, model, device, optimizer=None):
     if not isinstance(path, Path):
         raise TypeError("path must be a pathlib.Path object.")
     

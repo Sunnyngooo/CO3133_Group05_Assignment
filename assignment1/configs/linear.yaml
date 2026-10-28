@@ -3,7 +3,9 @@ experiment:
 
 model:
   name: linear
-  dropout: 0.2
+  input_dim: 784
+  num_classes: 10
 
 training:
   lr: 0.0005
+  epochs: 20

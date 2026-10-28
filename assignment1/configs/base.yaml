@@ -18,5 +18,5 @@ training:
   weight_decay: 0.0
 
 checkpoints:
-  monitor: val_macro_f1
+  monitor: macro_f1
   mode: max

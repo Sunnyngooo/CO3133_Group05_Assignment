@@ -1,5 +1,9 @@
 import torch
-from assignment1.src.metrics.cls_metrics import compute_classification_metrics, validate_label_vector
+import time
+from pathlib import Path
+from assignment1.src.metrics.cls_metrics import compute_classification_metrics
+from assignment1.src.engine.evaluator import validate
+from assignment1.src.engine.checkpoint import save_checkpoint
 
 def train_one_epoch(model, train_loader, loss_fn, optimizer, device):
     model.train()
@@ -38,3 +42,52 @@ def train_one_epoch(model, train_loader, loss_fn, optimizer, device):
     metrics = compute_classification_metrics(truth_epoch, preds_epoch)
     metrics['loss'] = epoch_loss
     return metrics
+
+def fit(model, train_loader, val_loader, loss_fn, optimizer, device, epochs, checkpoint_path: Path, config):
+    if isinstance(epochs, bool) or not isinstance(epochs, int): 
+        raise TypeError("epochs must be integer.")    
+    if epochs < 1: 
+        raise ValueError("epochs must be larger than 1.")
+    
+    if not isinstance(checkpoint_path, Path):
+        raise TypeError(f"Checkpoint path must be pathlib.Path object: {checkpoint_path}")
+    # Init training state
+    history = []
+    best_macro_f1 = float('-inf')
+    best_epoch = None
+    start_time = time.perf_counter()
+    
+    # training loop
+    for epoch in range(1, epochs + 1):
+        train_metrics = train_one_epoch(model=model, train_loader=train_loader, 
+                                  loss_fn=loss_fn,optimizer=optimizer, device=device)
+        val_metrics = validate(model=model, val_loader=val_loader, loss_fn=loss_fn, device=device)
+        
+        # Save training history
+        history.append({'epoch': epoch, 'train_metrics': train_metrics, 'val_metrics': val_metrics})
+        
+        # Choose the best checkpoint
+        if val_metrics['macro_f1'] > best_macro_f1:
+            best_macro_f1 = val_metrics['macro_f1']
+            best_epoch = epoch
+            save_checkpoint(checkpoint_path, model, optimizer, best_epoch, val_metrics, config)
+        
+        print(
+            f"Epoch [{epoch}/{epochs}] "
+            f"Train Loss: {train_metrics['loss']:.4f} "
+            f"Accuracy: {train_metrics['accuracy']:.4f} "
+            f"Macro-F1: {train_metrics['macro_f1']:.4f} | "
+            f"Val Loss: {val_metrics['loss']:.4f} "
+            f"Accuracy: {val_metrics['accuracy']:.4f} "
+            f"Macro F1: {val_metrics['macro_f1']:.4f} | "
+            f"Best Macro F1: {best_macro_f1:.4f} (Epoch {best_epoch})"
+        )
+    elapsed_time = time.perf_counter() - start_time 
+    
+    return {
+        "history": history,
+        'best_epoch':  best_epoch,
+        'best_macro_f1': best_macro_f1,
+        'best_checkpoint_path': str(checkpoint_path),
+        'training_time': elapsed_time
+    }

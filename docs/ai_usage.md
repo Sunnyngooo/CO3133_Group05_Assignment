@@ -1,6 +1,6 @@
 # AI Usage Disclosure — Assignment 1
 
-This document records the use of AI assistance during Assignment 1. The activities below describe AI contributions and the corresponding student verification. The student remained responsible for implementing, testing, and validating the submitted work.
+This document records the use of AI assistance during Assignment 1. The activities below describe AI contributions and the corresponding student verification. Each member remains responsible for implementing, reviewing, and validating their submitted work.
 
 ## 1. Model Architecture and Experimental Design
 
@@ -56,3 +56,14 @@ This document records the use of AI assistance during Assignment 1. The activiti
 - **Student verification:** Implemented the evaluation and visualization functions, checked generated figures, and compared calculated metrics with saved test results.
 - **Affected files/sections:** `src/metrics/`, `src/visualization/`, `scripts/compare.py`, `scripts/analyze_error.py`; report Results section.
 - **Responsible member:** Ngô Diễm Quyên
+
+## 6. Report Writing and LaTeX Editing
+
+- **Tool:** OpenAI Codex (exact model/version not recorded).
+- **Used by:** Nguyễn Hữu Minh Khôi.
+- **Task:** Report drafting, artifact review and LaTeX formatting, 24–28 October 2026.
+- **Prompt summary:** Asked to complete the report from branch `a1`, clarify methodology and limitations, and revise layout and AI disclosure against the handbook.
+- **AI contribution:** Drafted/revised text, tables and the pipeline diagram; organized original figures; checked saved artifacts and LaTeX compilation.
+- **Student verification:** Directed content, layout and figure revisions. Codex cross-checked the handbook and committed `a1` records at `27ef182`, reconciled metrics and selected epochs, and compiled the LaTeX source. Final student verification remains the responsible member's task.
+- **Affected files/sections:** `assignment1/report/`; cover, Sections 1–3, references and AI disclosure.
+- **Responsible member:** Nguyễn Hữu Minh Khôi.

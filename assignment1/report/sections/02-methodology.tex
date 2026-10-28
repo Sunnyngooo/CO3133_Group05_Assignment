@@ -4,7 +4,37 @@
 \subsection{End-to-End Deep Learning Pipeline}
 \subsubsection{Pipeline Overview}
 The project separates configuration, data preparation, model construction, optimization, prediction, evaluation and checkpoint management~\cite{code}. The five models share this infrastructure. Training updates model weights, validation selects the checkpoint, and the final test only evaluates the selected model.
-The processing stages are dataset preparation, saved splitting, training-only normalization, DataLoader construction, model forward passes, loss/optimization, validation-based checkpoint selection and held-out prediction/evaluation.
+Figure~\ref{fig:method-pipeline} separates weight updates from validation/test prediction. Preprocessing uses the saved split and training-derived normalization; a model maps $B\times1\times28\times28$ images to $B\times10$ logits. Prediction takes the largest logit; no additional class post-processing is applied.
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm,
+ stage/.style={draw,rounded corners=1mm,align=center,text width=36mm,minimum height=11mm,font=\small,inner sep=2mm},
+ flow/.style={-{Latex[length=2mm]},thick}]
+\node[stage] (raw) at (0,0) {Raw data\\Images and labels};
+\node[stage] (prep) at (50,0) {Preprocessing\\Scale and normalize};
+\node[stage] (loader) at (100,0) {DataLoader\\Partition batches};
+\draw[flow] (raw) -- (prep);
+\draw[flow] (prep) -- (loader);
+\node[stage,fill=black!4] (train) at (25,-28) {Model: train mode\\Raw logits};
+\node[stage,fill=black!4] (loss) at (25,-49) {Loss\\Cross-entropy};
+\node[stage,fill=black!4] (opt) at (25,-70) {Optimization\\Backpropagation; Adam};
+\node[stage] (evalmodel) at (100,-28) {Model: eval mode\\No gradients};
+\node[stage] (pred) at (100,-49) {Prediction\\$\arg\max$ over logits};
+\node[stage] (post) at (100,-70) {Post-processing\\No additional steps};
+\node[stage] (metrics) at (100,-91) {Evaluation\\Accuracy; Macro-F1};
+\draw[flow] (loader.south) -- (100,-12) -| (train.north);
+\draw[flow] (loader.south) -- (evalmodel.north);
+\draw[flow] (train) -- (loss);
+\draw[flow] (loss) -- (opt);
+\draw[flow] (opt.west) -- (0,-70) -- node[left,font=\footnotesize,rotate=90,anchor=south] {Update weights} (0,-28) -- (train.west);
+\draw[flow] (evalmodel) -- (pred);
+\draw[flow] (pred) -- (post);
+\draw[flow] (post) -- (metrics);
+\end{tikzpicture}
+\captionof{figure}{Shared pipeline with training and evaluation paths. Validation selects the checkpoint after each training epoch; test loads the selected checkpoint. Only the left path updates weights. Evaluation also records cross-entropy without backpropagation. Labels supply loss and metric targets.}
+\label{fig:method-pipeline}
+\end{minipage}\par\medskip
 
 \subsubsection{DataLoader, Training and Evaluation}
 Separate dataset objects provide independent training and validation transforms while referring to disjoint saved indices. The training loader shuffles with a seeded generator; validation and test retain their order. Batch size is 128 and \texttt{num\_workers=0}. Each training batch clears gradients, computes logits and cross-entropy, backpropagates and performs one optimizer step. Training enables dropout; validation and test disable it with evaluation mode and gradient suppression.
@@ -16,7 +46,7 @@ Epoch loss is sample-weighted: for batch size $n_b$ and mean batch loss $\ell_b$
 Thus the final partial batch is not weighted as heavily as a full batch. Accuracy and Macro-F1 are computed from the entire epoch's prediction vectors rather than averaged over batch scores. Evaluation rebuilds the architecture from the saved YAML, loads its selected checkpoint and exports test metrics. Error analysis separately verifies that its Accuracy and Macro-F1 agree with the saved test record.
 
 \subsection{Architectures and Input Representations}
-All models are trained from scratch. Table~\ref{tab:architectures} summarizes their representations; parameter counts include biases and are recorded in the branch's inference artifacts.
+All models are trained from scratch and return raw logits of shape $B\times10$ for batch size $B$. Table~\ref{tab:architectures} summarizes their representations; parameter counts include biases and are recorded in the branch's inference artifacts.
 \begin{table}[!htbp]\centering\small
 \caption{Architectures used in the main comparison. All outputs are ten logits.}
 \label{tab:architectures}
@@ -59,7 +89,7 @@ Local kernels and weight sharing encode the assumption that garment patterns are
 \subsubsection{LSTM: Rows as Timesteps}
 The channel dimension is removed to form $X\in\mathbb R^{B\times28\times28}$. There are 28 timesteps, each containing the 28 pixels of one image row. A two-layer, unidirectional LSTM with hidden size 128 processes the sequence from top to bottom. Its gates update a cell state and hidden state using the current row and preceding state. The final hidden state of the last layer summarizes the image; dropout 0.2 and a $128\to10$ affine layer produce logits. Inter-layer LSTM dropout is also 0.2.
 
-For one layer, PyTorch stores four input-gate weight blocks, four recurrent blocks and two bias vectors per gate. Thus the count is
+For one layer, PyTorch stores input and recurrent weight blocks for four gates, with two bias vectors per gate. Thus the count is
 \begin{equation}
 \underbrace{4(128)(28+128+2)}_{80{,}896}
 +\underbrace{4(128)(128+128+2)}_{132{,}096}
@@ -73,7 +103,7 @@ A $7\times7$ convolution with stride 7 projects each non-overlapping image patch
 Q=XW_Q,\quad K=XW_K,\quad V=XW_V,\qquad
 \operatorname{Attention}(Q,K,V)=\operatorname{softmax}\!\left(\frac{QK^\top}{\sqrt{32}}\right)V.
 \end{equation}
-Queries, keys and values all come from the image-token sequence. Attention mixes information between patch locations; the combined encoder output retains shape $B\times16\times128$. Mean pooling over tokens, LayerNorm and a $128\to10$ head yield logits. There is no class token or pretrained backbone.
+Here $X$ denotes the layer-normalized tokens entering an attention sublayer. Queries, keys and values all come from this same image-token sequence. Attention mixes information between patch locations; the combined encoder output retains shape $B\times16\times128$. Mean pooling over tokens, LayerNorm and a $128\to10$ head yield logits. There is no class token or pretrained backbone.
 
 Patch projection contributes 6,400 parameters, positional embeddings 2,048, the two encoder layers 264,960, and the final normalization/head 1,546: 274,954 in total. Attention provides global token interactions but has less built-in local image structure than the CNN. The $7\times7$ patch size also changes how fine spatial details enter the network.
 
@@ -91,7 +121,7 @@ Accuracy is $N^{-1}\sum_i\mathbf1(\hat y_i=y_i)$. For class $c$,
 F1_c=\frac{2TP_c}{2TP_c+FP_c+FN_c},\qquad
 \mathrm{Macro\mbox{-}F1}=\frac1{10}\sum_{c=0}^{9}F1_c.
 \end{equation}
-The metric code explicitly includes all ten labels and uses zero for undefined denominators. Confusion-matrix rows are true classes and columns are predictions. Row-normalized diagonals measure recall, not overall accuracy. Saved error-analysis records include each class's precision, recall, F1 and support, plus the most frequent directed confusions.
+Accuracy measures the overall proportion of correct predictions, whereas Macro-F1 weights all ten classes equally and accounts for both precision and recall. Metrics use complete prediction/target vectors for each evaluated partition, not averages of batch scores. Validation Macro-F1 selects the checkpoint; test metrics never enter that decision. The metric code explicitly includes all ten labels and uses zero for undefined denominators. Confusion-matrix rows are true classes and columns are predictions. Row-normalized diagonals measure recall, not overall accuracy. Saved error-analysis records include each class's precision, recall, F1 and support, plus the most frequent directed confusions.
 
 \subsection{Training Setup and Experimental Design}
 \subsubsection{Hardware, Dependencies and Randomness}
@@ -115,20 +145,47 @@ Checkpoint selection & Highest validation Macro-F1\\
 Scheduler / early stopping & Neither used\\
 Precision & Default float32; no mixed precision\\\bottomrule
 \end{tabularx}\end{table}
-Dropout is 0.2 in the nonlinear models and absent from Linear. The reported runs use one baseline configuration for each architecture. Equal epochs do not imply equal compute or matched capacity.
+Dropout is 0.2 in the nonlinear models and absent from Linear. The reported runs use one saved baseline configuration per architecture. The loader merges \texttt{base.yaml} with model-specific overrides, and each run saves the resolved settings. Table~\ref{tab:training} reflects those saved configurations rather than unmerged defaults.
+
+The source README documents no systematic hyperparameter search, search space or tuning history. These runs are treated as a comparison of saved baseline settings, not independently tuned optima. Selecting an epoch by validation Macro-F1 is distinct from choosing hyperparameters; the artifacts do not establish how learning rates, widths or dropout values were originally chosen.
 
 \subsubsection{Checkpoint Selection and Comparison Criteria}
-After each epoch, a strict improvement in validation Macro-F1 replaces the checkpoint; an exact tie retains the earlier epoch. Checkpoints save model and optimizer states, epoch, validation metrics and configuration. Test evaluation uses that checkpoint rather than necessarily epoch 20.
+After each epoch, a strict improvement in validation Macro-F1 replaces the checkpoint; an exact tie retains the earlier epoch. Checkpoints save model and optimizer states, epoch, validation metrics and configuration. Test evaluation uses that checkpoint rather than necessarily epoch 20. This epoch-level selection rule is distinct from hyperparameter selection and does not establish a tuning history.
 
-The changed factors are architecture and input representation (flattened pixels, spatial feature maps, row sequence or patch tokens). The fixed factors are dataset split, normalization, seed, optimizer, learning rate, batch size, epoch budget, selection criterion and test metrics. The main hypotheses are that nonlinear interactions improve over a linear rule, and that convolutional locality offers a useful accuracy--cost trade-off. Evidence is evaluated through test Accuracy and Macro-F1 together with errors, parameters and elapsed time. This design compares concrete configurations; it cannot isolate representation from architecture or prove a universal ranking.
+The five saved runs form one shared architecture/representation comparison. The following hypotheses organize its interpretation; they are not claimed to have been registered before the experiments:
+\begin{itemize}
+\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+\item \textbf{Nonlinear representations.} MLP is expected to exceed Linear in test Accuracy and Macro-F1 by learning nonlinear pixel interactions. The comparison directly contrasts their two test scores.
+\item \textbf{Spatial inductive bias.} CNN is expected to offer a favorable classification-quality--parameter trade-off relative to flattened (MLP), row-sequence (LSTM) and patch-token (Transformer) representations. Assess this separately against each model using Accuracy, Macro-F1 and parameter count; no accuracy-per-parameter ratio is introduced.
+\item \textbf{CPU inference cost.} LSTM and Transformer are expected to have higher median CPU forward latency than Linear and MLP under the same benchmark protocol. Recurrent dependencies and projection/attention operations are plausible contributors to cost, but these timings do not isolate or prove their individual effects.
+\end{itemize}
+
+\begin{table}[!htbp]\centering\small
+\caption{Controls and measurements for the main five-model comparison.}
+\label{tab:experiment-design}
+\begin{tabularx}{\linewidth}{@{}p{29mm}X@{}}\toprule
+Element & Definition\\\midrule
+Changed factors & Model architecture and internal input representation; architecture-dependent depth, hidden dimensions, parameter count and dropout placement. Parameter count varies with architecture rather than being independently controlled.\\
+Fixed training factors & Identical train/validation/test indices and training-derived normalization; seed 42; Adam, learning rate $5\times10^{-4}$, weight decay 0; batch size 128 and 20 epochs; cross-entropy on raw logits.\\
+Fixed evaluation factors & Accuracy and Macro-F1; checkpoint selection by validation Macro-F1; held-out test protocol. Inference uses CPU, four threads, batch size one, five warm-up passes and 20 timed repeats.\\
+Measurements & Test Accuracy and Macro-F1, per-class errors, trainable parameters, training wall time and median CPU forward time.\\\bottomrule
+\end{tabularx}\end{table}
+
+Dropout is absent from Linear; the nonlinear models use rate 0.2 at architecture-specific locations. It is therefore not a fully identical control across models.
+
+Higher Accuracy and Macro-F1 indicate better observed classification quality; parameter count and measured times are evaluated separately as costs. The nonlinear-representation comparison contrasts MLP with Linear; the spatial-bias comparison evaluates CNN's quality and parameter count against each alternative; and the CPU-cost comparison contrasts LSTM/Transformer latency with both dense baselines under the fixed timing settings. A quality gain accompanied by higher cost is reported as a trade-off. No composite score, numerical acceptance threshold or new statistical test is introduced. Section~3.3 reports the quantitative comparisons, while Section~3.5 interprets representation and inductive bias.
+
+Conclusions concern these concrete configurations. One seed provides no estimate of variability across independent runs. Equal epochs do not imply equal compute or matched capacity, and simultaneous changes in architecture and representation prevent isolating their causal contributions. No statistical significance or universal architecture ranking is inferred.
 
 \subsubsection{Timing Protocol}
-Training time is wall-clock duration of the fit loop, including training, validation, metric computation and checkpoint writes; dataset preparation and model construction are excluded. Inference artifacts record CPU execution, four threads, batch size one, five warm-up passes and 20 timed repeats using \texttt{perf\_counter}. Only the loaded model's forward pass is timed in inference mode. Data loading, preprocessing, checkpoint loading and startup are excluded. The report gives the median; p95 is retained for context. These are repeated timings of one preprocessed test image, not a distribution over the entire test set or end-to-end deployment latency.
+Training time is wall-clock duration of the fit loop, including training, validation, metric computation and checkpoint writes; dataset preparation and model construction are excluded. Inference artifacts record CPU execution, four threads, batch size one, five warm-up passes and 20 timed repeats using \texttt{perf\_counter}. Only the loaded model's forward pass is timed in inference mode. Data loading, preprocessing, checkpoint loading and startup are excluded. The report gives the median; p95 is retained for context. Table~\ref{tab:finalcomparison} in Section~\ref{sec:results} reports measured training and inference times alongside test quality. These are repeated timings of one preprocessed test image, not a distribution over the entire test set or end-to-end deployment latency.
 
 \subsection{Implementation and Verification}
-The group defines architecture assembly, configuration handling, normalization, split validation, training/evaluation loops, checkpointing, error analysis and reporting. PyTorch supplies layers, autograd, optimizers and loaders; torchvision supplies Fashion-MNIST/transforms; scikit-learn supplies classification metrics; Matplotlib/seaborn supply plots and PyYAML reads configurations. No pretrained model replaces any of the five mandatory architectures.
+The group implements architecture classes and representation changes, configuration merging, training-only statistics and split checks, training/evaluation control flow, checkpoint handling and diagnostic/reporting scripts. These assemble library components rather than reimplementing numerical kernels. PyTorch supplies affine/convolutional/recurrent/attention layers, autograd, Adam, cross-entropy and DataLoader; torchvision supplies Fashion-MNIST and image transforms; scikit-learn computes classification metrics; Matplotlib/seaborn render plots; and PyYAML reads/writes configurations. All five models are trained from scratch; no pretrained backbone substitutes for a mandatory architecture.
 
-The updated branch collects pytest tests for metrics, weighted losses, training updates, evaluation behavior, checkpoint restoration, deterministic splitting, loaders, transforms, EDA and random-number control. Dataset tests replace downloads with in-memory inputs. These tests cover implementation behavior. For this report, the saved comparison CSV was independently checked against every selected run's JSON records, all checkpoint-epoch fields were reconciled, and Accuracy/Macro-F1 were recomputed from all five stored confusion matrices.
+The source test suite includes checks for metrics, weighted losses, training updates, evaluation behavior, checkpoint restoration, deterministic splitting, loaders, transforms, EDA and random-number control. Dataset tests replace downloads with in-memory inputs. Such tests address pipeline behavior; their presence alone does not establish a passing test run or reproduce benchmark accuracy.
+
+For this report, all five stored confusion matrices were used to recompute Accuracy/Macro-F1, the comparison CSV was reconciled with saved metric/timing records, and selected-epoch fields were checked across histories and diagnostic records. These are consistency checks of committed artifacts, not new training or test-set inference runs.
 
 \subsubsection{Reproducibility}
 \begin{itemize}

@@ -182,6 +182,7 @@ The comparison shows that greater architectural complexity does not automaticall
 ## Source and deliverables
 
 - [Source code](https://github.com/Sunnyngooo/DeepLearning_Assignment/blob/a1/assignment1/README.md)
+- [M1 draft](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/blob/main/assignment1/draft.ipynb)
 - [Reproduction instructions](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/blob/main/assignment1/README.md)
 - [Saved checkpoints](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/main/assignment1/checkpoints)
 - [Run configurations and logs](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/main/assignment1/runs)

@@ -1,10 +1,18 @@
-venv
-assignment1/data/
+# Python virtual environments
+venv/
+.venv/
+.venv311/
+.venv*/
 
+# Python cache
 __pycache__/
 *.py[cod]
-*$py.class
+.pytest_cache/
 
+# Assignment 1
+assignment1/data/
+
+# Dataset files
 *-ubyte
 *.ubyte.gz
 *.gz

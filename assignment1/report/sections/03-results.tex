@@ -1,135 +1,304 @@
-\clearpage
 \section{Implementation Results}
 \label{sec:results}
+\subsection{Evidence and Selected Experiments}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Evidence.} The main comparison uses the exact five runs identified in the \texttt{a1} README and committed comparison CSV at revision \texttt{27ef182}~\cite{code}.
+\item \textbf{Selected runs.} Linear uses \texttt{linear\_baseline\_001}; MLP, CNN, LSTM and Transformer use their respective \texttt{baseline\_002} runs.
+\item \textbf{Checkpoint protocol.} All have 20 logged epochs and a validation-selected checkpoint. Run identifiers distinguish saved experiments; a suffix is not a random-seed number.
+\end{itemize}
 
 \subsection{Training Behavior}
-\subsubsection{Training and Validation Loss and Metric Curves}
-\label{sec:preliminary}
-The only stored model-training output available in the inspected source snapshot is a preliminary linear-classifier experiment in \texttt{draft.ipynb}~\cite{code}. It contains ten epochs of printed training and validation metrics. Figure~\ref{fig:preliminary} reconstructs those curves from the saved text output; no model was retrained to produce the figure.
+\subsubsection{Learning Curves and Selected Checkpoints}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Learning curves.} Figures~\ref{fig:learning}--\ref{fig:learning-transformer} reproduce the learning-curve images committed in the cited branch, without redrawing them. Loss decreases and validation Macro-F1 improves substantially for every model.
+\item \textbf{Checkpoint statistics.} Table~\ref{tab:bestepochs} gives values at the selected checkpoint, rather than combining training statistics from a different epoch.
+\end{itemize}
+\begin{table}[!htbp]\centering\small
+\caption{Validation-selected checkpoints. Training accuracy is collected in training mode during the epoch; validation accuracy uses the resulting model in evaluation mode.}
+\label{tab:bestepochs}
+\begin{tabular}{@{}lrrrrr@{}}\toprule
+Model & Epoch & Val. F1 & Train Acc. (\%) & Val. Acc. (\%) & Val. loss\\\midrule
+Linear & 13 & 0.8563 & 86.38 & 85.64 & 0.4260 \\
+MLP & 20 & 0.8970 & 92.61 & 89.63 & 0.3082 \\
+CNN & 19 & 0.9226 & 94.53 & 92.22 & 0.2343 \\
+LSTM & 20 & 0.8990 & 92.25 & 89.90 & 0.2971 \\
+Transformer & 17 & 0.8910 & 91.01 & 89.11 & 0.3140 \\
+\bottomrule\end{tabular}\end{table}
 
-\textbf{Protocol distinction.} This notebook experiment predates the current scripts. It uses a 50,000/10,000 train--validation split, batch size 64, SGD with learning rate 0.01 and ten epochs. Pixels are scaled to $[0,1]$ without the training-statistic normalization used by the current pipeline. Consequently, its metrics must not be presented as final test results or used as a controlled comparison with later model runs. Table~\ref{tab:protocols} makes these differences explicit.
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Selected epochs.} Linear peaks at epoch 13 and Transformer at epoch 17; their last epochs are not automatically the selected models. CNN's best validation Macro-F1 is at epoch 19, while MLP and LSTM select epoch 20.
+\item \textbf{Training budget and interpretation.} None uses early stopping: all complete their full budget. Selecting epoch 20 for MLP/LSTM leaves open whether a longer budget would help; it does not establish non-convergence.
+\end{itemize}
 
-\begin{table}[htbp]
-\centering\small
-\caption{Preliminary notebook protocol versus the current configured protocol.}
-\label{tab:protocols}
-\begin{tabularx}{\linewidth}{@{}lXX@{}}
-\toprule
-Setting & Preliminary notebook & Current scripts \\
-\midrule
-Train / validation & 50,000 / 10,000 & 51,000 / 9,000 \\
-Optimizer & SGD & Adam \\
-Learning rate & 0.01 & 0.0005 \\
-Batch size & 64 & 128 \\
-Epochs & 10 & 20 for Linear, MLP, CNN \\
-Normalization & Scale to $[0,1]$ only & Scale, then training mean/std \\
-Reported evaluation & Validation & Final test results TBD \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\begin{figure}[htbp]
+\par\medskip\noindent\begin{minipage}{\linewidth}
 \centering
-\includegraphics[width=\linewidth]{images/preliminary_linear_curves.pdf}
-\caption{Preliminary Linear learning curves reconstructed from the ten logged notebook epochs. All displayed classification metrics are training or validation metrics, not test metrics.}
-\label{fig:preliminary}
-\end{figure}
-\FloatBarrier
+\includegraphics[width=\linewidth]{images/final_linear_baseline_001_learning_curves.png}
+\captionof{figure}{Linear: original training/validation loss and Macro-F1 curves from branch \texttt{a1}. The red dashed line marks the validation-selected epoch.}
+\label{fig:learning}
+\end{minipage}\par\medskip
 
-Across the logged epochs, training loss decreases from 1.0076 to 0.5003, while validation loss decreases from 0.7610 to 0.5151. Validation Accuracy increases from 75.44\% to 82.91\%, and validation Macro-F1 increases from 0.7433 to 0.8293. Table~\ref{tab:preliminary} reports the last logged epoch. These observations support that the preliminary linear model learns a useful decision rule under its own protocol, but do not establish its performance under the current configuration.
-
-\begin{table}[htbp]
+\par\medskip\noindent\begin{minipage}{\linewidth}
 \centering
-\caption{Last logged epoch of the preliminary Linear experiment. Values retain the precision printed in the notebook.}
-\label{tab:preliminary}
-\begin{tabular}{@{}lr@{}}
-\toprule
-Measurement at epoch 10 & Value \\
-\midrule
-Training loss & 0.5003 \\
-Training Accuracy & 83.32\% \\
-Validation loss & 0.5151 \\
-Validation Accuracy & 82.91\% \\
-Validation Macro-F1 & 0.8293 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=\linewidth]{images/final_mlp_baseline_002_learning_curves.png}
+\captionof{figure}{MLP: original training/validation loss and Macro-F1 curves from branch \texttt{a1}. The red dashed line marks the validation-selected epoch.}
+\label{fig:learning-mlp}
+\end{minipage}\par\medskip
 
-\subsubsection{Selected Checkpoints and Convergence Behavior}
-For the preliminary experiment, epoch 10 has the highest Macro-F1 among the ten printed validation scores. The notebook does not provide the current pipeline's saved-checkpoint record, so this observation is not evidence of a recoverable selected checkpoint. Best-epoch records, training histories and checkpoints for the current Linear, MLP and CNN configurations are \textbf{TBD}.
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth]{images/final_cnn_baseline_002_learning_curves.png}
+\captionof{figure}{CNN: original training/validation loss and Macro-F1 curves from branch \texttt{a1}. The red dashed line marks the validation-selected epoch.}
+\label{fig:learning-cnn}
+\end{minipage}\par\medskip
 
-\subsubsection{Overfitting, Underfitting and Implementation Issues}
-At the preliminary experiment's last logged epoch, training Accuracy exceeds validation Accuracy by 0.41 percentage points. Both loss curves decrease over the observed period. This short trajectory alone is insufficient to conclude that overfitting is absent or that the model is capacity-limited: the metrics are rounded, only one split is shown, and no independent repeat or test outcome is stored. A diagnosis for the current architectures requires their own histories.
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth]{images/final_lstm_baseline_002_learning_curves.png}
+\captionof{figure}{LSTM: original training/validation loss and Macro-F1 curves from branch \texttt{a1}. The red dashed line marks the validation-selected epoch.}
+\label{fig:learning-lstm}
+\end{minipage}\par\medskip
 
-Implementation issues relevant to interpreting this draft are the older notebook protocol, unfinished sequence-model modules and the lack of committed final-run artifacts. They limit evidence coverage rather than demonstrate a specific model failure. Runtime issues and verified fixes associated with the final experiment runs remain \textbf{TBD}.
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth]{images/final_transformer_baseline_002_learning_curves.png}
+\captionof{figure}{Transformer: original training/validation loss and Macro-F1 curves from branch \texttt{a1}. The red dashed line marks the validation-selected epoch.}
+\label{fig:learning-transformer}
+\end{minipage}\par\medskip
 
-\subsection{Quantitative Model Comparison}
-\subsubsection{Test Accuracy and Macro-F1 Across the Five Models}
-Table~\ref{tab:finalcomparison} reserves space for the required five-model comparison. The source snapshot contains implementations of Linear, MLP and CNN, but no corresponding saved final-run histories, test-metric JSON files or checkpoints. LSTM and Transformer model files are still empty. The absence of tracked run artifacts does not imply that no teammate has run experiments locally; it means those experiments cannot yet be verified from this snapshot.
+\subsubsection{Generalization Gaps}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Accuracy gaps.} At epoch 20, train-minus-validation accuracy gaps are 1.45 percentage points (Linear), 2.97 (MLP), 2.46 (CNN), 2.35 (LSTM) and 2.64 (Transformer).
+\item \textbf{Late-epoch behavior.} Training loss continues to improve while validation gains flatten, indicating limited late-epoch generalization gains under this budget.
+\item \textbf{Interpretation.} The gaps alone do not prove a causal diagnosis of overfitting: training metrics include dropout and accumulate predictions while parameters change. Checkpoint selection limits the effect of late validation degradation.
 
-\begin{table}[htbp]
-\centering\small
-\caption{Final comparison status. Parameter counts are architecture-derived; test metrics and timings have not been supplied.}
+\item \textbf{Traceability.} The branch contains all five model implementations, an inference benchmark, saved diagnostics and pytest-collected data-pipeline tests. The result records link each selected checkpoint to its configuration and metrics.
+\end{itemize}
+
+\subsection{Quantitative Comparison}
+\subsubsection{Test Quality and Computational Cost}
+\begin{table}[!htbp]\centering\small
+\caption{Main five-model comparison: one seed, shared split and validation-based checkpoint selection. Inference is median CPU forward time per image.}
 \label{tab:finalcomparison}
-\begin{tabular}{@{}lrrrrr@{}}
-\toprule
-Model & Parameters & Test Acc. & Macro-F1 & Train time & Infer. time \\
-\midrule
-Linear & 7,850 & TBD & TBD & TBD & TBD \\
-MLP & 235,146 & TBD & TBD & TBD & TBD \\
-CNN & 220,234 & TBD & TBD & TBD & TBD \\
-LSTM & TBD & TBD & TBD & TBD & TBD \\
-Transformer & TBD & TBD & TBD & TBD & TBD \\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{tabular}{@{}lrrrrr@{}}\toprule
+Model & Acc. (\%) & Macro-F1 & Parameters & Train (s) & Infer. (ms)\\\midrule
+CNN & 91.69 & 0.9163 & 220,234 & 1748.41 & 0.8216 \\
+LSTM & 89.66 & 0.8960 & 214,282 & 1798.18 & 1.9652 \\
+MLP & 89.08 & 0.8907 & 235,146 & 715.37 & 0.2037 \\
+Transformer & 87.98 & 0.8790 & 274,954 & 2133.30 & 1.9598 \\
+Linear & 84.31 & 0.8424 & 7,850 & 941.05 & 0.0484 \\
+\bottomrule\end{tabular}\end{table}
 
-\subsubsection{Parameter Counts and Model Configurations}
-The three known counts follow directly from layer dimensions, including biases. Linear has 7,850 parameters, MLP has 235,146 and CNN has 220,234. The CNN therefore contains 14,912 fewer trainable parameters than this MLP, approximately 6.34\% fewer. This is a structural comparison, not an observed accuracy, memory or speed improvement. ReLU, dropout, pooling and flattening do not add learned parameters.
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{CNN.} It leads with 91.69\% Accuracy and 0.9163 Macro-F1, exceeding MLP by 2.61 percentage points and 0.0256 Macro-F1. Although it uses 6.34\% fewer parameters than MLP, training takes about 2.44 times longer and median inference about 4.03 times longer. It provides the highest observed quality at a higher computational cost than MLP.
+\item \textbf{MLP.} It achieves 89.08\% Accuracy and 0.8907 Macro-F1. It has the lowest recorded training time (715.37 s) and a median inference time of 0.2037 ms/image, approximately one quarter of CNN's. These measurements make it a useful quality--latency compromise on the recorded CPU; timing cannot be inferred from parameter count alone.
+\item \textbf{LSTM.} It ranks second at 89.66\% Accuracy and 0.8960 Macro-F1. Its gain over MLP is 0.58 percentage points and 0.0053 Macro-F1, while median inference takes about 9.64 times longer. The modest quality gain therefore comes with a substantial latency cost.
+\item \textbf{Transformer.} It reaches 87.98\% Accuracy and 0.8790 Macro-F1, trailing MLP by 1.10 percentage points. It also has the largest parameter count (274,954) and longest recorded training time (2,133.30 s). Its greater architectural flexibility does not improve the quality--cost trade-off under this configuration and budget.
+\item \textbf{Linear.} It reaches 84.31\% Accuracy and 0.8424 Macro-F1, the lowest scores among the five models. With 7,850 parameters and a median inference time of 0.0484 ms/image, it is the smallest and fastest model. It offers the lowest forward cost but sacrifices classification quality.
+\end{itemize}
 
-The implementation provides a helper for total, trainable and non-trainable parameter counts. The figures above were independently calculated from the current architecture definitions; runtime count verification for the final saved configurations is \textbf{TBD}.
 
-\subsubsection{Training Time and Inference Time}
-The fit function returns a \texttt{training\_time} field, but no measured value from a current model run is stored in the examined snapshot. Inference timing is not yet implemented as a benchmark. The notebook output includes no elapsed-time record. Both required timing columns therefore remain \textbf{TBD}; neither parameter count nor epoch count substitutes for a wall-clock measurement.
 
-\subsubsection{Variability Across Random Seeds, When Feasible}
-The present configurations specify seed 42, and the available preliminary output represents one run. Repeated-run results, mean scores and standard deviations are \textbf{TBD}. Without repeats, small differences between future scores should not be interpreted as robust improvements.
+\subsubsection{Timing Resolution and Single-Seed Uncertainty}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Timing spread.} Stored p95 forward times are 0.0570 ms (Linear), 0.2323 (MLP), 0.9844 (CNN), 2.5340 (LSTM) and 2.1620 (Transformer).
+\item \textbf{Close medians.} LSTM and Transformer have almost equal medians (1.9652 and 1.9598 ms); their tiny median difference is not a reliable speed distinction from only 20 repeated passes.
+\item \textbf{Measurement limits.} CPU scheduling, thread behavior and kernel implementations influence these values. Training times also include validation and checkpoint overhead.
 
-\subsection{Qualitative Results and Per-Class Analysis}
-\subsubsection{Confusion Matrices and Per-Class Performance}
-\TBD
-\subsubsection{Correct Predictions and Difficult but Correct Cases}
-\TBD
-\subsubsection{Incorrect Predictions and Ground-Truth Comparisons}
-\TBD
+\item \textbf{Single-seed scope.} The reported scores are single-seed measurements. No multi-seed mean, standard deviation or significance claim is supported.
+\item \textbf{Limits of comparison.} In particular, the modest LSTM--MLP gap should be treated as an observation for these saved runs. Different run-number suffixes do not provide independent seed replications.
+\end{itemize}
 
-\subsection{Comparison and Discussion}
-\subsubsection{Effects of Input Representation and Inductive Bias}
-The implemented architectures already make different assumptions about images. Linear and MLP consume flattened pixels, whereas CNN preserves a two-dimensional feature hierarchy and shares local filters. The MLP introduces nonlinear capacity without explicit convolutional structure. These design differences define what the eventual experiments should test; the current evidence cannot attribute a measured gain to any of them because a shared-protocol multi-model result is not yet available.
+\subsection{Per-Class and Qualitative Results}
+\subsubsection{Confusion Matrices and Class-Wise F1}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Confusion matrices.} Figures~\ref{fig:confusions}--\ref{fig:confusions-transformer} reproduce the original row-normalized confusion matrices for all five models.
+\item \textbf{Per-class evaluation.} Table~\ref{tab:perclass} provides per-class F1; each class has exactly 1,000 test examples. High aggregate accuracy does not remove the much larger error rate on Shirt.
+\end{itemize}
+\par\medskip\noindent\begin{minipage}{\linewidth}\centering\small
+\captionof{table}{Per-class F1 from the committed error-analysis JSON files. Values are rounded to three decimals; the macro scores use unrounded values.}
+\label{tab:perclass}
+\begin{tabular}{@{}lrrrrr@{}}\toprule
+Class & Linear & MLP & CNN & LSTM & Transformer\\\midrule
+T-shirt/top & 0.809 & 0.851 & 0.865 & 0.847 & 0.828\\
+Trouser & 0.969 & 0.980 & 0.984 & 0.977 & 0.975\\
+Pullover & 0.725 & 0.816 & 0.872 & 0.830 & 0.792\\
+Dress & 0.854 & 0.895 & 0.914 & 0.895 & 0.889\\
+Coat & 0.749 & 0.813 & 0.871 & 0.822 & 0.805\\
+Sandal & 0.930 & 0.965 & 0.983 & 0.970 & 0.962\\
+Shirt & 0.592 & 0.710 & 0.753 & 0.717 & 0.672\\
+Sneaker & 0.922 & 0.950 & 0.964 & 0.958 & 0.944\\
+Bag & 0.933 & 0.974 & 0.986 & 0.976 & 0.965\\
+Ankle boot & 0.943 & 0.954 & 0.971 & 0.968 & 0.957\\
+\bottomrule\end{tabular}\end{minipage}\par\medskip
 
-\subsubsection{Accuracy--Speed--Parameter Trade-Offs}
-The current MLP and CNN have similar parameter counts, with CNN slightly smaller, whereas Linear is substantially smaller. However, convolution performs repeated operations across spatial locations, and equal parameter counts do not imply equal inference cost. A complete trade-off analysis must combine final test metrics with measured train/inference times and the documented hardware. The empirical comparison is \textbf{TBD}.
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Hardest class.} Shirt is the weakest class for every model. CNN improves its F1 from Linear's 0.592 to 0.753, but its recall is still only 71.2\%: 288 of 1,000 shirts are missed.
+\item \textbf{Strong classes.} CNN's best class is Bag (F1 0.986), with 98.7\% recall. Trouser and Sandal are also strong (F1 about 0.984).
+\item \textbf{Uneven gains.} The CNN does not lead every class: LSTM has slightly higher Trouser recall (97.4\% versus 97.3\%), although CNN's precision gives it the higher F1. The gains are uneven across classes. Overall Macro-F1 is determined by the average across all ten classes, not a single easy category.
+\end{itemize}
 
-\subsubsection{Evidence for Hypotheses and Limits of the Comparison}
-The stored EDA supports a near-balanced training subset, and the preliminary notebook output supports that a linear model can learn under its earlier setup. Neither observation decides the architecture-comparison hypotheses. There is currently no controlled evidence that the CNN outperforms the MLP, that nonlinear capacity improves over Linear under the current protocol, or that a sequence model is competitive. Those conclusions remain \textbf{TBD}.
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=.84\linewidth]{images/final_cnn_cm_normalized.png}
+\captionof{figure}{Original CNN confusion matrix from branch \texttt{a1}. Rows are true labels, columns are predictions and entries are row-normalized. Table~\ref{tab:cnnerrors} reports the largest directed error counts.}
+\label{fig:confusions}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=.84\linewidth,height=.40\textheight,keepaspectratio]{images/final_linear_cm_normalized.png}
+\captionof{figure}{Linear: original row-normalized confusion matrix from the selected branch run.}
+\label{fig:confusions-linear}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=.84\linewidth,height=.40\textheight,keepaspectratio]{images/final_mlp_cm_normalized.png}
+\captionof{figure}{MLP: original row-normalized confusion matrix from the selected branch run.}
+\label{fig:confusions-mlp}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=.84\linewidth,height=.40\textheight,keepaspectratio]{images/final_lstm_cm_normalized.png}
+\captionof{figure}{LSTM: original row-normalized confusion matrix from the selected branch run.}
+\label{fig:confusions-lstm}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=.84\linewidth,height=.40\textheight,keepaspectratio]{images/final_transformer_cm_normalized.png}
+\captionof{figure}{Transformer: original row-normalized confusion matrix from the selected branch run.}
+\label{fig:confusions-transformer}
+\end{minipage}\par\medskip
+
+\subsubsection{Correct and Incorrect Prediction Examples}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Correct predictions.} Figure~\ref{fig:cnnexamples} reproduces five correct and five incorrect CNN predictions from the branch. The correctly recognized Pullover contains visible internal structure despite its coarse resolution; the Ankle boot has a recognizable silhouette.
+\item \textbf{Failure examples.} The incorrect Sneaker-to-Bag and Ankle-boot-to-Sandal cases show that seemingly distinctive categories still have individual failures. Their precise causal features cannot be established from a few images alone.
+
+\item \textbf{Selection rule.} The source selects the first correct and first incorrect test examples in dataset order, not examples ranked by confidence or human-assessed difficulty. Thus a correct image can illustrate recognition of a nontrivial shape, but cannot be labeled objectively ``hard'' without a difficulty definition.
+\item \textbf{Interpretation limits.} These panels are diagnostic illustrations, not an estimate of error prevalence. Figures~\ref{fig:cnnexamples}--\ref{fig:examples-transformer} include the original prediction examples for all five models.
+\end{itemize}
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth]{images/final_cnn_prediction_examples.png}
+\captionof{figure}{Original CNN prediction-example image from branch \texttt{a1}. Five correct predictions appear above five failures; ground-truth and predicted labels are preserved.}
+\label{fig:cnnexamples}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth,height=.24\textheight,keepaspectratio]{images/final_linear_prediction_examples.png}
+\captionof{figure}{Linear: original prediction examples from the selected branch run. Five correct predictions appear above five failures, with ground-truth and prediction labels.}
+\label{fig:examples-linear}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth,height=.24\textheight,keepaspectratio]{images/final_mlp_prediction_examples.png}
+\captionof{figure}{MLP: original prediction examples from the selected branch run. Five correct predictions appear above five failures, with ground-truth and prediction labels.}
+\label{fig:examples-mlp}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth,height=.24\textheight,keepaspectratio]{images/final_lstm_prediction_examples.png}
+\captionof{figure}{LSTM: original prediction examples from the selected branch run. Five correct predictions appear above five failures, with ground-truth and prediction labels.}
+\label{fig:examples-lstm}
+\end{minipage}\par\medskip
+
+\par\medskip\noindent\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=\linewidth,height=.24\textheight,keepaspectratio]{images/final_transformer_prediction_examples.png}
+\captionof{figure}{Transformer: original prediction examples from the selected branch run. Five correct predictions appear above five failures, with ground-truth and prediction labels.}
+\label{fig:examples-transformer}
+\end{minipage}\par\medskip
+
+\subsection{Representation and Inductive Bias}
+\subsubsection{Evidence for the Research Hypotheses}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Nonlinear capacity.} The MLP exceeds Linear by 4.77 percentage points and 0.0482 Macro-F1, consistent with useful nonlinear pixel interactions.
+\item \textbf{Spatial structure.} CNN then improves over MLP while using slightly fewer parameters, consistent with a beneficial image-specific bias from local receptive fields and weight sharing.
+\item \textbf{Scope of evidence.} The comparison supports those hypotheses for these configurations; it does not isolate a causal contribution of each design choice because capacity, depth and operations also change.
+
+\item \textbf{Row representation.} Row-wise LSTM processing improves over the flattened MLP slightly in aggregate, but its serial recurrence is expensive on the measured CPU. It does not preserve a two-dimensional neighborhood in the same explicit way as convolution.
+\item \textbf{Patch representation.} Transformer can exchange information globally among 16 patches, but the learned representation and common 20-epoch budget yield a weaker result here.
+\item \textbf{Observed ranking.} The evidence does not support the claim that a more modern or more parameter-rich architecture must outperform a small CNN on this benchmark.
+\end{itemize}
+
+\subsubsection{Practical Trade-Off}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Quality priority.} CNN is the preferred quality-focused model among these runs.
+\item \textbf{Latency priority.} If CPU forward latency is the principal constraint, MLP offers 89.08\% Accuracy at roughly one quarter of CNN's median time; Linear offers a still cheaper but less accurate reference.
+\item \textbf{Sequence-model trade-off.} LSTM's small gain over MLP comes with a large cost, while Transformer is dominated by CNN in quality, parameters, training time and median inference time. This conclusion is specific to the recorded CPU protocol and saved configurations.
+\end{itemize}
 
 \subsection{Error Analysis}
-\subsubsection{Error Categories, Frequencies and Representative Examples}
-\TBD
-\subsubsection{Likely Causes of Misclassification}
-\TBD
-\subsubsection{Potential Improvements}
-\TBD
+\subsubsection{Frequent CNN Confusions}
+\begin{table}[!htbp]\centering\small
+\caption{Largest directed CNN confusions. Class rate uses 1,000 true-class examples; error share uses all 831 CNN mistakes.}
+\label{tab:cnnerrors}
+\begin{tabular}{@{}lrrr@{}}\toprule
+True $\to$ predicted & Count & Class rate & Error share\\\midrule
+Shirt $\to$ T-shirt/top & 100 & 10.0\% & 12.03\% \\
+T-shirt/top $\to$ Shirt & 88 & 8.8\% & 10.59\% \\
+Shirt $\to$ Pullover & 80 & 8.0\% & 9.63\% \\
+Shirt $\to$ Coat & 72 & 7.2\% & 8.66\% \\
+Coat $\to$ Pullover & 62 & 6.2\% & 7.46\% \\
+\bottomrule\end{tabular}\end{table}
 
-\subsection{Representation or Regularization Ablation (Optional)}
-\TBD
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Frequent directions.} The five listed directions account for 402 mistakes (48.4\% of all CNN errors).
+\item \textbf{Upper-body confusion.} Four upper-body classes---T-shirt/top, Pullover, Coat and Shirt---contain 547 internal off-diagonal confusions, or 65.8\% of all errors.
+\item \textbf{Shirt errors.} The 288 Shirt false negatives alone contribute 34.7\% of errors; 252 of them go to the other three upper-body categories. This concentration is more informative than the overall 8.31\% error rate.
 
-\subsection{Limitations and Conclusion}
-\subsubsection{Data, Method and Experimental Limitations}
-This draft describes a controlled small-image benchmark and an implementation snapshot, not a completed five-model study. Its main limitations are unfinished LSTM/Transformer code, missing current-run artifacts and repeated trials, and unavailable per-class, qualitative and timing results. The preliminary Linear run cannot fill these gaps because it uses a different split and training configuration. Index-disjoint partitions also do not demonstrate content-level duplicate removal.
+\item \textbf{Baseline comparison.} Linear's largest directions include Shirt-to-T-shirt/top (153) and Pullover-to-Coat (150).
+\item \textbf{Asymmetric errors.} CNN reduces these to 100 and 35, while some directions remain asymmetric: 100 shirts become T-shirt/top, versus 88 T-shirt/top images becoming Shirt. Predicted-class frequency and decision boundaries matter alongside raw visual resemblance.
+\end{itemize}
 
-\subsubsection{Main Findings and Answer to the Research Question}
-The completed work establishes a shared data-processing and checkpoint-selection pipeline, supplies EDA evidence and implements three architecture families. The stored training subset is nearly balanced, and the preliminary notebook reaches 82.91\% validation Accuracy under its earlier protocol. The main research question about comparative architecture quality remains unanswered. A final ranking and final test-based conclusion are \textbf{TBD}.
+\subsubsection{Interpretation of the Observed Errors}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\item \textbf{Plausible sources.} Shared silhouettes, low resolution and missing color/texture plausibly contribute to upper-body confusion.
+\item \textbf{Evidence limits.} These are interpretations consistent with the class-level pattern, not measured causal effects or evidence that labels are wrong.
+\item \textbf{Other failure types.} Garment boundaries, sleeve shape and fine texture could be less distinctive after downsampling and pooling. The illustrative prediction panels also contain rare errors outside this dominant group, so error analysis should not focus exclusively on one pair.
+\end{itemize}
 
-\subsubsection{Generalization and Future Work}
-The next priorities are to complete the two sequence architectures, run all five models under the shared protocol, retain configurations/checkpoints/histories, and export test metrics, confusion matrices, prediction examples and timings. If feasible, additional seeds and a controlled representation or regularization ablation should assess stability and explain observed differences. Claims beyond Fashion-MNIST would require evaluation on data reflecting the intended deployment conditions.
+\subsection{Conclusion and Limitations}
+The completed shared pipeline supports five architecture families and traceable test evaluation. CNN gives the best observed quality (91.69\% Accuracy, 0.9163 Macro-F1), with 47.0\% fewer errors than Linear and 23.9\% fewer than MLP. Its local image structure is effective for this small grayscale benchmark, although its measured forward cost exceeds that of the dense baselines. MLP supplies a useful accuracy--latency compromise. Sequence models are functional, but their greater flexibility does not yield the best quality/cost trade-off here.
+
+\begin{itemize}
+\setlength{\itemsep}{3pt}\setlength{\parskip}{0pt}
+\item Only one seed and one configuration per model are reported; variability across independent runs is unknown.
+\item Shared training settings do not ensure equally tuned models or matched computational budgets.
+\item Architecture, representation and regularization change together, so their individual effects cannot be isolated.
+\item No augmentation experiment or controlled representation ablation is included in the reported comparison.
+\item CPU timings depend on runtime conditions. The inference benchmark measures forward passes on a single preprocessed image, using five warm-up passes and only 20 timed repetitions; it excludes loading and preprocessing.
+\item Performance on small grayscale benchmark images does not establish generalization to real-world fashion photographs or unseen classes. Split checks address index leakage rather than visual duplicates.
+\end{itemize}

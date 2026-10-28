@@ -59,3 +59,92 @@ All generated content was reviewed and adjusted by the project contributors befo
 - Verification: approved source compiled twice with XeLaTeX; 23 pages; no overfull/underfull or unresolved-reference warnings. Table 4 and the following Methodology page were visually checked. Other body pages retained their extracted text apart from page numbering. Published LaTeX and assets were copied byte-for-byte from the approved source.
 - User review: user accepted the table placement preview and authorized commit/push. This does not imply final scientific verification of the report.
 - Student verification and final responsible member: TBD.
+
+## Assignment 1 completed-run report update - 28 October 2026
+
+- Tool: OpenAI Codex; exact model/version not recorded.
+- Used by: requesting report author; member identity and final verifier are not recorded.
+- Purpose: finish the report using only committed a1 evidence at
+  27ef182308f0f6ac6f04510ee9fc77b9a16cc14a and publish the user-approved source.
+- Affected files: assignment1/report/main.tex, sections/, images/, data/ and README.md.
+- Contribution: source/artifact inspection, English narrative, model/metric tables,
+  error and cost analysis, LaTeX formatting and bullet organization. Reproduction
+  notes were condensed into Methodology, diagnostics moved into Results, and AI
+  disclosure placed last. Parameter-count formulas were labeled with parameters.
+- Figure provenance: the final report uses unchanged image files already present
+  in a1; assistant-redrawn charts and cropped panels from intermediate drafts were
+  removed. No new training or local-rerun scores enter the comparison.
+- Representative requests: complete the report from a1; use only figures already
+  in that branch; omit unperformed work; group Results into bullets while retaining
+  Conclusion; merge appendices; commit and push to a1-report.
+- Verification: reconciled saved comparison, history, checkpoint-epoch and metric
+  records; recomputed Accuracy/Macro-F1 from all five stored confusion matrices;
+  checked source references and original-image bytes. The saved source compiled
+  successfully with the desktop editor compiler before publication. Copied source
+  and included assets are hash-checked against the compiled local project.
+- Limits: latest exported-PDF visual QA and final member-specific scientific
+  verification remain outstanding. No new full test-pass count is asserted.
+- Approval: the user explicitly requested commit/push of the edited report.
+
+
+## Assignment 1 member-confirmed AI disclosure - 28 October 2026
+
+This entry records the member-supplied development account and supersedes the
+unresolved report-author identity in earlier entries: Nguyen Huu Minh Khoi
+(Nguyễn Hữu Minh Khôi) uses Codex for the report and is responsible for its final
+verification. Naming that responsibility does not assert that final student
+scientific verification has already been completed.
+
+### ChatGPT (OpenAI, GPT-6)
+
+- Used by and responsible member: Ngô Diễm Quyên.
+- Stages: architecture/design, implementation guidance, debugging, sanity testing,
+  and evaluation/visualization. Tool/model identification is supplied by the member.
+- Representative prompts and contributions: requested five-model configurations,
+  hyperparameters and representations; AI suggested layers/dropout and a fair
+  validation protocol. Requested module organization and function contracts; AI
+  explained pipeline structure. Requested tensor/configuration/checkpoint/JSON/plot
+  debugging; AI proposed targeted fixes. Requested forward/shape/parameter/gradient/
+  timing/confusion-matrix checks; AI generated example tests and assertions.
+  Requested benchmarking, curves and prediction panels; AI recommended procedures
+  and layouts.
+- Student editing/verification, as reported by the member: independently implemented
+  and integrated the main pipeline, reviewed configurations and tests, applied
+  relevant fixes, ran scripts/tests, inspected training/validation behavior and
+  figures, and compared computed metrics with saved results.
+- Affected paths (under assignment1/): src/models/, configs/, src/engine/,
+  src/metrics/, src/visualization/, scripts/, test/, and report Results.
+- Verification evidence described by the member: sanity checks, local script/test
+  results, training/validation behavior, generated figures and saved test metrics.
+  This disclosure update does not independently rerun the full test suite or models.
+
+### Gemini Flash (exact version not recorded)
+
+- Used by and responsible member: Ngô Diễm Quyên.
+- Stages and prompts: environment documentation (retrieve notebook package versions;
+  structure hardware specifications) and notebook debugging (inspect tensor labels
+  without the tensor wrapper).
+- Contributions: dependency-inspection code, formatting of supplied hardware
+  information, and suggestions to use .tolist()/.numpy().
+- Student verification, as reported: reviewed package versions, cross-checked system
+  information, and executed the conversion snippet and inspected its list output.
+- Affected paths: assignment1/requirements.txt, assignment1/README.md,
+  assignment1/draft.ipynb. Sources: installed versions, system information and the
+  executed notebook snippet.
+
+### OpenAI Codex (exact model/version not recorded)
+
+- Used by and responsible for final report verification: Nguyễn Hữu Minh Khôi.
+- Stage: report drafting and revision, 24-28 October 2026.
+- Current prompt: summarize/format the supplied ChatGPT and Gemini activities in the
+  final report disclosure, retain actual report-authoring assistance, then push.
+- Contribution: grouped the disclosure by tool, retained purpose/prompt summaries,
+  affected paths and verification/responsibility fields, and corrected tests/ to
+  the source branch's actual test/ path. No new experimental result was introduced.
+- Affected files: assignment1/report/sections/04-appendices.tex and AI_USAGE.md.
+- Assistant checks: compared the supplied account with report/source organization,
+  kept all other report sources/images unchanged, checked the saved LaTeX source
+  with the desktop compiler before publication, and hash-checked the copied file.
+- Sources: the member's supplied disclosure and identity confirmation, handbook
+  Sections 3 and 5, and a1 snapshot 27ef182308f0f6ac6f04510ee9fc77b9a16cc14a.
+- Authorization: the user explicitly requested the report update and push.

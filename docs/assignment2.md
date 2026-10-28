@@ -139,103 +139,139 @@ Overall, the preliminary EDA identifies four main challenges:
 - perspective and occlusion in complex urban scenes.
 
 ---
-
-## **2. Methodology and Setup**
+## **2. Methodology and Experimental Setup**
 
 ### **Methodology**
 
-The main controlled experiment will compare two loss formulations:
+This project evaluates two semantic segmentation architectures on the Cityscapes dataset: U-Net and DeepLabV3 with a ResNet-50 backbone.
 
-**Cross-Entropy:**
+- **U-Net:** Used as a baseline encoder–decoder architecture with skip connections.
+- **DeepLabV3-ResNet50:** Used as a stronger segmentation model with an ImageNet-pretrained ResNet-50 backbone.
 
-$$
-\mathcal{L} = \mathcal{L}_{CE}
-$$
+Both models predict 19 semantic classes. Cityscapes label IDs are mapped to training IDs from 0 to 18, while labels excluded from evaluation are assigned the ignore index 255.
 
-**Cross-Entropy + Dice:**
-
-$$
-\mathcal{L}
-=
-\mathcal{L}_{CE}
-+
-\lambda \mathcal{L}_{Dice}
-$$
-
-**Hypothesis:** combining Dice loss with Cross-Entropy may improve segmentation performance under the observed class imbalance and region-size variation.
-
----
+Both models are trained using Cross-Entropy (CE) loss. The current experiment focuses on comparing architectures under the implemented training setup. Although comparing CE with CE combined with Dice loss was part of the initial plan, this loss-function ablation has not been conducted and is left for future work.
 
 ### **Experimental Setup**
 
-The official Cityscapes split will be used:
+The experiments use the official Cityscapes training and validation splits, containing 2,975 training images and 500 validation images, respectively.
 
-- **Training:** 2,975 images
-- **Validation:** 500 images
+The original images have a resolution of 2048 × 1024 pixels. For training, images and segmentation masks are resized to 1024 × 512 pixels in width and height, respectively, corresponding to a tensor shape of 512 × 1024 in height and width. Images are normalized using ImageNet mean and standard deviation. Random horizontal flipping is applied during training.
 
-Training will be performed using **Kaggle GPU acceleration**. Because the original resolution is 2048 × 1024, an appropriate training crop/resolution will be selected according to available GPU memory.
+The main training configuration is summarized below:
 
-Planned preprocessing includes resizing/cropping, normalization, and random horizontal flipping for training.
+| Setting | Value |
+|---|---|
+| Training set | 2,975 images |
+| Validation set | 500 images |
+| Input resolution (H × W) | 512 × 1024 |
+| Number of classes | 19 |
+| Loss function | Cross-Entropy |
+| Ignore index | 255 |
+| Optimizer | AdamW |
+| Learning rate | 0.0001 |
+| Weight decay | 0.0001 |
+| Batch size | 2 |
+| Training duration | 10 epochs per model |
+| U-Net base channels | 32 |
+| DeepLabV3 backbone | ResNet-50, ImageNet-pretrained |
 
-The primary evaluation metric is **mean Intersection over Union (mIoU)**. For each class $c$:
-
-$$
-\operatorname{IoU}_c
-=
-\frac{TP_c}
-{TP_c + FP_c + FN_c}
-$$
-
-The mean IoU over the 19 evaluation classes is:
-
-$$
-\operatorname{mIoU}
-=
-\frac{1}{19}
-\sum_{c=1}^{19}
-\operatorname{IoU}_c
-$$
-
-The Dice score for each class is:
-
-$$
-\operatorname{Dice}_c
-=
-\frac{2TP_c}
-{2TP_c + FP_c + FN_c}
-$$
-
-mIoU will be used as the primary evaluation metric, while Dice score and per-class IoU/Dice will provide additional class-level analysis.
+Model performance is evaluated using mean Intersection over Union (mIoU), mean Dice score, and validation loss. The best recorded validation checkpoint is used when reporting each model's best result.
 
 ---
 
 ## **3. Results and Analysis**
 
-### **Results**
+### **Quantitative Results**
 
-### **Comparison and Discussion**
+The following table summarizes the best validation results recorded during training.
+
+| Metric | U-Net | DeepLabV3-ResNet50 |
+|---|---:|---:|
+| Best epoch | 10 | 8 |
+| Best validation mIoU | 37.99% | 65.19% |
+| Mean Dice at best epoch | 45.98% | 77.25% |
+| Validation loss at best epoch | 0.3814 | 0.1779 |
+| Training loss at best epoch | 0.3613 | 0.1400 |
+
+DeepLabV3-ResNet50 achieved a validation mIoU of 65.19%, compared with 37.99% for U-Net. This represents an improvement of 27.20 percentage points. Its mean Dice score was also higher by 31.27 percentage points.
+
+These results indicate that DeepLabV3-ResNet50 performed better than the U-Net baseline under the implemented experimental setup. However, the comparison evaluates the complete model configurations, including the pretrained backbone, rather than isolating the effect of architecture alone.
+
+### **Training Curves**
+
+![Training and validation loss comparison](assets/assignment2/loss_comparison.png)
+
+*Figure 4. Training and validation loss curves for U-Net and DeepLabV3-ResNet50.*
+
+![Validation metric comparison](assets/assignment2/metrics_comparison.png)
+
+*Figure 5. Validation mIoU and mean Dice score across training epochs.*
+
+The training curves show that U-Net's validation mIoU improved progressively during the ten epochs, reaching its highest recorded value at epoch 10. DeepLabV3-ResNet50 reached its best recorded validation mIoU at epoch 8. Its validation metrics fluctuated across epochs, indicating that performance did not improve monotonically throughout training.
+
+The best validation checkpoint was therefore selected separately for each model rather than assuming that the final epoch always produced the best result.
+
+### **Qualitative Prediction Comparison**
+
+![Qualitative prediction comparison](assets/assignment2/prediction_comparison.png)
+
+*Figure 6. Input image, ground-truth annotation, U-Net prediction, and DeepLabV3-ResNet50 prediction for one validation image.*
+
+The qualitative comparison provides an example of how the two models predict semantic classes in a street scene. The predictions can be compared with the ground-truth mask to inspect differences in segmentation boundaries and object regions.
+
+This figure represents one validation example only. It is useful for illustrating model behavior but is not sufficient to establish performance across the entire validation set.
+
+### **Discussion**
+
+The quantitative results favor DeepLabV3-ResNet50 over the U-Net baseline in both mIoU and mean Dice score. One possible contributing factor is the ImageNet-pretrained ResNet-50 backbone, which provides pretrained visual features. However, the current experiment does not isolate the effect of pretraining from other differences between the two model configurations.
+
+The exploratory data analysis also revealed class imbalance: road, building, and vegetation account for approximately 75.62% of valid training pixels. Small or infrequent classes, including motorcycles, riders, and traffic lights, occupy much smaller pixel proportions. Consequently, overall metrics may not fully reflect performance on these challenging categories.
+
+Further analysis of per-class IoU and Dice scores is needed to determine which classes contribute most to the remaining segmentation errors.
 
 ### **Error Analysis**
 
-### **Limitation and Conclusion**
+The dataset analysis suggests two challenges for semantic segmentation: imbalanced class frequencies and small regions belonging to less frequent classes. These factors may make some categories harder to learn and segment accurately.
+
+However, the current report does not yet quantify the error rate for individual classes or establish which specific classes are most frequently confused by either model. A complete error analysis should examine per-class validation metrics and representative incorrect predictions before drawing more specific conclusions.
 
 ---
 
-## **4. Links**
+## **4. Limitations and Conclusion**
 
-**Source code:**
+### **Limitations**
 
-**Links to checkpoints:**
+This experiment has several limitations:
 
-**Links to report/slides:**
+1. **Limited training duration:** Each model was trained for ten epochs. Longer training may produce different results.
+2. **Input resolution:** Images were resized to 512 × 1024, which may remove details from small objects and thin structures.
+3. **Limited model comparison:** Only U-Net and DeepLabV3-ResNet50 were evaluated.
+4. **No loss-function ablation:** The planned comparison between Cross-Entropy and Cross-Entropy combined with Dice loss has not been performed.
+5. **Limited qualitative evaluation:** The report includes one example of predictions. A broader sample is needed to characterize errors reliably.
+6. **Validation reporting:** The reported metrics are the best validation values recorded during training. A separate full-validation evaluation using the saved best checkpoints would provide a consistent basis for further analysis.
+7. **Official test set:** The official Cityscapes test annotations are not publicly available for ordinary local evaluation; therefore, the reported results are based on the validation set.
 
-**Links to YouTube presentation video:**
+### **Conclusion**
+
+This project implemented and compared U-Net and DeepLabV3-ResNet50 for 19-class semantic segmentation on Cityscapes. Under the recorded training setup, DeepLabV3-ResNet50 achieved the higher best validation mIoU of 65.19%, compared with 37.99% for U-Net.
+
+The results provide an initial comparison between a baseline segmentation architecture and a model with an ImageNet-pretrained backbone. Future work should include a per-class error analysis, longer training experiments, and the planned comparison between Cross-Entropy and Cross-Entropy combined with Dice loss.
 
 ---
 
-## **5. AI Usage Disclosure**
+## **5. Project Links**
 
-**Tool:** 
+- **Source code:** https://github.com/sunnyngooo/CO3133_Group05_Assignment/tree/A2-training
+- **Report:** https://sunnyngooo.github.io/CO3133_Group05_Assignment/
+- **Checkpoints and training logs:** Available in the project working environment; a public download link has not yet been provided.
+- **Presentation slides:** Not yet available.
+- **Demo video:** Not yet available.
+
+## **6. AI Usage Disclosure**
+
+**Tool**
+
 
 ---
 

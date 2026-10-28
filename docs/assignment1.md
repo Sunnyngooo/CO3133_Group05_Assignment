@@ -187,7 +187,7 @@ The comparison shows that greater architectural complexity does not automaticall
 - [Saved checkpoints](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/main/assignment1/checkpoints)
 - [Run configurations and logs](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/main/assignment1/runs)
 - [Detailed repository AI statement](https://github.com/Sunnyngooo/DeepLearning_Assignment/blob/a1/AI_USAGE.md)
-- [Report](https://github.com/Sunnyngooo/DeepLearning_Assignment/blob/a1/AI_USAGE.md)
+- [Report](https://drive.google.com/file/d/1z_WInHes8nzveDOxyur9ldGsMSyPwfoT/view?usp=sharing)
 - [Presentation slide](https://canva.link/a9tolhmr3rypids)
 - [YouTube presentation](https://youtu.be/vfxV-s4yhtc)
 

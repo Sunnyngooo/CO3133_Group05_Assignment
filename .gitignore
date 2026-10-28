@@ -4,3 +4,5 @@ assignment1/data/
 *-ubyte
 *.ubyte.gz
 *.gz
+
+__pycache__/

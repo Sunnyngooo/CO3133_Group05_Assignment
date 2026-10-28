@@ -1,20 +1,32 @@
 # Assignment 1 report
 
-English LaTeX report for CO3133, Group 05, based on the Assignment 1 code
-on branch `a1` (source snapshot `eb89385269bf1384913a011cf4d8ed6184690172`).
+English LaTeX report for CO3133, Group 05. Experiment evidence comes from the
+committed `a1` snapshot `27ef182308f0f6ac6f04510ee9fc77b9a16cc14a`.
 
-The report includes the cover, contents, data analysis, methodology, preliminary
-Linear results, references and appendices. Unavailable final results remain `TBD`.
-It uses Latin Modern fonts and preserves Vietnamese names.
+The report covers Fashion-MNIST data analysis, all five architectures, test
+results, training/inference costs, learning curves, class-level diagnostics,
+error analysis and conclusions. CNN achieves 91.69% test Accuracy and 0.9163
+Macro-F1 in the saved single-seed comparison.
 
-## Files
+## Source and figures
 
-- `main.tex`: cover and document assembly.
-- `sections/`: data, methodology, results, references and appendices.
-- `images/`: logo, EDA figures and preliminary learning curves.
-- `data/preliminary_linear_history.csv`: saved notebook values used for the curves.
-- `images/01_logobachkhoasang.png`: university logo supplied by the group.
-- `../../AI_USAGE.md`: AI assistance and pending student verification record.
+- `main.tex`: cover, contents and document assembly.
+- `sections/01-problem-data.tex`: problem, EDA, splitting and preprocessing.
+- `sections/02-methodology.tex`: models, training, verification and concise
+  reproduction information.
+- `sections/03-results.tex`: results and all model diagnostics; Section 3.3.1
+  groups quality, cost and interpretation by model.
+- `sections/references.tex`: references.
+- `sections/04-appendices.tex`: closing AI Usage Disclosure (last in the report).
+- `images/`: unchanged original EDA and experiment figures from the cited `a1`
+  snapshot, plus the university logo supplied by the group. No assistant-redrawn
+  chart or cropped prediction panel is used.
+- `data/`: committed comparison values and source-provenance records.
+- `../../AI_USAGE.md`: AI-assistance history.
+
+Selected runs are `linear_baseline_001`, `mlp_baseline_002`, `cnn_baseline_002`,
+`lstm_baseline_002` and `transformer_baseline_002`. Checkpoints and full run
+records remain in the cited `a1` snapshot; they are not duplicated here.
 
 ## Download the PDF without installing LaTeX
 
@@ -57,15 +69,14 @@ Pull the latest changes before starting; keep edits focused on your own sections
 to reduce merge conflicts. Keep `main.tex` and `images/` together when exporting
 or importing the project into another LaTeX editor.
 
-## Current scope and verification
+## Current verification
 
-The structure follows the course handbook. Content describes the cited `a1`
-source snapshot and stored EDA artifacts. The notebook Linear experiment uses
-a different setup and is explicitly preliminary, not an official test result.
-Final comparative experiments and other unavailable evidence remain `TBD`.
+The final source compiled successfully with the desktop editor's built-in
+LaTeX compiler on 28 October 2026. The package was copied byte-for-byte from
+that source, and every included experiment/EDA image was checked against the
+cited `a1` snapshot. All source references resolve. The previously reviewed
+Conclusion is unchanged by the latest list and section-organization edits.
 
-The reviewed source compiled twice with XeLaTeX into a 23-page preview on
-25 October 2026. Table 4 was placed below section 1.5.4 on printed Page 6;
-the following page starts Methodology. Those two pages were visually checked.
-Other previously identified presentation concerns were outside this targeted fix.
-Students must verify and complete the report and AI disclosure before submission.
+The latest source has not undergone a fresh exported-PDF visual inspection.
+Review the PDF produced by the workflow before submission. User approval to
+publish does not imply completed member-specific scientific verification.

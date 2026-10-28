@@ -1,0 +1,96 @@
+{
+  "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+  "assets": [
+    {
+      "report_asset": "images\\final_linear_baseline_001_learning_curves.png",
+      "branch_asset": "assignment1/reports/figures/linear_baseline_001_learning_curves.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "863d41094a24bafa349f1f68eeb47efc0e15655fb44fab2998397a6f8db11a5f"
+    },
+    {
+      "report_asset": "images\\final_linear_cm_normalized.png",
+      "branch_asset": "assignment1/reports/figures/linear_cm_normalized.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "eb3d5b5257ebcc42a40fbff748167145491b27e4943a8ce63dbabd37e4592b4a"
+    },
+    {
+      "report_asset": "images\\final_linear_prediction_examples.png",
+      "branch_asset": "assignment1/reports/figures/linear_prediction_examples.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "e80723b563f1d950f598e04b8c3b5d65f08c818c55201e3efb7ef99ead6884d9"
+    },
+    {
+      "report_asset": "images\\final_mlp_baseline_002_learning_curves.png",
+      "branch_asset": "assignment1/reports/figures/mlp_baseline_002_learning_curves.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "d2d35601078dc53a6f88cb779d67ab7865dbab6fb4fd1b2c2c97ee07ed86b06e"
+    },
+    {
+      "report_asset": "images\\final_mlp_cm_normalized.png",
+      "branch_asset": "assignment1/reports/figures/mlp_cm_normalized.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "61a72dcee972dd0f08ff9a29b22b1e7a9499ba4459c7f41b0f1f37bd6b8d8648"
+    },
+    {
+      "report_asset": "images\\final_mlp_prediction_examples.png",
+      "branch_asset": "assignment1/reports/figures/mlp_prediction_examples.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "82b3d0a66002739ae0d7a73424a308c6e4a507c327f6a0786468ca38fb9fbdfe"
+    },
+    {
+      "report_asset": "images\\final_cnn_baseline_002_learning_curves.png",
+      "branch_asset": "assignment1/reports/figures/cnn_baseline_002_learning_curves.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "0d5d6299d689562f3db153dcf79178efa0ec2b2f5837da25dd66e3ed86fc4f6b"
+    },
+    {
+      "report_asset": "images\\final_cnn_cm_normalized.png",
+      "branch_asset": "assignment1/reports/figures/cnn_cm_normalized.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "7991c755a6979a57efb75598f5e4d6e7c7b6cff786e07b64a6478bfded18d3cd"
+    },
+    {
+      "report_asset": "images\\final_cnn_prediction_examples.png",
+      "branch_asset": "assignment1/reports/figures/cnn_prediction_examples.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "653a04e08fe49ddb37b4c0958d80d6dcdccf9519e2935ba23e2017d4cdbf3a79"
+    },
+    {
+      "report_asset": "images\\final_lstm_baseline_002_learning_curves.png",
+      "branch_asset": "assignment1/reports/figures/lstm_baseline_002_learning_curves.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "337528f1d932ab557a67e967b3437830e8c54b80353b55a6908e684d4af112ee"
+    },
+    {
+      "report_asset": "images\\final_lstm_cm_normalized.png",
+      "branch_asset": "assignment1/reports/figures/lstm_cm_normalized.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "315f1132243f27c03129aaaf99be6b2bd6933628e25992dc4d20b61e39d52449"
+    },
+    {
+      "report_asset": "images\\final_lstm_prediction_examples.png",
+      "branch_asset": "assignment1/reports/figures/lstm_prediction_examples.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "ff1cd31c31de6b01ef048ce6d2d4b16fcd703981ed7c51f432085b59008cd46f"
+    },
+    {
+      "report_asset": "images\\final_transformer_baseline_002_learning_curves.png",
+      "branch_asset": "assignment1/reports/figures/transformer_baseline_002_learning_curves.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "dea30b48683a6ab39268fe3f99d96f4130915c263e6c8abf788a1add2e3ef6e8"
+    },
+    {
+      "report_asset": "images\\final_transformer_cm_normalized.png",
+      "branch_asset": "assignment1/reports/figures/transformer_cm_normalized.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "ade5b3f74daeb3a630e9ef22a2a1585da9cbb8094cb58cbd8f2cb5575bb5301d"
+    },
+    {
+      "report_asset": "images\\final_transformer_prediction_examples.png",
+      "branch_asset": "assignment1/reports/figures/transformer_prediction_examples.png",
+      "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+      "sha256": "ab4ed8a6bc91743239b92e7307051a6836aad00b24091789cea85a6035a2543f"
+    }
+  ],
+  "cover_logo": "Previously supplied university logo retained"
+}

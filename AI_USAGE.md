@@ -59,3 +59,29 @@ All generated content was reviewed and adjusted by the project contributors befo
 - Verification: approved source compiled twice with XeLaTeX; 23 pages; no overfull/underfull or unresolved-reference warnings. Table 4 and the following Methodology page were visually checked. Other body pages retained their extracted text apart from page numbering. Published LaTeX and assets were copied byte-for-byte from the approved source.
 - User review: user accepted the table placement preview and authorized commit/push. This does not imply final scientific verification of the report.
 - Student verification and final responsible member: TBD.
+
+## Assignment 1 completed-run report update - 28 October 2026
+
+- Tool: OpenAI Codex; exact model/version not recorded.
+- Used by: requesting report author; member identity and final verifier are not recorded.
+- Purpose: finish the report using only committed a1 evidence at
+  27ef182308f0f6ac6f04510ee9fc77b9a16cc14a and publish the user-approved source.
+- Affected files: assignment1/report/main.tex, sections/, images/, data/ and README.md.
+- Contribution: source/artifact inspection, English narrative, model/metric tables,
+  error and cost analysis, LaTeX formatting and bullet organization. Reproduction
+  notes were condensed into Methodology, diagnostics moved into Results, and AI
+  disclosure placed last. Parameter-count formulas were labeled with parameters.
+- Figure provenance: the final report uses unchanged image files already present
+  in a1; assistant-redrawn charts and cropped panels from intermediate drafts were
+  removed. No new training or local-rerun scores enter the comparison.
+- Representative requests: complete the report from a1; use only figures already
+  in that branch; omit unperformed work; group Results into bullets while retaining
+  Conclusion; merge appendices; commit and push to a1-report.
+- Verification: reconciled saved comparison, history, checkpoint-epoch and metric
+  records; recomputed Accuracy/Macro-F1 from all five stored confusion matrices;
+  checked source references and original-image bytes. The saved source compiled
+  successfully with the desktop editor compiler before publication. Copied source
+  and included assets are hash-checked against the compiled local project.
+- Limits: latest exported-PDF visual QA and final member-specific scientific
+  verification remain outstanding. No new full test-pass count is asserted.
+- Approval: the user explicitly requested commit/push of the edited report.

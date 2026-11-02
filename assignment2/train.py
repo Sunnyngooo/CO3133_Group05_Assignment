@@ -277,6 +277,11 @@ def main():
     parser.add_argument("--output-root", type=str, default=None)
     parser.add_argument("--batch-size", type=int, default=None)
     parser.add_argument("--num-workers", type=int, default=None)
+    parser.add_argument(
+        "--freeze-backbone",
+        action="store_true",
+        help="Freeze the DeepLabV3 backbone",
+    )
 
     args = parser.parse_args()
 
@@ -361,6 +366,19 @@ def main():
 
     model = build_model(model_cfg, resume=bool(args.resume)).to(device)
 
+    if args.freeze_backbone:
+        if model_name := model_cfg.get("name", "unet").lower():
+            if model_name != "deeplabv3":
+                raise ValueError("--freeze-backbone is only supported for DeepLabV3")
+
+        for param in model.model.backbone.parameters():
+            param.requires_grad = False
+
+        trainable_params = sum(
+            p.numel() for p in model.parameters() if p.requires_grad
+        )
+        print(f"Backbone frozen. Trainable parameters: {trainable_params:,}")
+
     ignore_index = train_cfg["ignore_index"]
 
     criterion = nn.CrossEntropyLoss(
@@ -368,7 +386,7 @@ def main():
     )
 
     optimizer = torch.optim.AdamW(
-        model.parameters(),
+        (p for p in model.parameters() if p.requires_grad),
         lr=train_cfg["learning_rate"],
         weight_decay=train_cfg["weight_decay"],
     )

@@ -92,6 +92,16 @@ def train_one_epoch(
 ):
     model.train()
 
+    # Keep the frozen backbone's BatchNorm statistics fixed.
+    if (
+        hasattr(model, "model")
+        and hasattr(model.model, "backbone")
+        and not any(
+            p.requires_grad for p in model.model.backbone.parameters()
+        )
+    ):
+        model.model.backbone.eval()
+
     total_loss = 0.0
     total_valid_pixels = 0
     start_time = time.perf_counter()

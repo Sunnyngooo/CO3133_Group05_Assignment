@@ -1,0 +1,10 @@
+{
+    "run_id": "transformer_baseline_002",
+    "checkpoint_epoch": 17,
+    "checkpoint_val_macro_f1": 0.8909539650947315,
+    "test_metrics": {
+        "accuracy": 0.8798,
+        "macro_f1": 0.8790049434907135,
+        "loss": 0.34865525977611544
+    }
+}

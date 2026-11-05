@@ -1,0 +1,67 @@
+{
+  "revision": "27ef182308f0f6ac6f04510ee9fc77b9a16cc14a",
+  "runs": {
+    "Linear": "linear_baseline_001",
+    "MLP": "mlp_baseline_002",
+    "CNN": "cnn_baseline_002",
+    "LSTM": "lstm_baseline_002",
+    "Transformer": "transformer_baseline_002"
+  },
+  "summary": {
+    "Linear": {
+      "best_epoch": 13,
+      "test": {
+        "accuracy": 0.8431,
+        "macro_f1": 0.8424475346646652,
+        "loss": 0.43849827699661253
+      },
+      "train_seconds": 941.0514717999995,
+      "latency_ms": 0.048350000724894926,
+      "errors": 1569
+    },
+    "MLP": {
+      "best_epoch": 20,
+      "test": {
+        "accuracy": 0.8908,
+        "macro_f1": 0.890659198478416,
+        "loss": 0.3255755849480629
+      },
+      "train_seconds": 715.3705041000012,
+      "latency_ms": 0.20374999985506292,
+      "errors": 1092
+    },
+    "CNN": {
+      "best_epoch": 19,
+      "test": {
+        "accuracy": 0.9169,
+        "macro_f1": 0.9162987172498696,
+        "loss": 0.24461347603797912
+      },
+      "train_seconds": 1748.4105026000034,
+      "latency_ms": 0.8215999996536993,
+      "errors": 831
+    },
+    "LSTM": {
+      "best_epoch": 20,
+      "test": {
+        "accuracy": 0.8966,
+        "macro_f1": 0.8959887859963146,
+        "loss": 0.29859084649086
+      },
+      "train_seconds": 1798.1842361000017,
+      "latency_ms": 1.9651500006148126,
+      "errors": 1034
+    },
+    "Transformer": {
+      "best_epoch": 17,
+      "test": {
+        "accuracy": 0.8798,
+        "macro_f1": 0.8790049434907135,
+        "loss": 0.34865525977611544
+      },
+      "train_seconds": 2133.3022482999995,
+      "latency_ms": 1.95979999989504,
+      "errors": 1202
+    }
+  }
+}

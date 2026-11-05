@@ -1,0 +1,36 @@
+experiment:
+  seed: 42
+  deterministic: true
+  name: transformer-baseline
+data:
+  dataset: fashion_mnist
+  root: ./data
+  val_ratio: 0.15
+  batch_size: 128
+  num_workers: 0
+  augmentation:
+    enabled: false
+    rotation_degrees: 10
+  normalization:
+    mean: 0.28566697239875793
+    std: 0.3528567850589752
+training:
+  epochs: 20
+  optimizer: adam
+  lr: 0.0005
+  weight_decay: 0.0
+checkpoints:
+  monitor: macro_f1
+  mode: max
+model:
+  name: transformer
+  input_channels: 1
+  image_size: 28
+  patch_size: 7
+  embed_dim: 128
+  num_heads: 4
+  num_layers: 2
+  ff_dim: 256
+  num_classes: 10
+  dropout: 0.2
+  pooling: mean

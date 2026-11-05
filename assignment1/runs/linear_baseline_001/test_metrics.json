@@ -1,0 +1,10 @@
+{
+  "run_id": "linear_baseline_001",
+  "checkpoint_epoch": 13,
+  "checkpoint_val_macro_f1": 0.8563425406926113,
+  "test_metrics": {
+    "accuracy": 0.8431,
+    "macro_f1": 0.8424475346646652,
+    "loss": 0.43849827699661253
+  }
+}

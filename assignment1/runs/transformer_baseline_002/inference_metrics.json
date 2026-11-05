@@ -1,0 +1,20 @@
+{
+    "run_id": "transformer_baseline_002",
+    "model_name": "transformer",
+    "device": "cpu",
+    "parameter_count": {
+        "total_params": 274954,
+        "trainable_params": 274954,
+        "non_trainable_params": 0
+    },
+    "epoch": 17,
+    "warmup": 5,
+    "repeats": 20,
+    "mean_ms": 1.9257199998719443,
+    "median_ms": 1.95979999989504,
+    "p95_ms": 2.1619600004669337,
+    "min_ms": 1.472900001317612,
+    "max_ms": 2.229599998827325,
+    "batch_size": 1,
+    "num_threads": 4
+}

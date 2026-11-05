@@ -1,0 +1,20 @@
+{
+    "run_id": "cnn_baseline_002",
+    "model_name": "cnn",
+    "device": "cpu",
+    "parameter_count": {
+        "total_params": 220234,
+        "trainable_params": 220234,
+        "non_trainable_params": 0
+    },
+    "epoch": 19,
+    "warmup": 5,
+    "repeats": 20,
+    "mean_ms": 0.8577149999837275,
+    "median_ms": 0.8215999996536993,
+    "p95_ms": 0.9843750005529728,
+    "min_ms": 0.7616000002599321,
+    "max_ms": 1.0085999983857619,
+    "batch_size": 1,
+    "num_threads": 4
+}

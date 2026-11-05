@@ -1,4 +1,15 @@
-venv
+# Python virtual environments
+venv/
+.venv/
+.venv311/
+.venv*/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Assignment 1
 assignment1/data/
 data/assignment3/
 checkpoints/assignment3/
@@ -6,6 +17,7 @@ checkpoints/assignment3/
 __pycache__/
 outputs/assignment3/*/review_gallery/
 
+# Dataset files
 *-ubyte
 *.ubyte.gz
 *.gz

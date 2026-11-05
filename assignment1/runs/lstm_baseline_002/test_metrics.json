@@ -1,0 +1,10 @@
+{
+    "run_id": "lstm_baseline_002",
+    "checkpoint_epoch": 20,
+    "checkpoint_val_macro_f1": 0.8989970962761648,
+    "test_metrics": {
+        "accuracy": 0.8966,
+        "macro_f1": 0.8959887859963146,
+        "loss": 0.29859084649086
+    }
+}

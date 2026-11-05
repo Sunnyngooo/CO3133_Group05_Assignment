@@ -1,0 +1,20 @@
+{
+    "run_id": "lstm_baseline_002",
+    "model_name": "lstm",
+    "device": "cpu",
+    "parameter_count": {
+        "total_params": 214282,
+        "trainable_params": 214282,
+        "non_trainable_params": 0
+    },
+    "epoch": 20,
+    "warmup": 5,
+    "repeats": 20,
+    "mean_ms": 1.9383200001357181,
+    "median_ms": 1.9651500006148126,
+    "p95_ms": 2.533960000801017,
+    "min_ms": 1.4210999997885665,
+    "max_ms": 2.8333999998721993,
+    "batch_size": 1,
+    "num_threads": 4
+}

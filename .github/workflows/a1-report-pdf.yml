@@ -1,0 +1,70 @@
+name: Build Assignment 1 PDF
+
+on:
+  push:
+    branches:
+      - a1-report
+    paths:
+      - 'assignment1/report/**'
+      - '.github/workflows/a1-report-pdf.yml'
+  pull_request:
+    branches:
+      - a1-report
+    paths:
+      - 'assignment1/report/**'
+      - '.github/workflows/a1-report-pdf.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a1-report-pdf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-pdf:
+    name: Compile report with XeLaTeX
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Compile LaTeX and resolve the table of contents
+        uses: xu-cheng/latex-action@6549dc21effb2730855a1281407ecfcececc6c1b # v4
+        with:
+          working_directory: assignment1/report
+          root_file: main.tex
+          texlive_version: '2026'
+          latexmk_use_xelatex: true
+          latexmk_shell_escape: false
+
+      - name: Prepare downloadable PDF
+        run: |
+          mkdir -p dist
+          cp assignment1/report/main.pdf dist/Group05_A1_Report.pdf
+
+      - name: Upload report PDF
+        id: upload
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: Group05_A1_Report
+          path: dist/Group05_A1_Report.pdf
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Show PDF download link
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        run: |
+          {
+            echo '## Assignment 1 PDF'
+            echo
+            printf '[Download the report PDF](%s)\n' "$ARTIFACT_URL"
+            echo
+            echo 'The download is a ZIP containing Group05_A1_Report.pdf. Sign in to GitHub to download it.'
+            echo 'This build is kept for 30 days. A new PDF is generated after report changes are pushed to a1-report.'
+          } >> "$GITHUB_STEP_SUMMARY"

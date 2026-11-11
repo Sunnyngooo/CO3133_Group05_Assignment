@@ -410,36 +410,39 @@ Overall, DeepLabV3 with full fine-tuning provided the best balance when segmenta
 
 ## **5. Project Links**
 
-- **Source code and experiment artifacts:** [GitHub repository – A2-training](https://github.com/sunnyngooo/CO3133_Group05_Assignment/tree/A2-training)
-- **Report:** [Report]()
+- **Source code and experiment artifacts:** [GitHub repository – Assignment2](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/main/assignment2)
+- **Report:** [Report](https://drive.google.com/file/d/1MX_NZdktRhL2LnM11AKRDV6P3VkRM5aS/view?usp=sharing)
 - **Presentation slides:** [Presentation Slides](https://canva.link/gtw7zeadkn7f3bm)
 - **YouTube presentation video:** [YouTube presentation](https://youtu.be/udnYHyNk3KA)
 
-The repository includes the source code, selected model checkpoints, training logs, and configuration files required to inspect the reported experiments. The backup folders containing these experiment artifacts are included in the `A2-training` branch.
+The GitHub repository contains the source code, training logs, and configuration files required to inspect the reported experiments. These files are available in the `main` branch.
 
-### **Checkpoint and Reproduction Instructions**
+Due to the large file sizes, the trained model checkpoints are not stored directly in the GitHub repository. Instead, the checkpoint files are provided as ZIP archives in a separate Kaggle Dataset, accessible through the link above. This separation allows the source code and experiment records to remain accessible through GitHub while providing a separate location for downloading the trained model weights.
+
+### Checkpoint and Reproduction Instructions
 
 The reported results correspond to the following selected checkpoints and experiment records:
 
-| Result | Configuration | Checkpoint path | Experiment/log path |
+| Result | Configuration | Checkpoint archive | Experiment/log path |
 |---|---|---|---|
-| U-Net: 37.99% mIoU | U-Net trained from scratch | `assignment2/unet-backup/checkpoints/assignment2/unet_best.pth` | `assignment2/unet-backup/outputs/assignment2/unet_history.csv` |
-| DeepLabV3 Full: 65.19% mIoU | DeepLabV3-ResNet50, full fine-tuning | `assignment2/deeplab-backup/runs/deeplabv3/full_run/checkpoints/deeplabv3_best.pth` | `assignment2/deeplab-backup/runs/deeplabv3/full_run/outputs/deeplabv3_history.csv` |
-| DeepLabV3 Frozen: 56.47% mIoU | DeepLabV3-ResNet50, frozen backbone | `assignment2/frozen-backup/checkpoints/deeplabv3_best.pth` | `assignment2/frozen-backup/outputs/deeplabv3_history.csv` |
+| U-Net: 37.99% mIoU | U-Net trained from scratch | U-Net checkpoint ZIP (Kaggle Dataset) | `assignment2/unet-backup/outputs/assignment2/unet_history.csv` |
+| DeepLabV3 Full: 65.19% mIoU | DeepLabV3-ResNet50, full fine-tuning | DeepLabV3 Full checkpoint ZIP (Kaggle Dataset) | `assignment2/deeplab-backup/runs/deeplabv3/full_run/outputs/deeplabv3_history.csv` |
+| DeepLabV3 Frozen: 56.47% mIoU | DeepLabV3-ResNet50, frozen backbone | DeepLabV3 Frozen checkpoint ZIP (Kaggle Dataset) | `assignment2/frozen-backup/outputs/deeplabv3_history.csv` |
 
-The corresponding training configuration files are provided at:
+The corresponding training configuration files are provided in the GitHub repository:
 
 - **U-Net:** `assignment2/unet-backup/outputs/assignment2/run_config.yaml`
 - **DeepLabV3 Full:** `assignment2/deeplab-backup/runs/deeplabv3/full_run/outputs/run_config.yaml`
 - **DeepLabV3 Frozen:** `assignment2/frozen-backup/outputs/run_config.yaml`
 
-All paths above are relative to the root directory of the cloned repository. The checkpoint files, training logs, and configuration files can therefore be accessed directly from the corresponding backup folders without requiring separate access to the original Kaggle backup datasets.
+All paths above are relative to the root directory of the cloned repository, except for the checkpoint archives, which are hosted separately on Kaggle.
 
-**Reproduction procedure**
+### Reproduction Procedure
 
 To reproduce or inspect the experiments, follow these steps:
 
-1. Clone the repository and switch to the `A2-training` branch:
+
+1. Clone the repository:
 
    ```bash
    git clone -b A2-training https://github.com/sunnyngooo/CO3133_Group05_Assignment.git
@@ -448,15 +451,17 @@ To reproduce or inspect the experiments, follow these steps:
 
 2. Install the dependencies specified in the repository's environment documentation. Download the Cityscapes dataset separately and organize it according to the directory structure expected by the project.
 
-3. Select the YAML configuration corresponding to the model to be reproduced. The recorded experiments used random seed 43, the AdamW optimizer with a learning rate of `1e-4` and weight decay of `1e-4`, Cross-Entropy loss, and 10 recorded training epochs. The U-Net configuration used a batch size of 12, while both DeepLabV3 configurations used a batch size of 2.
+3. Download the required checkpoint ZIP archives from the Kaggle Dataset and extract them to access the trained model weights. The training logs and configuration files can be inspected directly from the GitHub repository.
 
-4. Run the corresponding training procedure documented in the repository. The existing backup folders provide the selected checkpoints and training histories for reference, allowing users to inspect the recorded results without having to retrain the models.
+4. Select the YAML configuration corresponding to the model to be reproduced. The recorded experiments used random seed 43, the AdamW optimizer with a learning rate of 1e-4 and weight decay of 1e-4, Cross-Entropy loss, and 10 recorded training epochs. The U-Net configuration used a batch size of 12, while both DeepLabV3 configurations used a batch size of 2.
 
-5. Evaluate the selected checkpoint on the official Cityscapes validation split using the project's evaluation implementation. For a consistent comparison, maintain the same dataset split, input resolution (`512 × 1024`), preprocessing pipeline, evaluation protocol, and model-selection criterion. The reported checkpoints were selected based on the highest validation mIoU.
+5. Run the corresponding training procedure documented in the repository. Alternatively, use the downloaded checkpoints to evaluate the trained models without repeating the training process.
 
-6. For reproducibility, record the repository commit hash, configuration file, checkpoint path, and evaluation results associated with each experiment.
+6. Evaluate the selected checkpoint on the official Cityscapes validation split using the project's evaluation implementation. For a consistent comparison, maintain the same dataset split, input resolution (512 × 1024), preprocessing pipeline, evaluation protocol, and model-selection criterion. The reported checkpoints were selected based on the highest validation mIoU.
 
-**Reproduction note:** The backup folders preserve the artifacts from the reported experiments, but reproducing the training process still requires the Cityscapes dataset, the appropriate software environment, and the training and evaluation procedures documented in the `A2-training` branch. The stored checkpoints and logs are provided to support result verification and facilitate further experiments.
+7. For reproducibility, record the repository commit hash, configuration file, checkpoint archive, and evaluation results associated with each experiment.
+
+**Reproduction Note:** The GitHub repository and Kaggle Dataset serve complementary purposes. GitHub provides the source code, training histories, and configuration files, while Kaggle hosts the trained model checkpoints because of their large file sizes. Reproducing the experiments requires the Cityscapes dataset and the appropriate software environment. The provided checkpoints and experiment records allow users to inspect and evaluate the reported models without having to retrain them.
 
 ---
 

@@ -30,17 +30,17 @@ The main challenges include strong class imbalance, small semantic regions, scal
 
 The project uses the **Cityscapes fine-annotation dataset** (`gtFine`) with RGB images from `leftImg8bit`.
 
-| Property | Value |
-|---|---|
-| Task | Semantic segmentation |
-| Fine-annotated images | 5,000 |
-| Cities | 50 |
-| Image resolution | 2048 × 1024 |
-| Evaluation classes | 19 |
-| Annotation | Polygon annotations and pixel-level label maps |
-| Train | 2,975 images |
-| Validation | 500 images |
-| Test | 1,525 images |
+| Property              | Value                                          |
+| --------------------- | ---------------------------------------------- |
+| Task                  | Semantic segmentation                          |
+| Fine-annotated images | 5,000                                          |
+| Cities                | 50                                             |
+| Image resolution      | 2048 × 1024                                    |
+| Evaluation classes    | 19                                             |
+| Annotation            | Polygon annotations and pixel-level label maps |
+| Train                 | 2,975 images                                   |
+| Validation            | 500 images                                     |
+| Test                  | 1,525 images                                   |
 
 The additional coarse-annotation `train_extra` set is not used.
 
@@ -64,31 +64,31 @@ pixels in total.
 
 The class distribution among valid pixels is:
 
-| Class | Percentage |
-|---|---:|
-| road | 36.870% |
-| building | 22.824% |
-| vegetation | 15.929% |
-| car | 6.995% |
-| sidewalk | 6.085% |
-| sky | 4.019% |
-| pole | 1.227% |
-| person | 1.219% |
-| terrain | 1.158% |
-| fence | 0.877% |
-| wall | 0.655% |
-| traffic sign | 0.551% |
-| bicycle | 0.414% |
-| truck | 0.267% |
-| bus | 0.235% |
-| train | 0.233% |
-| traffic light | 0.208% |
-| rider | 0.135% |
-| motorcycle | 0.099% |
+| Class         | Percentage |
+| ------------- | ---------: |
+| road          |    36.870% |
+| building      |    22.824% |
+| vegetation    |    15.929% |
+| car           |     6.995% |
+| sidewalk      |     6.085% |
+| sky           |     4.019% |
+| pole          |     1.227% |
+| person        |     1.219% |
+| terrain       |     1.158% |
+| fence         |     0.877% |
+| wall          |     0.655% |
+| traffic sign  |     0.551% |
+| bicycle       |     0.414% |
+| truck         |     0.267% |
+| bus           |     0.235% |
+| train         |     0.233% |
+| traffic light |     0.208% |
+| rider         |     0.135% |
+| motorcycle    |     0.099% |
 
 ![Cityscapes training pixel distribution](assets/assignment2/train_pixel_distribution.png)
 
-*Figure 1. Pixel-level class distribution of the Cityscapes training set.*
+_Figure 1. Pixel-level class distribution of the Cityscapes training set._
 
 The dataset shows substantial **pixel-level class imbalance**. Road, building, and vegetation alone account for approximately **75.62%** of all valid pixels, while several classes contribute less than 0.3%.
 
@@ -102,18 +102,18 @@ Connected-component analysis was performed to examine the spatial sizes of seman
 
 A threshold of **1,024 pixels (32 × 32)** was used as an exploratory definition of a small region.
 
-| Class | Median Region Size | Regions < 1,024 px |
-|---|---:|---:|
-| traffic light | 457 | 71.85% |
-| traffic sign | 543 | 66.50% |
-| rider | 753 | 56.77% |
-| bicycle | 767 | 56.39% |
-| person | 890 | 52.87% |
-| motorcycle | 890.5 | 52.91% |
+| Class         | Median Region Size | Regions < 1,024 px |
+| ------------- | -----------------: | -----------------: |
+| traffic light |                457 |             71.85% |
+| traffic sign  |                543 |             66.50% |
+| rider         |                753 |             56.77% |
+| bicycle       |                767 |             56.39% |
+| person        |                890 |             52.87% |
+| motorcycle    |              890.5 |             52.91% |
 
 ![Connected semantic region sizes](assets/assignment2/train_median_region_size.png)
 
-*Figure 2. Median connected semantic-region size for each Cityscapes class.*
+_Figure 2. Median connected semantic-region size for each Cityscapes class._
 
 Traffic-related and human-related classes frequently appear as small regions. Together with the pixel distribution, this indicates that Cityscapes contains both **class imbalance and strong scale variation**.
 
@@ -127,7 +127,7 @@ Selected RGB images and their semantic annotations were visually inspected.
 
 ![Cityscapes semantic annotation](assets/assignment2/__results___58_1.png)
 
-*Figure 3. Example Cityscapes street scene and its fine semantic annotation.*
+_Figure 3. Example Cityscapes street scene and its fine semantic annotation._
 
 The examples show large regions such as road, building, and vegetation together with much smaller vehicles, riders, pedestrians, poles, and traffic infrastructure. Perspective and partial occlusion further increase segmentation difficulty.
 
@@ -139,6 +139,7 @@ Overall, the preliminary EDA identifies four main challenges:
 - perspective and occlusion in complex urban scenes.
 
 ---
+
 ## **2. Methodology and Experimental Setup**
 
 ### **Methodology**
@@ -492,9 +493,9 @@ The group remains responsible for the final implementation, experimental methodo
 
 ## **References**
 
-[1] M. Cordts et al., “The Cityscapes Dataset for Semantic Urban Scene Understanding,” *CVPR*, 2016.
+[1] M. Cordts et al., “The Cityscapes Dataset for Semantic Urban Scene Understanding,” _CVPR_, 2016.
 
-[2] O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” *MICCAI*, 2015.
+[2] O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” _MICCAI_, 2015.
 
 [3] L.-C. Chen, G. Papandreou, F. Schroff, and H. Adam, “Rethinking Atrous Convolution for Semantic Image Segmentation,” arXiv:1706.05587, 2017.
 

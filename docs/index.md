@@ -14,7 +14,7 @@
 
 ## **Group information**
 
-- Group name: Group 01
+- Group name: Group G-05
 - Group's Repository: [link](https://github.com/Sunnyngooo/CO3133_Group05_Assignment.git)
 
   | Name                 | Student ID | Main role | Github Profile                                                      |

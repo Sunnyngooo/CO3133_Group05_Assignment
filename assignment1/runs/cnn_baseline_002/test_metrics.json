@@ -1,0 +1,10 @@
+{
+  "run_id": "cnn_baseline_002",
+  "checkpoint_epoch": 19,
+  "checkpoint_val_macro_f1": 0.9225655405215886,
+  "test_metrics": {
+    "accuracy": 0.9169,
+    "macro_f1": 0.9162987172498696,
+    "loss": 0.24461347603797912
+  }
+}

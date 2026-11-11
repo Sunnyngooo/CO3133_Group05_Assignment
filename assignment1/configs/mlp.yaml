@@ -1,0 +1,13 @@
+experiment:
+  name: mlp-baseline
+
+model:
+  name: mlp
+  input_dim: 784
+  hidden_dims: [256, 128]
+  num_classes: 10
+  dropout: 0.2
+
+training:
+  lr: 0.0005
+  epochs: 20

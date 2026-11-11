@@ -1,0 +1,20 @@
+{
+    "run_id": "mlp_baseline_002",
+    "model_name": "mlp",
+    "device": "cpu",
+    "parameter_count": {
+        "total_params": 235146,
+        "trainable_params": 235146,
+        "non_trainable_params": 0
+    },
+    "epoch": 20,
+    "warmup": 5,
+    "repeats": 20,
+    "mean_ms": 0.2069299997856433,
+    "median_ms": 0.20374999985506292,
+    "p95_ms": 0.23225000031743548,
+    "min_ms": 0.20199999926262535,
+    "max_ms": 0.23700000019744039,
+    "batch_size": 1,
+    "num_threads": 4
+}

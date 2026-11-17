@@ -1,45 +1,38 @@
-# **Multimodal Deep Learning**
+# Assignment 3 — M1 Dataset Proposal
 
-#### **Topic**: Multimodal Deep Learning: Representation, Fusion, and Evaluation
+**Course:** CO3133 — Deep Learning and Its Applications, Semester 261.  
+**Group:** G-05. **Instructor:** Lê Thành Sách.  
+**Members:** Đàm Hoài An; Nguyễn Hữu Minh Khôi; Ngô Diễm Quyên.
 
-**Group members:**
+**M1 deadline:** 18 November 2026, 23:59 GMT+7. Weight: 15% of Assignment 3.
 
-- Đàm Hoài An
-- Nguyễn Hữu Minh Khôi
-- Ngô Diễm Quyên
+## Dataset Proposal
 
-**Instructor:** Lê Thành Sách
+[Read the M1 proposal](assignment3-proposal.md)
 
-## **1. Problem and data:**
+Task: single-label classification of news topics from an article's image and
+English headline. Dataset: N24News, 61,218 verified pairs across 24 classes.
+Fixed group-aware split: 48,976 train / 6,122 validation / 6,120 test; seed 44.
 
-**Problem statement:**
+![Class distribution](assets/assignment3/class_distribution.png)
 
-**Data description and EDA**
+![Preliminary EDA and split sizes](assets/assignment3/input_and_split_stats.png)
 
-## **2. Methodology and setup**
+The proposal covers dataset provenance/version and unresolved license conditions,
+paired-sample validity, preliminary pair-quality review, cleaning, leakage control,
+metrics, four planned configurations, ablation, compute budget and subset rules.
+Technical integrity checks do not establish full semantic pair quality.
 
-**Methodology**
+## Scope of this milestone
 
-**Experimental setup**
+M1 presents the dataset proposal and preliminary EDA. Model-result tables,
+completed ablation, final report, slides, video and checkpoints belong to later
+milestones. No M2/M3 artifacts are included in this M1 commit proposal.
 
-## **3. Results and Analysis**
+- [Proposal source in the repository](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/blob/A3/assignment3/PROPOSAL.md)
+- [Repository](https://github.com/Sunnyngooo/CO3133_Group05_Assignment)
+- [N24News authors' repository](https://github.com/billywzh717/N24News)
+- [N24News paper](https://aclanthology.org/2022.lrec-1.729/)
 
-**Results**
+## AI Usage Disclosure
 
-**Comparison and discussion**
-
-**Error analysis**
-
-**Limitation and conclusion:**
-
-## **4. Links:**
-
-**Source code:**
-
-**Links to checkpoints:**
-
-**Links to report/slides:**
-
-**Links to Youtube presentation video:**
-
-## **5. AI Usage Disclosure**

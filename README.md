@@ -2,6 +2,18 @@
 
 Repository structure and reproducibility details for all three assignments.
 
+## Assignment 3 - M1 Dataset Proposal
+
+Assignment 3 studies N24News image/headline topic classification. M1 covers the
+dataset proposal, preliminary EDA and planned experiments. The main scope is
+61,218 valid pairs across 24 classes, split into 48,976 train / 6,122 validation /
+6,120 test pairs using group-aware splitting with seed 44.
+
+- [M1 assignment page](docs/assignment3.md)
+- [Dataset proposal](assignment3/PROPOSAL.md)
+- [Public proposal](docs/assignment3-proposal.md)
+- [Data-preparation materials on A3](https://github.com/Sunnyngooo/CO3133_Group05_Assignment/tree/A3/assignment3)
+
 ## Repository layout
 
 ```text

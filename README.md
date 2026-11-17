@@ -5,8 +5,9 @@ Repository structure and reproducibility details for all three assignments.
 ## Assignment 3 current status
 
 Assignment 3 uses N24News image + headline classification. Data preparation code
-is in `assignment3/`; model training and evaluation are not implemented yet.
-Use its separate environment and preparation instructions linked below.
+is in `assignment3/`. The selected M1 submission covers the Dataset Proposal
+and preliminary EDA; later-stage local implementation is outside this commit.
+See the [M1 page](docs/assignment3.md) and [public proposal](docs/assignment3-proposal.md).
 
 Main data scope is all 61,218 N24News metadata records (no per-class cap), retaining
 every usable image/headline pair. Full-data preparation is complete under
@@ -18,9 +19,6 @@ its manifests must not be mixed with the new full-data split.
 - [Dataset proposal](assignment3/PROPOSAL.md)
 - [Plan and requirement checklist](assignment3/PLAN.md)
 - [Dataset provenance](assignment3/DATASET.md)
-
-The preparation environment is `.venv-a3` on Windows. Main training starts after
-the Dataset Proposal is approved; no Assignment 3 model results are claimed.
 
 ## Repository layout
 
